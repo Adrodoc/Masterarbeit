@@ -1,0 +1,443 @@
+@article{TKT-Lock,
+  author     = {Mellor-Crummey, John M. and Scott, Michael L.},
+  title      = {Algorithms for Scalable Synchronization on Shared-Memory Multiprocessors},
+  year       = {1991},
+  issue_date = {Feb. 1991},
+  publisher  = {Association for Computing Machinery},
+  address    = {New York, NY, USA},
+  volume     = {9},
+  number     = {1},
+  issn       = {0734-2071},
+  url        = {https://doi.org/10.1145/103727.103729},
+  doi        = {10.1145/103727.103729},
+  abstract   = {Busy-wait techniques are heavily used for mutual exclusion and barrier synchronization
+                in shared-memory parallel programs. Unfortunately, typical implementations of busy-waiting
+                tend to produce large amounts of memory and interconnect contention, introducing performance
+                bottlenecks that become markedly more pronounced as applications scale. We argue that
+                this problem is not fundamental, and that one can in fact construct busy-wait synchronization
+                algorithms that induce no memory or interconnect contention. The key to these algorithms
+                is for every processor to spin on separate locally-accessible flag variables, and
+                for some other processor to terminate the spin with a single remote write operation
+                at an appropriate time. Flag variables may be locally-accessible as a result of coherent
+                caching, or by virtue of allocation in the local portion of physically distributed
+                shared memory.We present a new scalable algorithm for spin locks that generates 0(1)
+                remote references per lock acquisition, independent of the number of processors attempting
+                to acquire the lock. Our algorithm provides reasonable latency in the absence of contention,
+                requires only a constant amount of space per lock, and requires no hardware support
+                other than a swap-with-memory instruction. We also present a new scalable barrier
+                algorithm that generates 0(1) remote references per processor reaching the barrier,
+                and observe that two previously-known barriers can likewise be cast in a form that
+                spins only on locally-accessible flag variables. None of these barrier algorithms
+                requires hardware support beyond the usual atomicity of memory reads and writes.We
+                compare the performance of our scalable algorithms with other software approaches
+                to busy-wait synchronization on both a Sequent Symmetry and a BBN Butterfly. Our principal
+                conclusion is that contention due to synchronization need not be a problem in large-scale
+                shared-memory multiprocessors. The existence of scalable algorithms greatly weakens
+                the case for costly special-purpose hardware support for synchronization, and provides
+                a case against so-called “dance hall” architectures, in which shared memory locations
+                are equally far from all processors. —From the Authors' Abstract},
+  journal    = {ACM Trans. Comput. Syst.},
+  month      = feb,
+  pages      = {21–65},
+  numpages   = {45}
+}
+
+@inproceedings{MCS-Lock,
+  author    = {Mellor-Crummey, John M. and Scott, Michael L.},
+  title     = {Synchronization without Contention},
+  year      = {1991},
+  isbn      = {0897913809},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  url       = {https://doi.org/10.1145/106972.106999},
+  doi       = {10.1145/106972.106999},
+  booktitle = {Proceedings of the Fourth International Conference on Architectural Support for Programming Languages and Operating Systems},
+  pages     = {269–278},
+  numpages  = {10},
+  location  = {Santa Clara, California, USA},
+  series    = {ASPLOS IV}
+}
+
+@techreport{C-Lock,
+  author      = {Craig, Travis},
+  title       = {Building FIFO and priority queuing spin locks from atomic swap},
+  institution = {University of Washington, Department of Computer Science and Engineering, FR-35},
+  year        = {1993},
+  number      = {93-02-02},
+  address     = {Seattle, WA 98195},
+  month       = feb
+}
+
+@inproceedings{LH-Lock,
+  author    = {Magnusson, Peter S. and Landin, Anders and Hagersten, Erik},
+  title     = {Queue Locks on Cache Coherent Multiprocessors},
+  year      = {1994},
+  isbn      = {0818656026},
+  publisher = {IEEE Computer Society},
+  address   = {USA},
+  url       = {https://doi.org/10.1109/IPPS.1994.288305},
+  doi       = {10.1109/IPPS.1994.288305},
+  abstract  = {Large-scale shared-memory multiprocessors typically have long latencies for remote data accesses. A key issue for execution performance of many common applications is the synchronization cost. The communication scalability of synchronization has been improved by the introduction of queue-based spin-locks instead of Test&amp;(Test&amp;Set). For architectures with long access latencies for global data, attention should also be paid to the number of global accesses that are involved in synchronization. We present a method to characterize the performance of proposed queue lock algorithms, and apply it to previously published algorithms. We also present two new queue locks, the LH lock and the M lock. We compare the locks in terms of performance, memory requirements, code size and required hardware support. The LH lock is the simplest of all the locks, yet requires only an atomic swap operation. The M lock is superior in terms of global accesses needed to perform synchronization and still competitive in all other criteria. We conclude that the M lock is the best overall queue lock for the class of architectures studied.&lt;<ETX>&gt;</ETX>},
+  booktitle = {Proceedings of the 8th International Symposium on Parallel Processing},
+  pages     = {165–171},
+  numpages  = {7}
+}
+
+@inproceedings{RH-Lock,
+  author    = {Radovi\'{c}, Zoran and Hagersten, Erik},
+  title     = {Efficient Synchronization for Nonuniform Communication Architectures},
+  year      = {2002},
+  isbn      = {076951524X},
+  publisher = {IEEE Computer Society Press},
+  address   = {Washington, DC, USA},
+  issn      = {1063-9535},
+  url       = {https://doi.org/10.1109/SC.2002.10038},
+  doi       = {10.1109/SC.2002.10038},
+  booktitle = {Proceedings of the 2002 ACM/IEEE Conference on Supercomputing},
+  month     = {Nov},
+  pages     = {1–13},
+  numpages  = {13},
+  location  = {Baltimore, Maryland},
+  series    = {SC '02}
+}
+
+@inproceedings{HCLH-Lock,
+  author    = {Luchangco, Victor and Nussbaum, Dan and Shavit, Nir},
+  title     = {A Hierarchical CLH Queue Lock},
+  year      = {2006},
+  isbn      = {3540377832},
+  publisher = {Springer-Verlag},
+  address   = {Berlin, Heidelberg},
+  url       = {https://doi.org/10.1007/11823285_84},
+  doi       = {10.1007/11823285_84},
+  abstract  = {Modern multiprocessor architectures such as CC-NUMA machines or CMPs have nonuniform
+               communication architectures that render programs sensitive to memory access locality.
+               A recent paper by Radovi\'{c} and Hagersten shows that performance gains can be obtained
+               by developing general-purpose mutual-exclusion locks that encourage threads with high
+               mutual memory locality to acquire the lock consecutively, thus reducing the overall
+               cost due to cache misses. Radovi\'{c} and Hagersten present the first such hierarchical
+               locks. Unfortunately, their locks are backoff locks, which are known to incur higher
+               cache miss rates than queue-based locks, suffer from various fundamental fairness
+               issues, and are hard to tune so as to maximize locality of lock accesses.Extending
+               queue-locking algorithms to be hierarchical requires that requests from threads with
+               high mutual memory locality be consecutive in the queue. Until now, it was not clear
+               that one could design such locks because collecting requests locally and moving them
+               into a global queue seemingly requires a level of coordination whose cost would defeat
+               the very purpose of hierarchical locking.This paper presents a hierarchical version
+               of the Craig, Landin, and Hagersten CLH queue lock, which we call the HCLH queue lock.
+               In this algorithm, threads build implicit local queues of waiting threads, splicing
+               them into a global queue at the cost of only a single CAS operation.In a set of microbenchmarks
+               run on a large scale multiprocessor machine and a state-of-the-art multi-threaded
+               multi-core chip, the HLCH algorithm exhibits better performance and significantly
+               better fairness than the hierarchical backoff locks of Radovi\'{c} and Hagersten.},
+  booktitle = {Proceedings of the 12th International Conference on Parallel Processing},
+  pages     = {801–810},
+  numpages  = {10},
+  location  = {Dresden, Germany},
+  series    = {Euro-Par'06}
+}
+
+@inproceedings{FC-MCS-Lock,
+  author    = {Dice, Dave and Marathe, Virendra J. and Shavit, Nir},
+  title     = {Flat-Combining NUMA Locks},
+  year      = {2011},
+  isbn      = {9781450307437},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  url       = {https://doi.org/10.1145/1989493.1989502},
+  doi       = {10.1145/1989493.1989502},
+  abstract  = {Multicore machines are growing in size, and accordingly shifting from simple bus-based
+               designs to NUMA and CCNUMA architectures. With this shift, the need for scalable hierarchical
+               locking algorithms is becoming crucial to performance. This paper presents a novel
+               scalable hierarchical queue-lock algorithm based on the flat combining synchronization
+               paradigm. At the core of the new algorithm is a scheme for building local queues of
+               waiting threads in a highly efficient manner, and then merging them globally, all
+               with little interconnect traffic and virtually no costly synchronization operations
+               in the common case. In empirical testing on an Oracle SPARC Enterprise T5440 Server,
+               a 256-way CC-NUMA machine, our new flat-combining hierarchical lock significantly
+               outperforms all classic locking algorithms, and at high concurrency levels, provides
+               up to a factor of two improvement over HCLH, the most efficient known hierarchical
+               locking algorithm.},
+  booktitle = {Proceedings of the Twenty-Third Annual ACM Symposium on Parallelism in Algorithms and Architectures},
+  pages     = {65–74},
+  numpages  = {10},
+  keywords  = {hierarchical locks, flat combining, queue locks},
+  location  = {San Jose, California, USA},
+  series    = {SPAA '11}
+}
+
+@article{Cohort-Lock,
+  author     = {Dice, David and Marathe, Virendra J. and Shavit, Nir},
+  title      = {Lock Cohorting: A General Technique for Designing NUMA Locks},
+  year       = {2012},
+  issue_date = {August 2012},
+  publisher  = {Association for Computing Machinery},
+  address    = {New York, NY, USA},
+  volume     = {47},
+  number     = {8},
+  issn       = {0362-1340},
+  url        = {https://doi.org/10.1145/2370036.2145848},
+  doi        = {10.1145/2370036.2145848},
+  abstract   = {Multicore machines are quickly shifting to NUMA and CC-NUMA architectures, making
+                scalable NUMA-aware locking algorithms, ones that take into account the machines'
+                non-uniform memory and caching hierarchy, ever more important. This paper presents
+                lock cohorting, a general new technique for designing NUMA-aware locks that is as
+                simple as it is powerful.Lock cohorting allows one to transform any spin-lock algorithm,
+                with minimal non-intrusive changes, into scalable NUMA-aware spin-locks. Our new cohorting
+                technique allows us to easily create NUMA-aware versions of the TATAS-Backoff, CLH,
+                MCS, and ticket locks, to name a few. Moreover, it allows us to derive a CLH-based
+                cohort abortable lock, the first NUMA-aware queue lock to support abortability.We
+                empirically compared the performance of cohort locks with prior NUMA-aware and classic
+                NUMA-oblivious locks on a synthetic micro-benchmark, a real world key-value store
+                application memcached, as well as the libc memory allocator. Our results demonstrate
+                that cohort locks perform as well or better than known locks when the load is low
+                and significantly out-perform them as the load increases.},
+  journal    = {SIGPLAN Not.},
+  month      = feb,
+  pages      = {247–256},
+  numpages   = {10},
+  keywords   = {NUMA, spin locks, hierarchical locks}
+}
+
+@inproceedings{DART-MPI,
+  author    = {Zhou, Huan and Mhedheb, Yousri and Idrees, Kamran and Glass, Colin W. and Gracia, Jos\'{e} and F\"{u}rlinger, Karl},
+  title     = {DART-MPI: An MPI-Based Implementation of a PGAS Runtime System},
+  year      = {2014},
+  isbn      = {9781450332477},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  url       = {https://doi.org/10.1145/2676870.2676875},
+  doi       = {10.1145/2676870.2676875},
+  abstract  = {A Partitioned Global Address Space (PGAS) approach treats a distributed system as
+               if the memory were shared on a global level. Given such a global view on memory, the
+               user may program applications very much like shared memory systems. This greatly simplifies
+               the tasks of developing parallel applications, because no explicit communication has
+               to be specified in the program for data exchange between different computing nodes.
+               In this paper we present DART, a runtime environment, which implements the PGAS paradigm
+               on large-scale high-performance computing clusters. A specific feature of our implementation
+               is the use of one-sided communication of the Message Passing Interface (MPI) version
+               3 (i.e. MPI-3) as the underlying communication substrate. We evaluated the performance
+               of the implementation with several low-level kernels in order to determine overheads
+               and limitations in comparison to the underlying MPI-3.},
+  booktitle = {Proceedings of the 8th International Conference on Partitioned Global Address Space Programming Models},
+  articleno = {3},
+  numpages  = {11},
+  keywords  = {Runtime Framework, One-sided Communication, Distributed Shared Memory, PGAS, MPI},
+  location  = {Eugene, OR, USA},
+  series    = {PGAS '14}
+}
+
+@misc{MPI-3.1,
+  title        = {MPI: A Message-Passing Interface Standard},
+  edition      = {3.1},
+  organization = {Message Passing Interface Forum},
+  month        = jun,
+  year         = {2015},
+  url          = {https://www.mpi-forum.org/docs/mpi-3.1/mpi31-report.pdf}
+}
+
+@inproceedings{HMCS-Lock,
+  author    = {Chabbi, Milind and Fagan, Michael and Mellor-Crummey, John},
+  title     = {High Performance Locks for Multi-Level NUMA Systems},
+  year      = {2015},
+  isbn      = {9781450332057},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  url       = {https://doi.org/10.1145/2688500.2688503},
+  doi       = {10.1145/2688500.2688503},
+  booktitle = {Proceedings of the 20th ACM SIGPLAN Symposium on Principles and Practice of Parallel Programming},
+  pages     = {215–226},
+  numpages  = {12},
+  keywords  = {MCS, Analytical modeling, Lock fairness, Spin locks, NUMA, Lock throughput, Hierarchical locks},
+  location  = {San Francisco, CA, USA},
+  series    = {PPoPP 2015}
+}
+
+@inproceedings{RMA-RW,
+  author    = {Schmid, Patrick and Besta, Maciej and Hoefler, Torsten},
+  title     = {High-Performance Distributed RMA Locks},
+  year      = {2016},
+  isbn      = {9781450343145},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  url       = {https://doi.org/10.1145/2907294.2907323},
+  doi       = {10.1145/2907294.2907323},
+  booktitle = {Proceedings of the 25th ACM International Symposium on High-Performance Parallel and Distributed Computing},
+  pages     = {19–30},
+  numpages  = {12},
+  keywords  = {topology-aware, locks, reader-writer locks, distributed locks, locking, parallel programming, hpc},
+  location  = {Kyoto, Japan},
+  series    = {HPDC '16}
+}
+
+@article{AHMCS-Lock,
+  author     = {Chabbi, Milind and Mellor-Crummey, John},
+  title      = {Contention-Conscious, Locality-Preserving Locks},
+  year       = {2016},
+  issue_date = {August 2016},
+  publisher  = {Association for Computing Machinery},
+  address    = {New York, NY, USA},
+  volume     = {51},
+  number     = {8},
+  issn       = {0362-1340},
+  url        = {https://doi.org/10.1145/3016078.2851166},
+  doi        = {10.1145/3016078.2851166},
+  abstract   = {Over the last decade, the growing use of cache-coherent NUMA architectures has spurred the development of numerous locality-preserving mutual exclusion algorithms. NUMA-aware locks such as HCLH, HMCS, and cohort locks exploit locality of reference among nearby threads to deliver high lock throughput under high contention. However, the hierarchical nature of these locality-aware locks increases latency, which reduces the throughput of uncontended or lightly-contended critical sections. To date, no lock design for NUMA systems has delivered both low latency under low contention and high throughput under high contention.In this paper, we describe the design and evaluation of an adaptive mutual exclusion scheme (AHMCS lock), which employs several orthogonal strategies---a hierarchical MCS (HMCS) lock for high throughput under high contention, Lamport's fast path approach for low latency under low contention, an adaptation mechanism that employs hysteresis to balance latency and throughput under moderate contention, and hardware transactional memory for lowest latency in the absence of contention. The result is a top performing lock that has most properties of an ideal mutual exclusion algorithm. AHMCS exploits the strengths of multiple contention management techniques to deliver high performance over a broad range of contention levels. Our empirical evaluations demonstrate the effectiveness of AHMCS over prior art.},
+  journal    = {SIGPLAN Not.},
+  month      = {feb},
+  articleno  = {22},
+  numpages   = {14},
+  keywords   = {spin locks, NUMA, dynamic locks, hierarchical locks}
+}
+
+@inproceedings{CST-Lock,
+  author    = {Kashyap, Sanidhya and Min, Changwoo and Kim, Taesoo},
+  title     = {Scalable NUMA-Aware Blocking Synchronization Primitives},
+  year      = {2017},
+  isbn      = {9781931971386},
+  publisher = {USENIX Association},
+  address   = {USA},
+  abstract  = {Application scalability is a critical aspect to efficiently use NUMA machines with
+               many cores. To achieve that, various techniques ranging from task placement to data
+               sharding are used in practice. However, from the perspective of an operating system,
+               these techniques often do not work as expected because various subsystems in the OS
+               interact and share data structures among themselves, resulting in scalability bottlenecks.
+               Although current OSes attempt to tackle this problem by introducing a wide range of
+               synchronization primitives such as spinlock and mutex, the widely used synchronization
+               mechanisms are not designed to handle both under- and over-subscribed scenarios in
+               a scalable fashion. In particular, the current blocking synchronization primitives
+               that are designed to address both scenarios are NUMA oblivious, meaning that they
+               suffer from cache-line contention in an undersubscribed situation, and even worse,
+               inherently spur long scheduler intervention, which leads to sub-optimal performance
+               in an over-subscribed situation.In this work, we present several design choices to
+               implement scalable blocking synchronization primitives that can address both under-
+               and over-subscribed scenarios. Such design decisions include memory-efficient NUMA-aware
+               locks (favorable for deployment) and scheduling-aware, scalable parking and wake-up
+               strategies. To validate our design choices, we implement two new blocking synchronization
+               primitives, which are variants of mutex and read-write semaphore in the Linux kernel.
+               Our evaluation shows that these locks can scale real-world applications by 1.2-1.6\texttimes{}
+               and some of the file system operations up to 4.7\texttimes{} in both under- and over-subscribed
+               scenarios. Moreover, they use 1.5-10\texttimes{} less memory than the state-of-the-art NUMA-aware
+               locks on a 120-core machine.},
+  booktitle = {Proceedings of the 2017 USENIX Conference on Usenix Annual Technical Conference},
+  pages     = {603–615},
+  numpages  = {13},
+  location  = {Santa Clara, CA, USA},
+  series    = {USENIX ATC '17}
+}
+
+@article{foMPI,
+  author     = {Gerstenberger, Robert and Besta, Maciej and Hoefler, Torsten},
+  title      = {Enabling Highly Scalable Remote Memory Access Programming with MPI-3 One Sided},
+  year       = {2018},
+  issue_date = {October 2018},
+  publisher  = {Association for Computing Machinery},
+  address    = {New York, NY, USA},
+  volume     = {61},
+  number     = {10},
+  issn       = {0001-0782},
+  url        = {https://doi.org/10.1145/3264413},
+  doi        = {10.1145/3264413},
+  abstract   = {Modern high-performance networks offer remote direct memory access (RDMA) that exposes a process' virtual address space to other processes in the network. The Message Passing Interface (MPI) specification has recently been extended with a programming interface called MPI-3 Remote Memory Access (MPI-3 RMA) for efficiently exploiting state-of-the-art RDMA features. MPI-3 RMA enables a powerful programming model that alleviates many message passing downsides. In this work, we design and develop bufferless protocols that demonstrate how to implement this interface and support scaling to millions of cores with negligible memory consumption while providing highest performance and minimal overheads. To arm programmers, we provide a spectrum of performance models for RMA functions that enable rigorous mathematical analysis of application performance and facilitate the development of codes that solve given tasks within specified time and energy budgets. We validate the usability of our library and models with several application studies with up to half a million processes. In a wider sense, our work illustrates how to use RMA principles to accelerate computation- and data-intensive codes.},
+  journal    = {Commun. ACM},
+  month      = sep,
+  pages      = {106–113},
+  numpages   = {8}
+}
+
+@inproceedings{CNA-Lock,
+  author    = {Dice, Dave and Kogan, Alex},
+  title     = {Compact NUMA-Aware Locks},
+  year      = {2019},
+  isbn      = {9781450362818},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  url       = {https://doi.org/10.1145/3302424.3303984},
+  doi       = {10.1145/3302424.3303984},
+  abstract  = {Modern multi-socket architectures exhibit non-uniform memory access (NUMA) behavior, where access by a core to data cached locally on a socket is much faster than access to data cached on a remote socket. Prior work offers several efficient NUMA-aware locks that exploit this behavior by keeping the lock ownership on the same socket, thus reducing remote cache misses and inter-socket communication. Virtually all those locks, however, are hierarchical in their nature, thus requiring space proportional to the number of sockets. The increased memory cost renders NUMA-aware locks unsuitable for systems that are conscious to space requirements of their synchronization constructs, with the Linux kernel being the chief example.In this work, we present a compact NUMA-aware lock that requires only one word of memory, regardless of the number of sockets in the underlying machine. The new lock is a variant of an efficient (NUMA-oblivious) MCS lock, and inherits its performant features, such as local spinning and a single atomic instruction in the acquisition path. Unlike MCS, the new lock organizes waiting threads in two queues, one composed of threads running on the same socket as the current lock holder, and another composed of threads running on a different socket(s).We implemented the new lock in user-space as well as integrated it in the Linux kernel's qspinlock, one of the major synchronization constructs in the kernel. Our evaluation using both user-space and kernel benchmarks shows that the new lock has a single-thread performance of MCS, but significantly outperforms the latter under contention, achieving a similar level of performance when compared to other, state-of-the-art NUMA-aware locks that require substantially more space.},
+  booktitle = {Proceedings of the Fourteenth EuroSys Conference 2019},
+  articleno = {12},
+  numpages  = {15},
+  keywords  = {mutual exclusion, non-uniform access memory, synchronization, Linux kernel, locks, memory footprint},
+  location  = {Dresden, Germany},
+  series    = {EuroSys '19}
+}
+
+@inproceedings{CNA-Lock,
+  author    = {Dice, Dave and Kogan, Alex},
+  title     = {Compact NUMA-Aware Locks},
+  year      = {2019},
+  isbn      = {9781450362818},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  url       = {https://doi.org/10.1145/3302424.3303984},
+  doi       = {10.1145/3302424.3303984},
+  abstract  = {Modern multi-socket architectures exhibit non-uniform memory access (NUMA) behavior, where access by a core to data cached locally on a socket is much faster than access to data cached on a remote socket. Prior work offers several efficient NUMA-aware locks that exploit this behavior by keeping the lock ownership on the same socket, thus reducing remote cache misses and inter-socket communication. Virtually all those locks, however, are hierarchical in their nature, thus requiring space proportional to the number of sockets. The increased memory cost renders NUMA-aware locks unsuitable for systems that are conscious to space requirements of their synchronization constructs, with the Linux kernel being the chief example.In this work, we present a compact NUMA-aware lock that requires only one word of memory, regardless of the number of sockets in the underlying machine. The new lock is a variant of an efficient (NUMA-oblivious) MCS lock, and inherits its performant features, such as local spinning and a single atomic instruction in the acquisition path. Unlike MCS, the new lock organizes waiting threads in two queues, one composed of threads running on the same socket as the current lock holder, and another composed of threads running on a different socket(s).We implemented the new lock in user-space as well as integrated it in the Linux kernel's qspinlock, one of the major synchronization constructs in the kernel. Our evaluation using both user-space and kernel benchmarks shows that the new lock has a single-thread performance of MCS, but significantly outperforms the latter under contention, achieving a similar level of performance when compared to other, state-of-the-art NUMA-aware locks that require substantially more space.},
+  booktitle = {Proceedings of the Fourteenth EuroSys Conference 2019},
+  articleno = {12},
+  numpages  = {15},
+  keywords  = {mutual exclusion, non-uniform access memory, synchronization, Linux kernel, locks, memory footprint},
+  location  = {Dresden, Germany},
+  series    = {EuroSys '19}
+}
+
+@inproceedings{SHFL-Lock,
+  author    = {Kashyap, Sanidhya and Calciu, Irina and Cheng, Xiaohe and Min, Changwoo and Kim, Taesoo},
+  title     = {Scalable and Practical Locking with Shuffling},
+  year      = {2019},
+  isbn      = {9781450368735},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  url       = {https://doi.org/10.1145/3341301.3359629},
+  doi       = {10.1145/3341301.3359629},
+  abstract  = {Locks are an essential building block for high-performance multicore system software. To meet performance goals, lock algorithms have evolved towards specialized solutions for architectural characteristics (e.g., NUMA). However, inpractice, applications run on different server platforms and exhibit widely diverse behaviors that evolve with time (e.g., number of threads, number of locks). This creates performance and scalability problems for locks optimized for a single scenario and platform. For example, popular spinlocks suffer from excessive cache-line bouncing in NUMA systems, while scalable, NUMA-aware locks exhibit sub-par single-thread performance.In this paper, we identify four dominating factors that impact the performance of lock algorithms. We then propose a new technique, shuffling, that can dynamically accommodate all these factors, without slowing down the critical path of the lock. The key idea of shuffling is to re-order the queue of threads waiting to acquire the lock in accordance with some pre-established policy. For best performance, this work is done off the critical path, by the waiter threads. Using shuffling, we demonstrate how to achieve NUMA-awareness and implement an efficient parking/wake-up strategy, without any auxiliary data structure, mostly off the critical path. The evaluation shows that our family of locks based on shuffling improves the throughput of real-world applications up to 12.5x, with impressive memory footprint reduction compared with the recent lock algorithms.},
+  booktitle = {Proceedings of the 27th ACM Symposium on Operating Systems Principles},
+  pages     = {586–599},
+  numpages  = {14},
+  keywords  = {memory footprint, mutual exclusion, Linux},
+  location  = {Huntsville, Ontario, Canada},
+  series    = {SOSP '19}
+}
+
+@inproceedings{Fissile-Locks,
+  author    = {Dice, Dave and Kogan, Alex},
+  editor    = {Georgiou, Chryssis and Majumdar, Rupak},
+  title     = {Fissile Locks},
+  booktitle = {Networked Systems},
+  year      = {2021},
+  publisher = {Springer International Publishing},
+  address   = {Cham},
+  pages     = {192--208},
+  abstract  = {Classic test-and-test (TS) mutual exclusion locks are simple, and enjoy high performance and low latency of ownership transfer under light or no contention. They do not, however, scale gracefully under high contention and do not provide any admission order guarantees. Such concerns led to the development of scalable queue-based locks, such as a recent Compact NUMA-aware (CNA) lock, a variant of another popular queue-based MCS lock. CNA scales well under load and provides certain admission guarantees, but has more complicated lock handover operations than TS and incurs higher latencies at low contention.},
+  isbn      = {978-3-030-67087-0},
+  url       = {https://doi.org/10.1007/978-3-030-67087-0_13},
+  doi       = {10.1007/978-3-030-67087-0_13}
+}
+
+@inproceedings{CLoF,
+  author    = {de Lima Chehab, Rafael Lourenco and Paolillo, Antonio and Behrens, Diogo and Fu, Ming and H\"{a}rtig, Hermann and Chen, Haibo},
+  title     = {CLoF: A Compositional Lock Framework for Multi-Level NUMA Systems},
+  year      = {2021},
+  isbn      = {9781450387095},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  url       = {https://doi.org/10.1145/3477132.3483557},
+  doi       = {10.1145/3477132.3483557},
+  abstract  = {Efficient locking mechanisms are extremely important to support large-scale concurrency and exploit the performance promises of many-core servers. Implementing an efficient, generic, and correct lock is very challenging due to the differences between various NUMA architectures. The performance impact of architectural/NUMA hierarchy differences between x86 and Armv8 are not yet fully explored, leading to unexpected performance when simply porting NUMA-aware locks from x86 to Armv8. Moreover, due to the Armv8 Weak Memory Model (WMM), correctly implementing complicated NUMA-aware locks is very difficult.We propose a Compositional Lock Framework (CLoF) for multi-level NUMA systems. CLoF composes NUMA-oblivious locks in a hierarchy matching the target platform, leading to hundreds of correct by construction NUMA-aware locks. CLoF can automatically select the best lock among them. To show the correctness of CLoF on WMMs, we provide an inductive argument with base and induction steps verified with model checkers. In our evaluation, CLoF locks outperform state-of-the-art NUMA-aware locks in most scenarios, e.g., in a highly contended LevelDB benchmark, our best CLoF locks yield twice the throughput achieved with CNA lock and ShflLock on large x86 and Armv8 servers.},
+  booktitle = {Proceedings of the ACM SIGOPS 28th Symposium on Operating Systems Principles},
+  pages     = {851–865},
+  numpages  = {15},
+  keywords  = {multicore concurrency, non-uniform access memory, weak memory models},
+  location  = {Virtual Event, Germany},
+  series    = {SOSP '21}
+}
+
+@article{Hemlock,
+  author  = {Dave Dice and Alex Kogan},
+  title   = {Hemlock : Compact and Scalable Mutual Exclusion},
+  journal = {CoRR},
+  volume  = {abs/2102.03863v4},
+  year    = {2022},
+  url     = {https://arxiv.org/abs/2102.03863v4},
+  month   = jan
+}

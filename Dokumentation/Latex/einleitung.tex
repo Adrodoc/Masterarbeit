@@ -1,0 +1,102 @@
+\chapter{Einleitung}
+
+\section{Motivation}
+
+Locks sind einer der grundlegendsten und verbreitetsten Mechanismen für die Synchronisierung von Speicherzugriffen in parallelen Programmen
+und es gibt eine Vielzahl von Algorithmen,
+die auf Locks basieren.
+Es ist daher nicht verwunderlich,
+dass immer wieder neue Lock-Algorithmen entwickelt werden,
+die weitere Verbesserungen in Geschwindigkeit, Speicherverbrauch oder anderen Bereichen erzielen.
+Die meisten dieser Algorithmen werden für Systeme mit gemeinsamem Speicher entwickelt.
+Locks können aber auch für die Programmierung in verteilten Systemen,
+z.~B. im Bereich \gls{hpc},
+nützlich sein \cite{RMA-RW}.
+
+Da in verteilten Systemen die Zugriffe auf entfernten Speicher deutlich langsamer sind
+als auf lokalen Speicher,
+müssen entfernte Zugriffe vermieden werden,
+um eine gute Performance zu erzielen.
+Locks, die nicht mit diesem Ziel entworfen wurden,
+eignen sich daher weniger gut für den Einsatz in verteilten Systemen.
+
+Diese Anforderung,
+Zugriffe auf entfernten Speicher zu vermeiden,
+gibt es aber nicht nur bei verteilten Systemen,
+sondern auch bei Systemen mit gemeinsamem Speicher:
+Manche Prozessoren nutzen Architekturen mit \glsfirst{numa}.
+Hierbei sind Zugriffe auf den Speicher anderer Prozessoren langsamer
+als Zugriffe auf den eigenen Speicher \cite{NUMA}
+und müssen entsprechend vermieden werden,
+um eine gute Performance zu erzielen.
+Algorithmen,
+die für \gls{numa}-Architekturen entworfen wurden,
+könnten sich daher auch für verteilte Systeme eignen.
+
+Im Rahmen dieser Arbeit soll daher untersucht werden,
+ob durch die Portierung von Locks für \gls{numa}-Architekturen auf verteilten Speicher
+eine bessere Performance erreicht werden kann
+als durch Nutzung bestehender Implementierungen für verteilte Systeme.
+
+\section{Übersicht}
+
+In \autoref{ch:hinfuehrung} werden die notwendigen Grundlagen zu Locks,
+den Unterschieden zwischen gemeinsamem und verteiltem Speicher
+und \gls{numa} etabliert.
+Darauf aufbauend wird das Ziel der Arbeit hergeleitet.
+
+\autoref{ch:dist_locks} zeigt dann,
+welche Locks bereits auf verteiltem Speicher zur Verfügung stehen
+und mit welchen Optimierungen diese verbessert werden können.
+Neben einem Lock basierend auf \texttt{MPI\_Win\_lock}
+werden dabei drei weitere Locks betrachtet:
+\texttt{dash::Mutex} aus \cite{DART-MPI},
+sowie D-MCS und RMA-MCS aus \cite{RMA-RW}.
+
+Da es bisher kaum Locks für verteilte Systeme gibt,
+gibt es auch keine Benchmarksuites,
+mit denen neue Implementierungen detailliert mit Bestehenden verglichen werden könnten.
+Daher werden in \autoref{ch:benchmarks} die relevanten Kriterien
+für einen Vergleich zusammengefasst
+und eine neue Benchmarksuite entwickelt.
+Mit dieser können
+die Geschwindigkeit,
+die praktische Fairness
+und andere algorithmusspezifische Kennzahlen
+von beliebigen Lock-Implementierungen auf verteiltem Speicher
+in verschiedenen Szenarien gemessen werden.
+
+Anschließend werden in \autoref{ch:portierung}
+die sieben Lock-Algorithmen für \gls{numa} aus \autoref{tab:numa_locks} analysiert,
+um zu entscheiden,
+welche der Algorithmen sich für eine Portierung auf verteilten Speicher eignen.
+Die geeigneten Algorithmen werden dann portiert,
+anhand der Erkenntnisse aus \autoref{ch:dist_locks} optimiert
+und mit der Benchmarksuite aus \autoref{ch:benchmarks} evaluiert.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|c|c|}
+        \hline
+        Algorithmus & Jahr & Quelle             & Analyse                   \\
+        \hline
+        RH-Lock     & 2002 & \cite{RH-Lock}     & \autoref{sec:rh-lock}     \\
+        \hline
+        HCLH-Lock   & 2006 & \cite{HCLH-Lock}   & \autoref{sec:hclh-lock}   \\
+        \hline
+        Cohort-Lock & 2012 & \cite{Cohort-Lock} & \autoref{sec:cohort-lock} \\
+        \hline
+        HMCS-Lock   & 2015 & \cite{HMCS-Lock}   & \autoref{sec:cohort-lock} \\
+        \hline
+        AHMCS-Lock  & 2016 & \cite{AHMCS-Lock}  & \autoref{sec:ahmcs-lock}  \\
+        \hline
+        CST-Lock    & 2017 & \cite{CST-Lock}    & \autoref{sec:cst-lock}    \\
+        \hline
+        SHFL-Lock   & 2019 & \cite{Shfl-Lock}   & \autoref{sec:shfl-lock}   \\
+        \hline
+    \end{tabular}
+    \caption{Untersuchte NUMA-Locks}
+    \label{tab:numa_locks}
+\end{table}
+
+Schließlich werden in \autoref{ch:fazit} die Ergebnisse zusammengefasst.

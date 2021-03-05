@@ -1,0 +1,1230 @@
+@inproceedings{Amdahl's-law,
+  author    = {Amdahl, Gene M.},
+  title     = {Validity of the Single Processor Approach to Achieving Large Scale Computing Capabilities},
+  year      = {1967},
+  isbn      = {9781450378956},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  url       = {https://doi.org/10.1145/1465482.1465560},
+  doi       = {10.1145/1465482.1465560},
+  abstract  = {For over a decade prophets have voiced the contention that the organization of a single
+               computer has reached its limits and that truly significant advances can be made only
+               by interconnection of a multiplicity of computers in such a manner as to permit cooperative
+               solution. Variously the proper direction has been pointed out as general purpose computers
+               with a generalized interconnection of memories, or as specialized computers with geometrically
+               related memory interconnections and controlled by one or more instruction streams.},
+  booktitle = {Proceedings of the April 18-20, 1967, Spring Joint Computer Conference},
+  pages     = {483–485},
+  numpages  = {3},
+  location  = {Atlantic City, New Jersey},
+  series    = {AFIPS '67 (Spring)}
+}
+
+@article{bessels_correction,
+  author = {So, Stephen},
+  title  = {Why is the sample variance a biased estimator?},
+  year   = {2008},
+  month  = sep,
+  note   = {Signal Processing Laboratory, Griffith School of Engineering, Griffith University, Brisbane, QLD, Australia, 4111}
+}
+
+@article{cache-coherence,
+  author     = {Censier, L. M. and Feautrier, P.},
+  title      = {A New Solution to Coherence Problems in Multicache Systems},
+  year       = {1978},
+  issue_date = {December 1978},
+  publisher  = {IEEE Computer Society},
+  address    = {USA},
+  volume     = {27},
+  number     = {12},
+  issn       = {0018-9340},
+  url        = {https://doi.org/10.1109/TC.1978.1675013},
+  doi        = {10.1109/TC.1978.1675013},
+  abstract   = {A memory hierarchy has coherence problems as soon as one of its levels is split in
+                several independent units which are not equally accessible from faster levels or processors.
+                The classical solution to these problems, as found for instance in multiprocessor,
+                multicache systems, is to restore a degree of interdependence between such units through
+                a set of high speed interconnecting buses. This solution is not entirely satisfactory,
+                as it tends to reduce the throughput of the memory hierarchy and to increase its cost.},
+  journal    = {IEEE Trans. Comput.},
+  month      = dec,
+  pages      = {1112–1118},
+  numpages   = {7},
+  keywords   = {multiprocessor systems, Caches, coherence, nonstore-through, memory hierarchy}
+}
+
+@inproceedings{Haswell-cache-coherence,
+  author    = {Molka, Daniel and Hackenberg, Daniel and Schone, Robert and Nagel, Wolfgang E.},
+  title     = {Cache Coherence Protocol and Memory Performance of the Intel Haswell-EP Architecture},
+  year      = {2015},
+  isbn      = {9781467375870},
+  publisher = {IEEE Computer Society},
+  address   = {USA},
+  url       = {https://doi.org/10.1109/ICPP.2015.83},
+  doi       = {10.1109/ICPP.2015.83},
+  abstract  = {A major challenge in the design of contemporary microprocessors is the increasing number of cores in conjunction with the persevering need for cache coherence. To achieve this, the memory subsystem steadily gains complexity that has evolved to levels beyond comprehension of most application performance analysts. The Intel Has well-EP architecture is such an example. It includes considerable advancements regarding memory hierarchy, on-chip communication, and cache coherence mechanisms compared to the previous generation. We have developed sophisticated benchmarks that allow us to perform in-depth investigations with full memory location and coherence state control. Using these benchmarks we investigate performance data and architectural properties of the Has well-EP micro-architecture, including important memory latency and bandwidth characteristics as well as the cost of core-to-core transfers. This allows us to further the understanding of such complex designs by documenting implementation details the are either not publicly available at all, or only indirectly documented through patents.},
+  booktitle = {Proceedings of the 2015 44th International Conference on Parallel Processing (ICPP)},
+  pages     = {739–748},
+  numpages  = {10},
+  series    = {ICPP '15}
+}
+
+@inproceedings{BCL,
+  author    = {Brock, Benjamin and Bulu\c{c}, Ayd\i{}n and Yelick, Katherine},
+  title     = {BCL: A Cross-Platform Distributed Data Structures Library},
+  year      = {2019},
+  isbn      = {9781450362955},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  url       = {https://doi.org/10.1145/3337821.3337912},
+  doi       = {10.1145/3337821.3337912},
+  abstract  = {One-sided communication is a useful paradigm for irregular parallel applications, but most one-sided programming environments, including MPI's one-sided interface and PGAS programming languages, lack application-level libraries to support these applications. We present the Berkeley Container Library, a set of generic, cross-platform, high-performance data structures for irregular applications, including queues, hash tables, Bloom filters and more. BCL is written in C++ using an internal DSL called the BCL Core that provides one-sided communication primitives such as remote get and remote put operations. The BCL Core has backends for MPI, OpenSHMEM, GASNet-EX, and UPC++, allowing BCL data structures to be used natively in programs written using any of these programming environments. Along with our internal DSL, we present the BCL ObjectContainer abstraction, which allows BCL data structures to transparently serialize complex data types while maintaining efficiency for primitive types. We also introduce the set of BCL data structures and evaluate their performance across a number of high-performance computing systems, demonstrating that BCL programs are competitive with hand-optimized code, even while hiding many of the underlying details of message aggregation, serialization, and synchronization.},
+  booktitle = {Proceedings of the 48th International Conference on Parallel Processing},
+  articleno = {102},
+  numpages  = {10},
+  keywords  = {Parallel Programming Libraries, RDMA, Distributed Data Structures},
+  location  = {Kyoto, Japan},
+  series    = {ICPP 2019}
+}
+
+@inproceedings{dmapp,
+  title     = {DMAPP - An API for One-sided Program Models on Baker Systems},
+  author    = {ten Bruggencate, Monika and Roweth, Duncan},
+  booktitle = {Cray User Group Conference},
+  year      = {2010}
+}
+
+@article{foMPI,
+  author     = {Gerstenberger, Robert and Besta, Maciej and Hoefler, Torsten},
+  title      = {Enabling Highly Scalable Remote Memory Access Programming with MPI-3 One Sided},
+  year       = {2018},
+  issue_date = {October 2018},
+  publisher  = {Association for Computing Machinery},
+  address    = {New York, NY, USA},
+  volume     = {61},
+  number     = {10},
+  issn       = {0001-0782},
+  url        = {https://doi.org/10.1145/3264413},
+  doi        = {10.1145/3264413},
+  abstract   = {Modern high-performance networks offer remote direct memory access (RDMA) that exposes a process' virtual address space to other processes in the network. The Message Passing Interface (MPI) specification has recently been extended with a programming interface called MPI-3 Remote Memory Access (MPI-3 RMA) for efficiently exploiting state-of-the-art RDMA features. MPI-3 RMA enables a powerful programming model that alleviates many message passing downsides. In this work, we design and develop bufferless protocols that demonstrate how to implement this interface and support scaling to millions of cores with negligible memory consumption while providing highest performance and minimal overheads. To arm programmers, we provide a spectrum of performance models for RMA functions that enable rigorous mathematical analysis of application performance and facilitate the development of codes that solve given tasks within specified time and energy budgets. We validate the usability of our library and models with several application studies with up to half a million processes. In a wider sense, our work illustrates how to use RMA principles to accelerate computation- and data-intensive codes.},
+  journal    = {Commun. ACM},
+  month      = sep,
+  pages      = {106–113},
+  numpages   = {8}
+}
+
+@book{fairness,
+  author    = {Francez, Nissim},
+  editor    = {},
+  publisher = {Springer, New York, NY},
+  title     = {Fairness},
+  series    = {Texts and Monographs in Computer Science},
+  edition   = {1},
+  year      = {1986},
+  url       = {https://doi.org/10.1007/978-1-4612-4886-6},
+  doi       = {10.1007/978-1-4612-4886-6},
+  isbn      = {978-1-4612-4886-6}
+}
+
+@misc{MPI-2.2,
+  title        = {MPI: A Message-Passing Interface Standard},
+  edition      = {2.2},
+  organization = {Message Passing Interface Forum},
+  month        = sep,
+  year         = {2009},
+  url          = {https://www.mpi-forum.org/docs/mpi-2.2/mpi22-report.pdf}
+}
+
+@misc{MPI-3.1,
+  title        = {MPI: A Message-Passing Interface Standard},
+  edition      = {3.1},
+  organization = {Message Passing Interface Forum},
+  month        = jun,
+  year         = {2015},
+  url          = {https://www.mpi-forum.org/docs/mpi-3.1/mpi31-report.pdf}
+}
+
+@article{NUMA,
+  author     = {Lameter, Christoph},
+  title      = {NUMA (Non-Uniform Memory Access): An Overview: NUMA Becomes More Common Because Memory Controllers Get Close to Execution Units on Microprocessors.},
+  year       = {2013},
+  issue_date = {July 2013},
+  publisher  = {Association for Computing Machinery},
+  address    = {New York, NY, USA},
+  volume     = {11},
+  number     = {7},
+  issn       = {1542-7730},
+  url        = {https://doi.org/10.1145/2508834.2513149},
+  doi        = {10.1145/2508834.2513149},
+  abstract   = {NUMA (non-uniform memory access) is the phenomenon that memory at various points in the address space of a processor have different performance characteristics. At current processor speeds, the signal path length from the processor to memory plays a significant role. Increased signal path length not only increases latency to memory but also quickly becomes a throughput bottleneck if the signal path is shared by multiple processors. The performance differences to memory were noticeable first on large-scale systems where data paths were spanning motherboards or chassis. These systems required modified operating-system kernels with NUMA support that explicitly understood the topological properties of the system’s memory (such as the chassis in which a region of memory was located) in order to avoid excessively long signal path lengths. (Altix and UV, SGI’s large address space systems, are examples. The designers of these products had to modify the Linux kernel to support NUMA; in these machines, processors in multiple chassis are linked via a proprietary interconnect called NUMALINK.)},
+  journal    = {Queue},
+  month      = {jul},
+  pages      = {40–51},
+  numpages   = {12}
+}
+
+RDMA
+
+@inproceedings{BlueGeneQ,
+  author    = {Kumar, Sameer and Mamidala, Amith R. and Faraj, Daniel A. and Smith, Brian and Blocksome, Michael and Cernohous, Bob and Miller, Douglas and Parker, Jeff and Ratterman, Joseph and Heidelberger, Philip and Chen, Dong and Steinmacher-Burrow, Burkhard},
+  booktitle = {2012 IEEE 26th International Parallel and Distributed Processing Symposium},
+  title     = {PAMI: A Parallel Active Message Interface for the Blue Gene/Q Supercomputer},
+  year      = {2012},
+  volume    = {},
+  number    = {},
+  pages     = {763-773},
+  abstract  = {The Blue Gene/Q machine is the next generation in the line of IBM massively parallel supercomputers, designed to scale to 262144 nodes and sixteen million threads. With each BG/Q node having 68 hardware threads, hybrid programming paradigms, which use message passing among nodes and multi-threading within nodes, are ideal and will enable applications to achieve high throughput on BG/Q. With such unprecedented massive parallelism and scale, this paper is a groundbreaking effort to explore the design challenges for designing a communication library that can match and exploit such massive parallelism In particular, we present the Parallel Active Messaging Interface (PAMI) library as our BG/Q library solution to the many challenges that come with a machine at such scale. PAMI provides (1) novel techniques to partition the application communication overhead into many contexts that can be accelerated by communication threads, (2) client and context objects to support multiple and different programming paradigms, (3) lockless algorithms to speed up MPI message rate, and (4) novel techniques leveraging the new BG/Q architectural features such as the scalable atomic primitives implemented in the L2 cache, the highly parallel hardware messaging unit that supports both point-to-point and collective operations, and the collective hardware acceleration for operations such as broadcast, reduce, and all reduce. We experimented with PAMI on 2048 BG/Q nodes and the results show high messaging rates as well as low latencies and high throughputs for collective communication operations.},
+  keywords  = {},
+  doi       = {10.1109/IPDPS.2012.73},
+  issn      = {1530-2075},
+  month     = {May}
+}
+
+@inproceedings{Gemini,
+  author    = {Alverson, Robert and Roweth, Duncan and Kaplan, Larry},
+  booktitle = {2010 18th IEEE Symposium on High Performance Interconnects},
+  title     = {The Gemini System Interconnect},
+  year      = {2010},
+  volume    = {},
+  number    = {},
+  pages     = {83-87},
+  abstract  = {The Gemini System Interconnect is a new network for Cray's supercomputer systems. It provides improved network functionality, latency and issue rate. Latency is reduced with OS bypass for sends and direct user completion notification on receives. Atomic memory operations support the construction of fast synchronization and reduction primitives.},
+  keywords  = {},
+  doi       = {10.1109/HOTI.2010.23},
+  issn      = {2332-5569},
+  month     = {Aug}
+}
+
+@misc{InfiniBand,
+  title        = {InfiniBand$^{TM}$ Architecture Specification Volume 1, Release 1.2.1},
+  organization = {InfiniBand$^{SM}$ Trade Association},
+  month        = nov,
+  year         = {2007}
+}
+
+@inproceedings{PERCS,
+  author    = {Arimilli, Baba and Arimilli, Ravi and Chung, Vicente and Clark, Scott and Denzel, Wolfgang and Drerup, Ben and Hoefler, Torsten and Joyner, Jody and Lewis, Jerry and Li, Jian and Ni, Nan and Rajamony, Ram},
+  booktitle = {2010 18th IEEE Symposium on High Performance Interconnects},
+  title     = {The PERCS High-Performance Interconnect},
+  year      = {2010},
+  volume    = {},
+  number    = {},
+  pages     = {75-82},
+  abstract  = {The PERCS system was designed by IBM in response to a DARPA challenge that called for a high-productivity high-performance computing system. A major innovation in the PERCS design is the network that is built using Hub chips that are integrated into the compute nodes. Each Hub chip is about 580 mm2 in size, has over 3700 signal I/Os, and is packaged in a module that also contains LGA-attached optical electronic devices. The Hub module implements five types of high-bandwidth interconnects with multiple links that are fully-connected with a high-performance internal crossbar switch. These links provide over 9 Tbits/second of raw bandwidth and are used to construct a two-level direct-connect topology spanning up to tens of thousands of POWER7 chips with high bisection bandwidth and low latency. The Blue Waters System, which is being constructed at NCSA, is an exemplar large-scale PERCS installation. Blue Waters is expected to deliver sustained Petascale performance over a wide range of applications. The Hub chip supports several high-performance computing protocols (e.g., MPI, RDMA, IP) and also provides a noncoherent system-wide global address space. Collective communication operations such as barriers, reductions, and multi-cast are supported directly in hardware. Multiple routing modes including deterministic as well as hardware-directed random routing are also supported. Finally, the Hub module is capable of operating in the presence of many types of hardware faults and gracefully degrades performance in the presence of lane failures.},
+  keywords  = {},
+  doi       = {10.1109/HOTI.2010.16},
+  issn      = {2332-5569},
+  month     = {Aug}
+}
+
+@inproceedings{RoCE,
+  author    = {Beck, Motti and Kagan, Michael},
+  title     = {Performance Evaluation of the RDMA over Ethernet (RoCE) Standard in Enterprise Data Centers Infrastructure},
+  year      = {2011},
+  isbn      = {9780983628323},
+  publisher = {International Teletraffic Congress},
+  abstract  = {RDMA or Remote Direct Memory Access, communications using Send/Receive semantics and kernel bypass technologies in server and storage interconnect products permit high through-put and low-latency networking. As numbers of cores per server and cluster sizes servicing enterprise datacenters (EDC) applications have increased, the benefits of higher performance - aka completing the job faster -- are being increasingly complemented by the efficiency factor - being able to do more jobs with fewer servers. Data Center efficiency is synonymous with Return on Investment (ROI) has ever been a critical goal of the EDC, especially with the scaling needs of Web 2.0 and Cloud Computing applications. As such, the importance of low latency technologies such as RDMA has grown, and the need for efficient RDMA products that is broadly deployable across market and application segments has become critical.Recent enhancements to the Ethernet data link layer under the umbrella of IEEE Converged Enhance Ethernet (CEE) open significant opportunities to proliferate the use of RDMA, SEND/RECEIVE and kernel bypass into mainstream datacenter applications by taking a fresh and yet evolutionary look at how those services can be more easily and efficiently delivered over Ethernet. The CEE new standards include: 802.1Qbb -- Priority-based flow control, 802.1Qau -- End-to-End Congestion Notification, and 802.1Qaz -- Enhanced Transmission Selection and Data Center Bridge Exchange. The lossless delivery features in CEE enables a natural choice for building RDMA, SEND/RECEIVE and kernel bypass services over CEE is to apply RDMA transport services over CEE or in short RoCE.In April 2010, the RoCE -- RDMA over Converged Ethernet standard that enables the RDMA capabilities of InfiniBand™ to run over Ethernet was released by the InfiniBand® Trade Association (IBTA). Since then, RoCE has received broad industry support from many hardware, software and system vendors, as well as from industry organizations including the OpenFabrics Alliance and the Ethernet Alliance.},
+  booktitle = {Proceedings of the 3rd Workshop on Data Center - Converged and Virtual Ethernet Switching},
+  pages     = {9–15},
+  numpages  = {7},
+  location  = {San Francisco, California},
+  series    = {DC-CaVES '11}
+}
+
+PGAS
+
+@inbook{PGAS,
+  author    = {Almasi, George},
+  editor    = {Padua, David},
+  chapter   = {PGAS (Partitioned Global Address Space) Languages},
+  title     = {Encyclopedia of Parallel Computing},
+  year      = {2011},
+  publisher = {Springer US},
+  address   = {Boston, MA},
+  pages     = {1539--1545},
+  isbn      = {978-0-387-09766-4},
+  doi       = {10.1007/978-0-387-09766-4_210},
+  url       = {https://doi.org/10.1007/978-0-387-09766-4_210}
+}
+
+@article{Co-Array-Fortran,
+  author     = {Numrich, Robert W. and Reid, John},
+  title      = {Co-Array Fortran for Parallel Programming},
+  year       = {1998},
+  issue_date = {Aug. 1998},
+  publisher  = {Association for Computing Machinery},
+  address    = {New York, NY, USA},
+  volume     = {17},
+  number     = {2},
+  issn       = {1061-7264},
+  url        = {https://doi.org/10.1145/289918.289920},
+  doi        = {10.1145/289918.289920},
+  abstract   = {Co-Array Fortran, formerly known as F--, is a small extension of Fortran 95 for parallel processing. A Co-Array Fortran program is interpreted as if it were replicated a number of times and all copies were executed asynchronously. Each copy has its own set of data objects and is termed an image. The array syntax of Fortran 95 is extended with additional trailing subscripts in square brackets to give a clear and straightforward representation of any access to data that is spread across images.References without square brackets are to local data, so code that can run independently is uncluttered. Only where there are square brackets, or where there is a procedure call and the procedure contains square brackets, is communication between images involved.There are intrinsic procedures to synchronize images, return the number of images, and return the index of the current image.We introduce the extension; give examples to illustrate how clear, powerful, and flexible it can be; and provide a technical definition.},
+  journal    = {SIGPLAN Fortran Forum},
+  month      = aug,
+  pages      = {1–31},
+  numpages   = {31}
+}
+
+@inproceedings{DART-MPI,
+  author    = {Zhou, Huan and Mhedheb, Yousri and Idrees, Kamran and Glass, Colin W. and Gracia, Jos\'{e} and F\"{u}rlinger, Karl},
+  title     = {DART-MPI: An MPI-Based Implementation of a PGAS Runtime System},
+  year      = {2014},
+  isbn      = {9781450332477},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  url       = {https://doi.org/10.1145/2676870.2676875},
+  doi       = {10.1145/2676870.2676875},
+  abstract  = {A Partitioned Global Address Space (PGAS) approach treats a distributed system as
+               if the memory were shared on a global level. Given such a global view on memory, the
+               user may program applications very much like shared memory systems. This greatly simplifies
+               the tasks of developing parallel applications, because no explicit communication has
+               to be specified in the program for data exchange between different computing nodes.
+               In this paper we present DART, a runtime environment, which implements the PGAS paradigm
+               on large-scale high-performance computing clusters. A specific feature of our implementation
+               is the use of one-sided communication of the Message Passing Interface (MPI) version
+               3 (i.e. MPI-3) as the underlying communication substrate. We evaluated the performance
+               of the implementation with several low-level kernels in order to determine overheads
+               and limitations in comparison to the underlying MPI-3.},
+  booktitle = {Proceedings of the 8th International Conference on Partitioned Global Address Space Programming Models},
+  articleno = {3},
+  numpages  = {11},
+  keywords  = {Runtime Framework, One-sided Communication, Distributed Shared Memory, PGAS, MPI},
+  location  = {Eugene, OR, USA},
+  series    = {PGAS '14}
+}
+
+@inproceedings{DASH,
+  author    = {Fuerlinger, Karl and Fuchs, Tobias and Kowalewski, Roger},
+  booktitle = {2016 IEEE 18th International Conference on High Performance Computing and Communications; IEEE 14th International Conference on Smart City; IEEE 2nd International Conference on Data Science and Systems (HPCC/SmartCity/DSS)},
+  title     = {DASH: A C++ PGAS Library for Distributed Data Structures and Parallel Algorithms},
+  year      = {2016},
+  volume    = {},
+  number    = {},
+  pages     = {983-990},
+  abstract  = {We present DASH, a C++ template library that offers distributed data structures and parallel algorithms and implements a compiler-free PGAS (partitioned global address space) approach. DASH offers many productivity and performance features such as global-view data structures, efficient support for the owner-computes model, flexible multidimensional data distribution schemes and interoperability with STL (standard template library) algorithms. DASH also features a flexible representation of the parallel target machine and allows the exploitation of several hierarchically organized levels of locality through a concept of Teams. We evaluate DASH on a number of benchmark applications and we port a scientific proxy application using the MPI two-sided model to DASH. We find that DASH offers excellent productivity and performance and demonstrate scalability up to 9800 cores.},
+  keywords  = {},
+  doi       = {10.1109/HPCC-SmartCity-DSS.2016.0140},
+  issn      = {},
+  month     = {Dec}
+}
+
+@misc{UPC,
+  title        = {UPC Language Specifications},
+  edition      = {1.3},
+  organization = {UPC Consortium},
+  month        = nov,
+  year         = {2013},
+  url          = {https://upc.lbl.gov/docs/user/upc-lang-spec-1.3.pdf}
+}
+
+data race detection in shared memory
+
+@inproceedings{RacerX,
+  author    = {Engler, Dawson and Ashcraft, Ken},
+  title     = {RacerX: Effective, Static Detection of Race Conditions and Deadlocks},
+  year      = {2003},
+  isbn      = {1581137575},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  url       = {https://doi.org/10.1145/945445.945468},
+  doi       = {10.1145/945445.945468},
+  abstract  = {This paper describes RacerX, a static tool that uses flow-sensitive, interprocedural analysis to detect both race conditions and deadlocks. It is explicitly designed to find errors in large, complex multithreaded systems. It aggressively infers checking information such as which locks protect which operations, which code contexts are multithreaded, and which shared accesses are dangerous. It tracks a set of code features which it uses to sort errors both from most to least severe. It uses novel techniques to counter the impact of analysis mistakes. The tool is fast, requiring between 2-14 minutes to analyze a 1.8 million line system. We have applied it to Linux, FreeBSD, and a large commercial code base, finding serious errors in all of them. RacerX is a static tool that uses flow-sensitive, interprocedural analysis to detect both race conditions and deadlocks. It uses novel strategies to infer checking information such as which locks protect which operations, which code contexts are multithreaded, and which shared accesses are dangerous. We applied it to FreeBSD, Linux and a large commercial code base and found serious errors in all of them.},
+  booktitle = {Proceedings of the Nineteenth ACM Symposium on Operating Systems Principles},
+  pages     = {237–252},
+  numpages  = {16},
+  keywords  = {deadlock detection, race detection, program checking},
+  location  = {Bolton Landing, NY, USA},
+  series    = {SOSP '03}
+}
+
+@inproceedings{Chord,
+  author    = {Naik, Mayur and Aiken, Alex and Whaley, John},
+  title     = {Effective Static Race Detection for Java},
+  year      = {2006},
+  isbn      = {1595933204},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  url       = {https://doi.org/10.1145/1133981.1134018},
+  doi       = {10.1145/1133981.1134018},
+  abstract  = {We present a novel technique for static race detection in Java programs, comprised of a series of stages that employ a combination of static analyses to successively reduce the pairs of memory accesses potentially involved in a race. We have implemented our technique and applied it to a suite of multi-threaded Java programs. Our experiments show that it is precise, scalable, and useful, reporting tens to hundreds of serious and previously unknown concurrency bugs in large, widely-used programs with few false alarms.},
+  booktitle = {Proceedings of the 27th ACM SIGPLAN Conference on Programming Language Design and Implementation},
+  pages     = {308–319},
+  numpages  = {12},
+  keywords  = {Java, static race detection, concurrency, multi-threading, synchronization},
+  location  = {Ottawa, Ontario, Canada},
+  series    = {PLDI '06}
+}
+
+@inproceedings{LOCKSMITH,
+  author    = {Pratikakis, Polyvios and Foster, Jeffrey S. and Hicks, Michael},
+  title     = {LOCKSMITH: Context-Sensitive Correlation Analysis for Race Detection},
+  year      = {2006},
+  isbn      = {1595933204},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  url       = {https://doi.org/10.1145/1133981.1134019},
+  doi       = {10.1145/1133981.1134019},
+  abstract  = {One common technique for preventing data races in multi-threaded programs is to ensure that all accesses to shared locations are consistently protected by a lock. We present a tool called LOCKSMITH for detecting data races in C programs by looking for violations of this pattern. We call the relationship between locks and the locations they protect consistent correlation, and the core of our technique is a novel constraint-based analysis that infers consistent correlation context-sensitively, using the results to check that locations are properly guarded by locks. We present the core of our algorithm for a simple formal language λ> which we have proven sound, and discuss how we scale it up to an algorithm that aims to be sound for all of C. We develop several techniques to improve the precision and performance of the analysis, including a sharing analysis for inferring thread locality; existential quantification for modeling locks in data structures; and heuristics for modeling unsafe features of C such as type casts. When applied to several benchmarks, including multi-threaded servers and Linux device drivers, LOCKSMITH found several races while producing a modest number of false alarm.},
+  booktitle = {Proceedings of the 27th ACM SIGPLAN Conference on Programming Language Design and Implementation},
+  pages     = {320–331},
+  numpages  = {12},
+  keywords  = {type inference, multi-threaded programming, correlation, race detection, locksmith, context-sensitivity},
+  location  = {Ottawa, Ontario, Canada},
+  series    = {PLDI '06}
+}
+
+@inproceedings{PACER,
+  author    = {Bond, Michael D. and Coons, Katherine E. and McKinley, Kathryn S.},
+  title     = {PACER: Proportional Detection of Data Races},
+  year      = {2010},
+  isbn      = {9781450300193},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  url       = {https://doi.org/10.1145/1806596.1806626},
+  doi       = {10.1145/1806596.1806626},
+  abstract  = {Data races indicate serious concurrency bugs such as order, atomicity, and sequential consistency violations. Races are difficult to find and fix, often manifesting only after deployment. The frequency and unpredictability of these bugs will only increase as software adds parallelism to exploit multicore hardware. Unfortunately, sound and precise race detectors slow programs by factors of eight or more and do not scale to large numbers of threads.This paper presents a precise, low-overhead sampling-based data race detector called Pacer. PACER makes a proportionality guarantee: it detects any race at a rate equal to the sampling rate, by finding races whose first access occurs during a global sampling period. During sampling, PACER tracks all accesses using the dynamically sound and precise FastTrack algorithm. In nonsampling periods, Pacer discards sampled access information that cannot be part of a reported race, and Pacer simplifies tracking of the happens-before relationship, yielding near-constant, instead of linear, overheads. Experimental results confirm our theoretical guarantees. PACER reports races in proportion to the sampling rate. Its time and space overheads scale with the sampling rate, and sampling rates of 1-3% yield overheads low enough to consider in production software. The resulting system provides a "get what you pay for" approach that is suitable for identifying real, hard-to-reproduce races in deployed systems.},
+  booktitle = {Proceedings of the 31st ACM SIGPLAN Conference on Programming Language Design and Implementation},
+  pages     = {255–268},
+  numpages  = {14},
+  keywords  = {data races, bugs, sampling, concurrency},
+  location  = {Toronto, Ontario, Canada},
+  series    = {PLDI '10}
+}
+
+@inproceedings{DejaVu,
+  author    = {Choi, Jong-Deok and Lee, Keunwoo and Loginov, Alexey and O'Callahan, Robert and Sarkar, Vivek and Sridharan, Manu},
+  title     = {Efficient and Precise Datarace Detection for Multithreaded Object-Oriented Programs},
+  year      = {2002},
+  isbn      = {1581134630},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  url       = {https://doi.org/10.1145/512529.512560},
+  doi       = {10.1145/512529.512560},
+  abstract  = {We present a novel approach to dynamic datarace detection for multithreaded object-oriented programs. Past techniques for on-the-fly datarace detection either sacrificed precision for performance, leading to many false positive datarace reports, or maintained precision but incurred significant overheads in the range of 3x to 30x. In contrast, our approach results in very few false positives and runtime overhead in the 13% to 42% range, making it both efficient and precise. This performance improvement is the result of a unique combination of complementary static and dynamic optimization techniques.},
+  booktitle = {Proceedings of the ACM SIGPLAN 2002 Conference on Programming Language Design and Implementation},
+  pages     = {258–269},
+  numpages  = {12},
+  keywords  = {object-oriented programming, synchronization, parallel programs, debugging, race conditions, multithreaded programming, dataraces, static-dynamic co-analysis},
+  location  = {Berlin, Germany},
+  series    = {PLDI '02}
+}
+
+@article{Eraser,
+  author     = {Savage, Stefan and Burrows, Michael and Nelson, Greg and Sobalvarro, Patrick and Anderson, Thomas},
+  title      = {Eraser: A Dynamic Data Race Detector for Multithreaded Programs},
+  year       = {1997},
+  issue_date = {Nov. 1997},
+  publisher  = {Association for Computing Machinery},
+  address    = {New York, NY, USA},
+  volume     = {15},
+  number     = {4},
+  issn       = {0734-2071},
+  url        = {https://doi.org/10.1145/265924.265927},
+  doi        = {10.1145/265924.265927},
+  abstract   = {Multithreaded programming is difficult and error prone. It is easy to make a mistake in synchronization that produces a data race, yet it can be extremely hard to locate this mistake during debugging. This article describes a new tool, called Eraser, for dynamically detecting data races in lock-based multithreaded programs. Eraser uses binary rewriting techniques to monitor every shared-monory reference and verify that consistent locking behavior is observed. We present several case studies, including undergraduate coursework and a multithreaded Web search engine, that demonstrate the effectiveness of this approach.},
+  journal    = {ACM Trans. Comput. Syst.},
+  month      = nov,
+  pages      = {391–411},
+  numpages   = {21},
+  keywords   = {race detection, multithreaded programming, binary code modification}
+}
+
+@inproceedings{RaceTrack,
+  author    = {Yu, Yuan and Rodeheffer, Tom and Chen, Wei},
+  title     = {RaceTrack: Efficient Detection of Data Race Conditions via Adaptive Tracking},
+  year      = {2005},
+  isbn      = {1595930795},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  url       = {https://doi.org/10.1145/1095810.1095832},
+  doi       = {10.1145/1095810.1095832},
+  abstract  = {Bugs due to data races in multithreaded programs often exhibit non-deterministic symptoms and are notoriously difficult to find. This paper describes RaceTrack, a dynamic race detection tool that tracks the actions of a program and reports a warning whenever a suspicious pattern of activity has been observed. RaceTrack uses a novel hybrid detection algorithm and employs an adaptive approach that automatically directs more effort to areas that are more suspicious, thus providing more accurate warnings for much less over-head. A post-processing step correlates warnings and ranks code segments based on how strongly they are implicated in potential data races. We implemented RaceTrack inside the virtual machine of Microsoft's Common Language Runtime (product version v1.1.4322) and monitored several major, real-world applications directly out-of-the-box,without any modification. Adaptive tracking resulted in a slowdown ratio of about 3x on memory-intensive programs and typically much less than 2x on other programs,and a memory ratio of typically less than 1.2x. Several serious data race bugs were revealed, some previously unknown.},
+  booktitle = {Proceedings of the Twentieth ACM Symposium on Operating Systems Principles},
+  pages     = {221–234},
+  numpages  = {14},
+  keywords  = {race detection, virtual machine instrumentation},
+  location  = {Brighton, United Kingdom},
+  series    = {SOSP '05}
+}
+
+data race detection in MPI
+
+@inproceedings{MC-Checker,
+  author    = {Chen, Zhezhe and Dinan, James and Tang, Zhen and Balaji, Pavan and Zhong, Hua and Wei, Jun and Huang, Tao and Qin, Feng},
+  title     = {MC-Checker: Detecting Memory Consistency Errors in MPI One-Sided Applications},
+  year      = {2014},
+  isbn      = {9781479955008},
+  publisher = {IEEE Press},
+  url       = {https://doi.org/10.1109/SC.2014.46},
+  doi       = {10.1109/SC.2014.46},
+  abstract  = {One-sided communication decouples data movement and synchronization by providing support for asynchronous reads and updates of distributed shared data. While such interfaces can be extremely efficient, they also impose challenges in properly performing asynchronous accesses to shared data.This paper presents MC-Checker, a new tool that detects memory consistency errors in MPI one-sided applications. MC-Checker first performs online instrumentation and captures relevant dynamic events, such as one-sided communications and load/store operations. MC-Checker then performs analysis to detect memory consistency errors. When found, errors are reported along with useful diagnostic information. Experiments indicate that MC-Checker is effective at detecting and diagnosing memory consistency bugs in MPI one-sided applications, with low overhead, ranging from 24.6% to 71.1%, with an average of 45.2%.},
+  booktitle = {Proceedings of the International Conference for High Performance Computing, Networking, Storage and Analysis},
+  pages     = {499–510},
+  numpages  = {12},
+  keywords  = {one-sided communication, MPI, bug detection},
+  location  = {New Orleans, Louisana},
+  series    = {SC '14}
+}
+
+@article{MC-CChecker,
+  title    = {A time-stamping system to detect memory consistency errors in MPI one-sided applications},
+  journal  = {Parallel Computing},
+  volume   = {86},
+  pages    = {36-44},
+  year     = {2019},
+  issn     = {0167-8191},
+  doi      = {https://doi.org/10.1016/j.parco.2019.04.013},
+  url      = {https://www.sciencedirect.com/science/article/pii/S0167819118303235},
+  author   = {Thanh-Dang Diep and Kien Trung Pham and Karl Fürlinger and Nam Thoai},
+  keywords = {Memory consistency error, MPI, One-sided communication, Encoded vector clock, MC-CChecker},
+  abstract = {Many high performance computing applications have been developed by using MPI one-sided communication. The separation between data movement and synchronization poses enormous challenges for programmers in preserving the reliability of programs. One of those challenges is the detection of memory consistency errors, which are a notorious bug, degrading the reliability and performance of programs. Even an MPI expert can easily make these mistakes. The lockopts bug, which occurred in an RMA test case of the MPICH MPI implementation, is an example for this situation. MC-Checker is the most effective debugger in solving the memory consistency errors. MC-Checker did ignore the transitive ordering of the happened-before relation to ensure the acceptable overheads in terms of time complexity. Consequently, MC-Checker is prone to error due to the source of false positives attributable to the ignorance of the transitive ordering of the happened-before relation. To address this issue, we propose a time-stamping system based on the encoded vector clock to help preserve the full happened-before relation with reasonable overhead. The system is implemented in MC-CChecker, which is an enhancement of MC-Checker. The experimental findings prove that MC-CChecker not only effectively detects memory consistency errors like MC-Checker did, but also completely eliminates the potential source of false positives, which is a major limitation of MC-Checker while still retaining acceptable overheads of execution time and memory usage. Especially, MC-CChecker is fairly scalable when processing a large number of trace files generated from running the lockopts up to 8192 processes.}
+}
+
+locks
+
+@article{Locks,
+  author     = {Dijkstra, E. W.},
+  title      = {Solution of a Problem in Concurrent Programming Control},
+  year       = {1965},
+  issue_date = {Sept. 1965},
+  publisher  = {Association for Computing Machinery},
+  address    = {New York, NY, USA},
+  volume     = {8},
+  number     = {9},
+  issn       = {0001-0782},
+  url        = {https://doi.org/10.1145/365559.365617},
+  doi        = {10.1145/365559.365617},
+  journal    = {Commun. ACM},
+  month      = sep,
+  pages      = {569},
+  numpages   = {1}
+}
+
+@article{TTS-Lock,
+  author     = {Rudolph, Larry and Segall, Zary},
+  title      = {Dynamic Decentralized Cache Schemes for Mimd Parallel Processors},
+  year       = {1984},
+  issue_date = {June 1984},
+  publisher  = {Association for Computing Machinery},
+  address    = {New York, NY, USA},
+  volume     = {12},
+  number     = {3},
+  issn       = {0163-5964},
+  url        = {https://doi.org/10.1145/773453.808203},
+  doi        = {10.1145/773453.808203},
+  abstract   = {This paper presents two cache schemes for a shared-memory shared bus multiprocessor.
+                Both schemes feature decentralized consistency control and dynamic type classification
+                of the datum cached (i.e. read-only, local, or shared). It is shown how to exploit
+                these features to minimize the shared bus traffic. The broadcasting ability of the
+                shared bus is used not only to signal an event but also to distribute data. In addition,
+                by introducing a new synchronization construct, i.e. the Test-and-Test-and-Set instruction,
+                many of the traditional. parallell processing “hot spots” or bottlenecks are eliminated.
+                Sketches of formal correctness proofs for the proposed schemes are also presented.
+                It appears that moderately large parallel processors can be designed by employing
+                the principles presented in this paper.},
+  journal    = {SIGARCH Comput. Archit. News},
+  month      = jan,
+  pages      = {340–347},
+  numpages   = {8}
+}
+
+@article{backoff,
+  author     = {Agarwal, A. and Cherian, M.},
+  title      = {Adaptive Backoff Synchronization Techniques},
+  year       = {1989},
+  issue_date = {June 1989},
+  publisher  = {Association for Computing Machinery},
+  address    = {New York, NY, USA},
+  volume     = {17},
+  number     = {3},
+  issn       = {0163-5964},
+  url        = {https://doi.org/10.1145/74926.74970},
+  doi        = {10.1145/74926.74970},
+  abstract   = {Shared-memory multiprocessors commonly use shared variables for synchronization. Our
+                simulations of real parallel applications show that large-scale cache-coherent multiprocessors
+                suffer significant amounts of invalidation traffic due to synchronization. Large multiprocessors
+                that do not cache synchronization variables are often more severely impacted. If this
+                synchronization traffic is not reduced or managed adequately, synchronization references
+                can cause severe congestion in the network. We propose a class of adaptive back-off
+                methods that do not use any extra hardware and can significantly reduce the memory
+                traffic to synchronization variables. These methods use synchronization state to reduce
+                polling of synchronization variables. Our simulations show that when the number of
+                processors participating in a barrier synchronization is small compared to the time
+                of arrival of the processors, reductions of 20 percent to over 95 percent in synchronization
+                traffic can be achieved at no extra cost. In other situations adaptive backoff techniques
+                result in a tradeoff between reduced network accesses and increased processor idle
+                time.},
+  journal    = {SIGARCH Comput. Archit. News},
+  month      = apr,
+  pages      = {396–406},
+  numpages   = {11}
+}
+
+@article{TTS-backoff,
+  author     = {Anderson, T. E.},
+  title      = {The Performance of Spin Lock Alternatives for Shared-Memory Multiprocessors},
+  year       = {1990},
+  issue_date = {January 1990},
+  publisher  = {IEEE Press},
+  volume     = {1},
+  number     = {1},
+  issn       = {1045-9219},
+  url        = {https://doi.org/10.1109/71.80120},
+  doi        = {10.1109/71.80120},
+  abstract   = {The author examines the questions of whether there are efficient algorithms for software
+                spin-waiting given hardware support for atomic instructions, or whether more complex
+                kinds of hardware support are needed for performance. He considers the performance
+                of a number of software spin-waiting algorithms. Arbitration for control of a lock
+                is in many ways similar to arbitration for control of a network connecting a distributed
+                system. He applies several of the static and dynamic arbitration methods originally
+                developed for networks to spin locks. A novel method is proposed for explicitly queueing
+                spinning processors in software by assigning each a unique number when it arrives
+                at the lock. Control of the lock can then be passed to the next processor in line
+                with minimal effecton other processors.},
+  journal    = {IEEE Trans. Parallel Distrib. Syst.},
+  month      = jan,
+  pages      = {6–16},
+  numpages   = {11},
+  keywords   = {shared-money multiprocessors, software queueing, delays, CSMA network protocols, atomic instructions, spinlock alternatives, storage management, distributed system, softwarespin-waiting algorithms, parallelprocessing, dynamic arbitration, Ethernet backoff, performance evaluation, multistage interconnection network, Index Termsshared data structures, shared bus multiprocessors, Symmetry Model B}
+}
+
+@article{TKT-Lock,
+  author     = {Mellor-Crummey, John M. and Scott, Michael L.},
+  title      = {Algorithms for Scalable Synchronization on Shared-Memory Multiprocessors},
+  year       = {1991},
+  issue_date = {Feb. 1991},
+  publisher  = {Association for Computing Machinery},
+  address    = {New York, NY, USA},
+  volume     = {9},
+  number     = {1},
+  issn       = {0734-2071},
+  url        = {https://doi.org/10.1145/103727.103729},
+  doi        = {10.1145/103727.103729},
+  abstract   = {Busy-wait techniques are heavily used for mutual exclusion and barrier synchronization
+                in shared-memory parallel programs. Unfortunately, typical implementations of busy-waiting
+                tend to produce large amounts of memory and interconnect contention, introducing performance
+                bottlenecks that become markedly more pronounced as applications scale. We argue that
+                this problem is not fundamental, and that one can in fact construct busy-wait synchronization
+                algorithms that induce no memory or interconnect contention. The key to these algorithms
+                is for every processor to spin on separate locally-accessible flag variables, and
+                for some other processor to terminate the spin with a single remote write operation
+                at an appropriate time. Flag variables may be locally-accessible as a result of coherent
+                caching, or by virtue of allocation in the local portion of physically distributed
+                shared memory.We present a new scalable algorithm for spin locks that generates 0(1)
+                remote references per lock acquisition, independent of the number of processors attempting
+                to acquire the lock. Our algorithm provides reasonable latency in the absence of contention,
+                requires only a constant amount of space per lock, and requires no hardware support
+                other than a swap-with-memory instruction. We also present a new scalable barrier
+                algorithm that generates 0(1) remote references per processor reaching the barrier,
+                and observe that two previously-known barriers can likewise be cast in a form that
+                spins only on locally-accessible flag variables. None of these barrier algorithms
+                requires hardware support beyond the usual atomicity of memory reads and writes.We
+                compare the performance of our scalable algorithms with other software approaches
+                to busy-wait synchronization on both a Sequent Symmetry and a BBN Butterfly. Our principal
+                conclusion is that contention due to synchronization need not be a problem in large-scale
+                shared-memory multiprocessors. The existence of scalable algorithms greatly weakens
+                the case for costly special-purpose hardware support for synchronization, and provides
+                a case against so-called “dance hall” architectures, in which shared memory locations
+                are equally far from all processors. —From the Authors' Abstract},
+  journal    = {ACM Trans. Comput. Syst.},
+  month      = feb,
+  pages      = {21–65},
+  numpages   = {45}
+}
+
+@inproceedings{MCS-Lock,
+  author    = {Mellor-Crummey, John M. and Scott, Michael L.},
+  title     = {Synchronization without Contention},
+  year      = {1991},
+  isbn      = {0897913809},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  url       = {https://doi.org/10.1145/106972.106999},
+  doi       = {10.1145/106972.106999},
+  booktitle = {Proceedings of the Fourth International Conference on Architectural Support for Programming Languages and Operating Systems},
+  pages     = {269–278},
+  numpages  = {10},
+  location  = {Santa Clara, California, USA},
+  series    = {ASPLOS IV}
+}
+
+@inproceedings{TTS-backoff-code,
+  author    = {Scott, Michael L. and Scherer, William N.},
+  title     = {Scalable Queue-Based Spin Locks with Timeout},
+  year      = {2001},
+  isbn      = {1581133464},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  url       = {https://doi.org/10.1145/379539.379566},
+  doi       = {10.1145/379539.379566},
+  abstract  = {Queue-based spin locks allow programs with busy-wait synchronization to scale to very large multiprocessors, without fear of starvation or performance-destroying contention. So-called try locks, traditionally based on non-scalable test-and-set locks, allow a process to abandon its attempt to acquire a lock after a given amount of time. The process can then pursue an alternative code path, or yield the processor to some other process.We demonstrate that it is possible to obtain both scalability and bounded waiting, using variants of the queue-based locks of Craig, Landin, and Hagersten, and of Mellor-Crummey and Scott. A process that decides to stop waiting for one of these new locks can ``link itself out of line'' atomically. Single-processor experiments reveal performance penalties of 50--100% for the CLH and MCS try locks in comparison to their standard versions; this marginal cost decreases with larger numbers of processors.We have also compared our queue-based locks to a traditional tatas lock with exponential backoff and timeout. At modest (non-zero) levels of contention, the queued locks sacrifice cache locality for fairness, resulting in a worst-case 3X performance penalty. At high levels of contention, however, they display a 1.5--2X performance advantage, with significantly more regular timings and significantly higher rates of acquisition prior to timeout.},
+  booktitle = {Proceedings of the Eighth ACM SIGPLAN Symposium on Principles and Practices of Parallel Programming},
+  pages     = {44–52},
+  numpages  = {9},
+  location  = {Snowbird, Utah, USA},
+  series    = {PPoPP '01}
+}
+
+@patent{K42-Lock,
+  author       = {Marc Auslander and David Edelsohn and Orran Krieger and Bryan Rosenburg and Robert Wisniewski},
+  title        = {Enhancement to the MCS lock for increased functionality and improved programmability},
+  year         = {2002},
+  number       = {US20030200457A1},
+  howpublished = {US20030200457A1},
+  organization = {International Business Machines Corp},
+  institution  = {United States Patent and Trademark Office},
+  url          = {https://patents.google.com/patent/US20030200457A1}
+}
+
+@techreport{C-Lock,
+  author      = {Craig, Travis},
+  title       = {Building FIFO and priority queuing spin locks from atomic swap},
+  institution = {University of Washington, Department of Computer Science and Engineering, FR-35},
+  year        = {1993},
+  number      = {93-02-02},
+  address     = {Seattle, WA 98195},
+  month       = feb
+}
+
+@inproceedings{LH-Lock,
+  author    = {Magnusson, Peter S. and Landin, Anders and Hagersten, Erik},
+  title     = {Queue Locks on Cache Coherent Multiprocessors},
+  year      = {1994},
+  isbn      = {0818656026},
+  publisher = {IEEE Computer Society},
+  address   = {USA},
+  url       = {https://doi.org/10.1109/IPPS.1994.288305},
+  doi       = {10.1109/IPPS.1994.288305},
+  abstract  = {Large-scale shared-memory multiprocessors typically have long latencies for remote data accesses. A key issue for execution performance of many common applications is the synchronization cost. The communication scalability of synchronization has been improved by the introduction of queue-based spin-locks instead of Test&amp;(Test&amp;Set). For architectures with long access latencies for global data, attention should also be paid to the number of global accesses that are involved in synchronization. We present a method to characterize the performance of proposed queue lock algorithms, and apply it to previously published algorithms. We also present two new queue locks, the LH lock and the M lock. We compare the locks in terms of performance, memory requirements, code size and required hardware support. The LH lock is the simplest of all the locks, yet requires only an atomic swap operation. The M lock is superior in terms of global accesses needed to perform synchronization and still competitive in all other criteria. We conclude that the M lock is the best overall queue lock for the class of architectures studied.&lt;<ETX>&gt;</ETX>},
+  booktitle = {Proceedings of the 8th International Symposium on Parallel Processing},
+  pages     = {165–171},
+  numpages  = {7}
+}
+
+@article{Hemlock,
+  author  = {Dave Dice and Alex Kogan},
+  title   = {Hemlock : Compact and Scalable Mutual Exclusion},
+  journal = {CoRR},
+  volume  = {abs/2102.03863v4},
+  year    = {2022},
+  url     = {https://arxiv.org/abs/2102.03863v4},
+  month   = jan
+}
+
+delegation locks
+
+@inproceedings{OyamaAlg,
+  title        = {Executing parallel programs with synchronization bottlenecks efficiently},
+  author       = {Oyama, Yoshihiro and Taura, Kenjiro and Yonezawa, Akinori},
+  booktitle    = {Proceedings of the International Workshop on Parallel and Distributed Computing for Symbolic and Irregular Applications},
+  volume       = {16},
+  pages        = {95},
+  year         = {1999},
+  organization = {Citeseer}
+}
+
+@inproceedings{FlatCombining,
+  author    = {Hendler, Danny and Incze, Itai and Shavit, Nir and Tzafrir, Moran},
+  title     = {Flat Combining and the Synchronization-Parallelism Tradeoff},
+  year      = {2010},
+  isbn      = {9781450300797},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  url       = {https://doi.org/10.1145/1810479.1810540},
+  doi       = {10.1145/1810479.1810540},
+  abstract  = {Traditional data structure designs, whether lock-based or lock-free, provide parallelism
+               via fine grained synchronization among threads.We introduce a new synchronization
+               paradigm based on coarse locking, which we call flat combining. The cost of synchronization
+               in flat combining is so low, that having a single thread holding a lock perform the
+               combined access requests of all others, delivers, up to a certain non-negligible concurrency
+               level, better performance than the most effective parallel finely synchronized implementations.
+               We use flat-combining to devise, among other structures, new linearizable stack, queue,
+               and priority queue algorithms that greatly outperform all prior algorithms.},
+  booktitle = {Proceedings of the Twenty-Second Annual ACM Symposium on Parallelism in Algorithms and Architectures},
+  pages     = {355–364},
+  numpages  = {10},
+  keywords  = {multiprocessors, synchronization, concurrent data-structures},
+  location  = {Thira, Santorini, Greece},
+  series    = {SPAA '10}
+}
+
+@inproceedings{P-Sim,
+  author    = {Fatourou, Panagiota and Kallimanis, Nikolaos D.},
+  title     = {A Highly-Efficient Wait-Free Universal Construction},
+  year      = {2011},
+  isbn      = {9781450307437},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  url       = {https://doi.org/10.1145/1989493.1989549},
+  doi       = {10.1145/1989493.1989549},
+  abstract  = {We present a new simple wait-free universal construction, called Sim, that uses just
+               a Fetch&amp;Add and an LL/SC object and performs a constant number of shared memory accesses.
+               We have implemented SIM in a real shared-memory machine. In theory terms, our practical
+               version of SIM, called P-SIM, has worse complexity than its theoretical analog; in
+               practice though, we experimentally show that P-SIM outperforms several state-of-the-art
+               lock-based and lock-free techniques, and this given that it is wait-free, i.e., that
+               it satisfies a stronger progress condition than all the algorithms it outperforms.We
+               have used P-SIM to get highly-efficient wait-free implementations of stacks and queues.
+               Our experiments show that our implementations outperform the currently state-of-the-art
+               shared stack and queue implementations which ensure only weaker progress properties
+               than wait-freedom.},
+  booktitle = {Proceedings of the Twenty-Third Annual ACM Symposium on Parallelism in Algorithms and Architectures},
+  pages     = {325–334},
+  numpages  = {10},
+  keywords  = {stacks, concurrent data structures, universal constructions, wait free, queues},
+  location  = {San Jose, California, USA},
+  series    = {SPAA '11}
+}
+
+@article{H-Sync,
+  author     = {Fatourou, Panagiota and Kallimanis, Nikolaos D.},
+  title      = {Revisiting the Combining Synchronization Technique},
+  year       = {2012},
+  issue_date = {August 2012},
+  publisher  = {Association for Computing Machinery},
+  address    = {New York, NY, USA},
+  volume     = {47},
+  number     = {8},
+  issn       = {0362-1340},
+  url        = {https://doi.org/10.1145/2370036.2145849},
+  doi        = {10.1145/2370036.2145849},
+  abstract   = {Fine-grain thread synchronization has been proved, in several cases, to be outperformed
+                by efficient implementations of the combining technique where a single thread, called
+                the combiner, holding a coarse-grain lock, serves, in addition to its own synchronization
+                request, active requests announced by other threads while they are waiting by performing
+                some form of spinning. Efficient implementations of this technique significantly reduce
+                the cost of synchronization, so in many cases they exhibit much better performance
+                than the most efficient finely synchronized algorithms.In this paper, we revisit the
+                combining technique with the goal to discover where its real performance power resides
+                and whether or how ensuring some desired properties (e.g., fairness in serving requests)
+                would impact performance. We do so by presenting two new implementations of this technique;
+                the first (CC-Synch) addresses systems that support coherent caches, whereas the second
+                (DSM-Synch) works better in cacheless NUMA machines. In comparison to previous such
+                implementations, the new implementations (1) provide bounds on the number of remote
+                memory references (RMRs) that they perform, (2) support a stronger notion of fairness,
+                and (3) use simpler and less basic primitives than previous approaches. In all our
+                experiments, the new implementations outperform by far all previous state-of-the-art
+                combining-based and fine-grain synchronization algorithms. Our experimental analysis
+                sheds light to the questions we aimed to answer.Several modern multi-core systems
+                organize the cores into clusters and provide fast communication within the same cluster
+                and much slower communication across clusters. We present an hierarchical version
+                of CC-Synch, called H-Synch which exploits the hierarchical communication nature of
+                such systems to achieve better performance. Experiments show that H-Synch significantly
+                outper forms previous state-of-the-art hierarchical approaches.We provide new implementations
+                of common shared data structures (like stacks and queues) based on CC-Synch, DSM-Synch
+                and H-Synch. Our experiments show that these implementations outperform by far all
+                previous (fine-grain or combined-based) implementations of shared stacks and queues.},
+  journal    = {SIGPLAN Not.},
+  month      = feb,
+  pages      = {257–266},
+  numpages   = {10},
+  keywords   = {combining, hierarchical algorithms, concurrent data structures, blocking algorithms, synchronization techniques}
+}
+
+@inproceedings{RCL,
+  author    = {Lozi, Jean-Pierre and David, Florian and Thomas, Ga\"{e}l and Lawall, Julia and Muller, Gilles},
+  title     = {Remote Core Locking: Migrating Critical-Section Execution to Improve the Performance of Multithreaded Applications},
+  year      = {2012},
+  publisher = {USENIX Association},
+  address   = {USA},
+  abstract  = {The scalability of multithreaded applications on current multicore systems is hampered
+               by the performance of lock algorithms, due to the costs of access contention and cache
+               misses. In this paper, we propose a new lock algorithm, Remote Core Locking (RCL),
+               that aims to improve the performance of critical sections in legacy applications on
+               multicore architectures. The idea of RCL is to replace lock acquisitions by optimized
+               remote procedure calls to a dedicated server core. RCL limits the performance collapse
+               observed with other lock algorithms when many threads try to acquire a lock concurrently
+               and removes the need to transfer lock-protected shared data to the core acquiring
+               the lock because such data can typically remain in the server core's cache.We have
+               developed a profiler that identifies the locks that are the bottlenecks in multithreaded
+               applications and that can thus benefit from RCL, and a reengineering tool that transforms
+               POSIX locks into RCL locks. We have evaluated our approach on 18 applications: Memcached,
+               Berkeley DB, the 9 applications of the SPLASH-2 benchmark suite and the 7 applications
+               of the Phoenix2 benchmark suite. 10 of these applications, including Memcached and
+               Berkeley DB, are unable to scale because of locks, and benefit from RCL. Using RCL
+               locks, we get performance improvements of up to 2.6 times with respect to POSIX locks
+               on Memcached, and up to 14 times with respect to Berkeley DB.},
+  booktitle = {Proceedings of the 2012 USENIX Conference on Annual Technical Conference},
+  pages     = {6},
+  numpages  = {1},
+  location  = {Boston, MA},
+  series    = {USENIX ATC'12}
+}
+
+@inproceedings{shared-mem-delegation,
+  author    = {Petrovi\'{c}, Darko and Ropars, Thomas and Schiper, Andr\'{e}},
+  title     = {On the Performance of Delegation over Cache-Coherent Shared Memory},
+  year      = {2015},
+  isbn      = {9781450329286},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  url       = {https://doi.org/10.1145/2684464.2684476},
+  doi       = {10.1145/2684464.2684476},
+  abstract  = {Delegation is a thread synchronization technique where access to shared data is performed
+               through a dedicated server thread. When a client thread requires shared data access,
+               it makes a request to a server and waits for a response. This paper studies delegation
+               implementation over cache-coherent shared memory, with the goal of optimizing it for
+               high throughput. Whereas client-server communication naturally fits message-passing
+               systems, efficient implementation over cache-coherent shared memory requires careful
+               optimization. We demonstrate optimizations that significantly improve delegation performance
+               on two modern x86 processors (the Intel Xeon Westmere and the AMD Opteron Magny-Cours),
+               enabling us to come up with counter, stack and queue implementations that outperform
+               the best known alternatives in a large number of cases. Our optimized delegation solution
+               achieves 1.4x (resp. 2x) higher throughput compared to the most efficient state-of-the-art
+               delegation solution on the Intel Xeon (resp. AMD Opteron).},
+  booktitle = {Proceedings of the 2015 International Conference on Distributed Computing and Networking},
+  articleno = {17},
+  numpages  = {10},
+  keywords  = {mutual exclusion, delegation, Cache-coherent shared memory},
+  location  = {Goa, India},
+  series    = {ICDCN '15}
+}
+
+@article{DYLOCK,
+  author   = {Yi, ZhengMing and Yao, YiPing},
+  title    = {A scalable lock on NUMA multicore},
+  journal  = {Concurrency and Computation: Practice and Experience},
+  volume   = {32},
+  number   = {24},
+  pages    = {e5964},
+  keywords = {locks, mutual exclusion, NUMA multicore, synchronization},
+  doi      = {https://doi.org/10.1002/cpe.5964},
+  url      = {https://onlinelibrary.wiley.com/doi/abs/10.1002/cpe.5964},
+  eprint   = {https://onlinelibrary.wiley.com/doi/pdf/10.1002/cpe.5964},
+  abstract = {Summary Modern NUMA multicore architectures exhibit complicated memory behavior, such as cache coherence invalidation and nonuniform memory access where the access from a core to its local memory is significantly faster than crossnode access to memory on a different NUMA node. The complicated memory behavior has a large impact on the efficiency of locking synchronization, which affects the performance of parallel applications. Prior works offer several efficient designs to improve locking performance such as delegation schemes. However, the existing delegation schemes either occupy computing cores or provide nonscalable performance, or offer less portability. In this work, we present a NUMA-aware delegation lock that occupies no cores while offering scalable performance under high contention for NUMA multicore machines. The new lock is a variant of an efficient FFWD lock, and inherits its performance features, such as buffering responses within a NUMA node to minimize cache coherence traffic. Unlike FFWD, the new lock employs hierarchical NUMA-aware memory allocation and NUMA-aware dynamic server thread technique, to reduce crossnode communication between client and server threads. Our evaluation shows that the new lock outperforms FFWD under high contention, achieving the significant performance gains when compared with other state-of-the-art locks.},
+  year     = {2020}
+}
+
+@article{SANL,
+  author     = {Zhang, Mingzhe and Lau, Francis C. M. and Wang, Cho-Li and Cheng, Luwei and Chen, Haibo},
+  title      = {Scalable Adaptive NUMA-Aware Lock: Combining Local Locking and Remote Locking for Efficient Concurrency},
+  year       = {2016},
+  issue_date = {August 2016},
+  publisher  = {Association for Computing Machinery},
+  address    = {New York, NY, USA},
+  volume     = {51},
+  number     = {8},
+  issn       = {0362-1340},
+  url        = {https://doi.org/10.1145/3016078.2851176},
+  doi        = {10.1145/3016078.2851176},
+  abstract   = {Scalable locking is a key building block for scalable multi-threaded software. Its
+                performance is especially critical in multi-socket, multi-core machines with non-uniform
+                memory access (NUMA). Previous schemes such as local locking and remote locking only
+                perform well under a certain level of contention, and often require non-trivial tuning
+                for a particular configuration. Besides, for large NUMA systems, because of unmanaged
+                lock server's nomination, current distance-first NUMA policies cannot perform satisfactorily.In
+                this work, we propose SANL, a locking scheme that can deliver high performance under
+                various contention levels by adaptively switching between the local and the remote
+                lock scheme. Furthermore, we introduce a new NUMA policy for the remote lock that
+                jointly considers node distances and server utilization when choosing lock servers.
+                A comparison with seven representative locking schemes shows that SANL outperforms
+                the others in most contention situations. In one group test, SANL is 3.7 times faster
+                than RCL lock and 17 times faster than POSIX mutex.},
+  journal    = {SIGPLAN Not.},
+  month      = feb,
+  articleno  = {50},
+  numpages   = {2}
+}
+
+NUMA aware locks
+
+@inproceedings{RH-Lock,
+  author    = {Radovi\'{c}, Zoran and Hagersten, Erik},
+  title     = {Efficient Synchronization for Nonuniform Communication Architectures},
+  year      = {2002},
+  isbn      = {076951524X},
+  publisher = {IEEE Computer Society Press},
+  address   = {Washington, DC, USA},
+  issn      = {1063-9535},
+  url       = {https://doi.org/10.1109/SC.2002.10038},
+  doi       = {10.1109/SC.2002.10038},
+  abstract  = {Scalable parallel computers are often nonuniform communication architectures (NUCAs),
+               where the access time to other processor's caches vary with their physical location.
+               Still, few attempts of exploring cache-to-cache communication locality have been made.
+               This paper introduces a new kind of synchronization primitives (lock-unlock) that
+               favor neighboring processors when a lock is released. This improves the lock handover
+               time as well as access time to the shared data of the critical region.A critical section
+               guarded by our new RH lock takes less than half the time to execute compared with
+               the same critical section guarded by any other lock on our NUCA hardware. The execution
+               time for Raytrace with 28 processors was improved 2.23--4.68 times, while global traffic
+               was dramatically decreased compared with all the other locks. The average execution
+               time was improved 7--24% while the global traffic was decreased 8-28% for an average
+               over the seven applications studied.},
+  booktitle = {Proceedings of the 2002 ACM/IEEE Conference on Supercomputing},
+  month     = {Nov},
+  pages     = {1–13},
+  numpages  = {13},
+  location  = {Baltimore, Maryland},
+  series    = {SC '02}
+}
+
+@inproceedings{HCLH-Lock,
+  author    = {Luchangco, Victor and Nussbaum, Dan and Shavit, Nir},
+  title     = {A Hierarchical CLH Queue Lock},
+  year      = {2006},
+  isbn      = {3540377832},
+  publisher = {Springer-Verlag},
+  address   = {Berlin, Heidelberg},
+  url       = {https://doi.org/10.1007/11823285_84},
+  doi       = {10.1007/11823285_84},
+  abstract  = {Modern multiprocessor architectures such as CC-NUMA machines or CMPs have nonuniform
+               communication architectures that render programs sensitive to memory access locality.
+               A recent paper by Radovi\'{c} and Hagersten shows that performance gains can be obtained
+               by developing general-purpose mutual-exclusion locks that encourage threads with high
+               mutual memory locality to acquire the lock consecutively, thus reducing the overall
+               cost due to cache misses. Radovi\'{c} and Hagersten present the first such hierarchical
+               locks. Unfortunately, their locks are backoff locks, which are known to incur higher
+               cache miss rates than queue-based locks, suffer from various fundamental fairness
+               issues, and are hard to tune so as to maximize locality of lock accesses.Extending
+               queue-locking algorithms to be hierarchical requires that requests from threads with
+               high mutual memory locality be consecutive in the queue. Until now, it was not clear
+               that one could design such locks because collecting requests locally and moving them
+               into a global queue seemingly requires a level of coordination whose cost would defeat
+               the very purpose of hierarchical locking.This paper presents a hierarchical version
+               of the Craig, Landin, and Hagersten CLH queue lock, which we call the HCLH queue lock.
+               In this algorithm, threads build implicit local queues of waiting threads, splicing
+               them into a global queue at the cost of only a single CAS operation.In a set of microbenchmarks
+               run on a large scale multiprocessor machine and a state-of-the-art multi-threaded
+               multi-core chip, the HLCH algorithm exhibits better performance and significantly
+               better fairness than the hierarchical backoff locks of Radovi\'{c} and Hagersten.},
+  booktitle = {Proceedings of the 12th International Conference on Parallel Processing},
+  pages     = {801–810},
+  numpages  = {10},
+  location  = {Dresden, Germany},
+  series    = {Euro-Par'06}
+}
+
+@inproceedings{FC-MCS-Lock,
+  author    = {Dice, Dave and Marathe, Virendra J. and Shavit, Nir},
+  title     = {Flat-Combining NUMA Locks},
+  year      = {2011},
+  isbn      = {9781450307437},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  url       = {https://doi.org/10.1145/1989493.1989502},
+  doi       = {10.1145/1989493.1989502},
+  abstract  = {Multicore machines are growing in size, and accordingly shifting from simple bus-based
+               designs to NUMA and CCNUMA architectures. With this shift, the need for scalable hierarchical
+               locking algorithms is becoming crucial to performance. This paper presents a novel
+               scalable hierarchical queue-lock algorithm based on the flat combining synchronization
+               paradigm. At the core of the new algorithm is a scheme for building local queues of
+               waiting threads in a highly efficient manner, and then merging them globally, all
+               with little interconnect traffic and virtually no costly synchronization operations
+               in the common case. In empirical testing on an Oracle SPARC Enterprise T5440 Server,
+               a 256-way CC-NUMA machine, our new flat-combining hierarchical lock significantly
+               outperforms all classic locking algorithms, and at high concurrency levels, provides
+               up to a factor of two improvement over HCLH, the most efficient known hierarchical
+               locking algorithm.},
+  booktitle = {Proceedings of the Twenty-Third Annual ACM Symposium on Parallelism in Algorithms and Architectures},
+  pages     = {65–74},
+  numpages  = {10},
+  keywords  = {hierarchical locks, flat combining, queue locks},
+  location  = {San Jose, California, USA},
+  series    = {SPAA '11}
+}
+
+@article{Cohort-Lock,
+  author     = {Dice, David and Marathe, Virendra J. and Shavit, Nir},
+  title      = {Lock Cohorting: A General Technique for Designing NUMA Locks},
+  year       = {2012},
+  issue_date = {August 2012},
+  publisher  = {Association for Computing Machinery},
+  address    = {New York, NY, USA},
+  volume     = {47},
+  number     = {8},
+  issn       = {0362-1340},
+  url        = {https://doi.org/10.1145/2370036.2145848},
+  doi        = {10.1145/2370036.2145848},
+  abstract   = {Multicore machines are quickly shifting to NUMA and CC-NUMA architectures, making
+                scalable NUMA-aware locking algorithms, ones that take into account the machines'
+                non-uniform memory and caching hierarchy, ever more important. This paper presents
+                lock cohorting, a general new technique for designing NUMA-aware locks that is as
+                simple as it is powerful.Lock cohorting allows one to transform any spin-lock algorithm,
+                with minimal non-intrusive changes, into scalable NUMA-aware spin-locks. Our new cohorting
+                technique allows us to easily create NUMA-aware versions of the TATAS-Backoff, CLH,
+                MCS, and ticket locks, to name a few. Moreover, it allows us to derive a CLH-based
+                cohort abortable lock, the first NUMA-aware queue lock to support abortability.We
+                empirically compared the performance of cohort locks with prior NUMA-aware and classic
+                NUMA-oblivious locks on a synthetic micro-benchmark, a real world key-value store
+                application memcached, as well as the libc memory allocator. Our results demonstrate
+                that cohort locks perform as well or better than known locks when the load is low
+                and significantly out-perform them as the load increases.},
+  journal    = {SIGPLAN Not.},
+  month      = feb,
+  pages      = {247–256},
+  numpages   = {10},
+  keywords   = {NUMA, spin locks, hierarchical locks}
+}
+
+@inproceedings{HMCS-Lock,
+  author    = {Chabbi, Milind and Fagan, Michael and Mellor-Crummey, John},
+  title     = {High Performance Locks for Multi-Level NUMA Systems},
+  year      = {2015},
+  isbn      = {9781450332057},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  url       = {https://doi.org/10.1145/2688500.2688503},
+  doi       = {10.1145/2688500.2688503},
+  abstract  = {Efficient locking mechanisms are critically important for high performance computers. On highly-threaded systems with a deep memory hierarchy, the throughput of traditional queueing locks, e.g., MCS locks, falls off due to NUMA effects. Two-level cohort locks perform better on NUMA systems, but fail to deliver top performance for deep NUMA hierarchies. In this paper, we describe a hierarchical variant of the MCS lock that adapts the principles of cohort locking for architectures with deep NUMA hierarchies. We describe analytical models for throughput and fairness of Cohort-MCS (C-MCS) and Hierarchical MCS (HMCS) locks that enable us to tailor these locks for high performance on any target platform without empirical tuning. Using these models, one can select parameters such that an HMCS lock will deliver better fairness than a C-MCS lock for a given throughput, or deliver better throughput for a given fairness. Our experiments show that, under high contention, a three-level HMCS lock delivers up to 7.6x higher lock throughput than a C-MCS lock on a 128-thread IBM Power 755 and a five-level HMCS lock delivers up to 72x higher lock throughput on a 4096-thread SGI UV 1000. On the K-means clustering code from the MineBench suit, a three-level HMCS lock reduces the running time by up to 55% compared to the C-MCS lock on a IBM Power 755. },
+  booktitle = {Proceedings of the 20th ACM SIGPLAN Symposium on Principles and Practice of Parallel Programming},
+  pages     = {215–226},
+  numpages  = {12},
+  keywords  = {MCS, Analytical modeling, Lock fairness, Spin locks, NUMA, Lock throughput, Hierarchical locks},
+  location  = {San Francisco, CA, USA},
+  series    = {PPoPP 2015}
+}
+
+@article{AHMCS-Lock,
+  author     = {Chabbi, Milind and Mellor-Crummey, John},
+  title      = {Contention-Conscious, Locality-Preserving Locks},
+  year       = {2016},
+  issue_date = {August 2016},
+  publisher  = {Association for Computing Machinery},
+  address    = {New York, NY, USA},
+  volume     = {51},
+  number     = {8},
+  issn       = {0362-1340},
+  url        = {https://doi.org/10.1145/3016078.2851166},
+  doi        = {10.1145/3016078.2851166},
+  abstract   = {Over the last decade, the growing use of cache-coherent NUMA architectures has spurred the development of numerous locality-preserving mutual exclusion algorithms. NUMA-aware locks such as HCLH, HMCS, and cohort locks exploit locality of reference among nearby threads to deliver high lock throughput under high contention. However, the hierarchical nature of these locality-aware locks increases latency, which reduces the throughput of uncontended or lightly-contended critical sections. To date, no lock design for NUMA systems has delivered both low latency under low contention and high throughput under high contention.In this paper, we describe the design and evaluation of an adaptive mutual exclusion scheme (AHMCS lock), which employs several orthogonal strategies---a hierarchical MCS (HMCS) lock for high throughput under high contention, Lamport's fast path approach for low latency under low contention, an adaptation mechanism that employs hysteresis to balance latency and throughput under moderate contention, and hardware transactional memory for lowest latency in the absence of contention. The result is a top performing lock that has most properties of an ideal mutual exclusion algorithm. AHMCS exploits the strengths of multiple contention management techniques to deliver high performance over a broad range of contention levels. Our empirical evaluations demonstrate the effectiveness of AHMCS over prior art.},
+  journal    = {SIGPLAN Not.},
+  month      = {feb},
+  articleno  = {22},
+  numpages   = {14},
+  keywords   = {spin locks, NUMA, dynamic locks, hierarchical locks}
+}
+
+@inproceedings{CST-Lock,
+  author    = {Kashyap, Sanidhya and Min, Changwoo and Kim, Taesoo},
+  title     = {Scalable NUMA-Aware Blocking Synchronization Primitives},
+  year      = {2017},
+  isbn      = {9781931971386},
+  publisher = {USENIX Association},
+  address   = {USA},
+  abstract  = {Application scalability is a critical aspect to efficiently use NUMA machines with
+               many cores. To achieve that, various techniques ranging from task placement to data
+               sharding are used in practice. However, from the perspective of an operating system,
+               these techniques often do not work as expected because various subsystems in the OS
+               interact and share data structures among themselves, resulting in scalability bottlenecks.
+               Although current OSes attempt to tackle this problem by introducing a wide range of
+               synchronization primitives such as spinlock and mutex, the widely used synchronization
+               mechanisms are not designed to handle both under- and over-subscribed scenarios in
+               a scalable fashion. In particular, the current blocking synchronization primitives
+               that are designed to address both scenarios are NUMA oblivious, meaning that they
+               suffer from cache-line contention in an undersubscribed situation, and even worse,
+               inherently spur long scheduler intervention, which leads to sub-optimal performance
+               in an over-subscribed situation.In this work, we present several design choices to
+               implement scalable blocking synchronization primitives that can address both under-
+               and over-subscribed scenarios. Such design decisions include memory-efficient NUMA-aware
+               locks (favorable for deployment) and scheduling-aware, scalable parking and wake-up
+               strategies. To validate our design choices, we implement two new blocking synchronization
+               primitives, which are variants of mutex and read-write semaphore in the Linux kernel.
+               Our evaluation shows that these locks can scale real-world applications by 1.2-1.6\texttimes{}
+               and some of the file system operations up to 4.7\texttimes{} in both under- and over-subscribed
+               scenarios. Moreover, they use 1.5-10\texttimes{} less memory than the state-of-the-art NUMA-aware
+               locks on a 120-core machine.},
+  booktitle = {Proceedings of the 2017 USENIX Conference on Usenix Annual Technical Conference},
+  pages     = {603–615},
+  numpages  = {13},
+  location  = {Santa Clara, CA, USA},
+  series    = {USENIX ATC '17}
+}
+
+@inproceedings{CNA-Lock,
+  author    = {Dice, Dave and Kogan, Alex},
+  title     = {Compact NUMA-Aware Locks},
+  year      = {2019},
+  isbn      = {9781450362818},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  url       = {https://doi.org/10.1145/3302424.3303984},
+  doi       = {10.1145/3302424.3303984},
+  abstract  = {Modern multi-socket architectures exhibit non-uniform memory access (NUMA) behavior, where access by a core to data cached locally on a socket is much faster than access to data cached on a remote socket. Prior work offers several efficient NUMA-aware locks that exploit this behavior by keeping the lock ownership on the same socket, thus reducing remote cache misses and inter-socket communication. Virtually all those locks, however, are hierarchical in their nature, thus requiring space proportional to the number of sockets. The increased memory cost renders NUMA-aware locks unsuitable for systems that are conscious to space requirements of their synchronization constructs, with the Linux kernel being the chief example.In this work, we present a compact NUMA-aware lock that requires only one word of memory, regardless of the number of sockets in the underlying machine. The new lock is a variant of an efficient (NUMA-oblivious) MCS lock, and inherits its performant features, such as local spinning and a single atomic instruction in the acquisition path. Unlike MCS, the new lock organizes waiting threads in two queues, one composed of threads running on the same socket as the current lock holder, and another composed of threads running on a different socket(s).We implemented the new lock in user-space as well as integrated it in the Linux kernel's qspinlock, one of the major synchronization constructs in the kernel. Our evaluation using both user-space and kernel benchmarks shows that the new lock has a single-thread performance of MCS, but significantly outperforms the latter under contention, achieving a similar level of performance when compared to other, state-of-the-art NUMA-aware locks that require substantially more space.},
+  booktitle = {Proceedings of the Fourteenth EuroSys Conference 2019},
+  articleno = {12},
+  numpages  = {15},
+  keywords  = {mutual exclusion, non-uniform access memory, synchronization, Linux kernel, locks, memory footprint},
+  location  = {Dresden, Germany},
+  series    = {EuroSys '19}
+}
+
+@inproceedings{Shfl-Lock,
+  author    = {Kashyap, Sanidhya and Calciu, Irina and Cheng, Xiaohe and Min, Changwoo and Kim, Taesoo},
+  title     = {Scalable and Practical Locking with Shuffling},
+  year      = {2019},
+  isbn      = {9781450368735},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  url       = {https://doi.org/10.1145/3341301.3359629},
+  doi       = {10.1145/3341301.3359629},
+  abstract  = {Locks are an essential building block for high-performance multicore system software. To meet performance goals, lock algorithms have evolved towards specialized solutions for architectural characteristics (e.g., NUMA). However, inpractice, applications run on different server platforms and exhibit widely diverse behaviors that evolve with time (e.g., number of threads, number of locks). This creates performance and scalability problems for locks optimized for a single scenario and platform. For example, popular spinlocks suffer from excessive cache-line bouncing in NUMA systems, while scalable, NUMA-aware locks exhibit sub-par single-thread performance.In this paper, we identify four dominating factors that impact the performance of lock algorithms. We then propose a new technique, shuffling, that can dynamically accommodate all these factors, without slowing down the critical path of the lock. The key idea of shuffling is to re-order the queue of threads waiting to acquire the lock in accordance with some pre-established policy. For best performance, this work is done off the critical path, by the waiter threads. Using shuffling, we demonstrate how to achieve NUMA-awareness and implement an efficient parking/wake-up strategy, without any auxiliary data structure, mostly off the critical path. The evaluation shows that our family of locks based on shuffling improves the throughput of real-world applications up to 12.5x, with impressive memory footprint reduction compared with the recent lock algorithms.},
+  booktitle = {Proceedings of the 27th ACM Symposium on Operating Systems Principles},
+  pages     = {586–599},
+  numpages  = {14},
+  keywords  = {memory footprint, mutual exclusion, Linux},
+  location  = {Huntsville, Ontario, Canada},
+  series    = {SOSP '19}
+}
+
+@inproceedings{Fissile-Locks,
+  author    = {Dice, Dave and Kogan, Alex},
+  editor    = {Georgiou, Chryssis and Majumdar, Rupak},
+  title     = {Fissile Locks},
+  booktitle = {Networked Systems},
+  year      = {2021},
+  publisher = {Springer International Publishing},
+  address   = {Cham},
+  pages     = {192--208},
+  abstract  = {Classic test-and-test (TS) mutual exclusion locks are simple, and enjoy high performance and low latency of ownership transfer under light or no contention. They do not, however, scale gracefully under high contention and do not provide any admission order guarantees. Such concerns led to the development of scalable queue-based locks, such as a recent Compact NUMA-aware (CNA) lock, a variant of another popular queue-based MCS lock. CNA scales well under load and provides certain admission guarantees, but has more complicated lock handover operations than TS and incurs higher latencies at low contention.},
+  isbn      = {978-3-030-67087-0},
+  url       = {https://doi.org/10.1007/978-3-030-67087-0_13},
+  doi       = {10.1007/978-3-030-67087-0_13}
+}
+
+@inproceedings{CLoF,
+  author    = {de Lima Chehab, Rafael Lourenco and Paolillo, Antonio and Behrens, Diogo and Fu, Ming and H\"{a}rtig, Hermann and Chen, Haibo},
+  title     = {CLoF: A Compositional Lock Framework for Multi-Level NUMA Systems},
+  year      = {2021},
+  isbn      = {9781450387095},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  url       = {https://doi.org/10.1145/3477132.3483557},
+  doi       = {10.1145/3477132.3483557},
+  abstract  = {Efficient locking mechanisms are extremely important to support large-scale concurrency and exploit the performance promises of many-core servers. Implementing an efficient, generic, and correct lock is very challenging due to the differences between various NUMA architectures. The performance impact of architectural/NUMA hierarchy differences between x86 and Armv8 are not yet fully explored, leading to unexpected performance when simply porting NUMA-aware locks from x86 to Armv8. Moreover, due to the Armv8 Weak Memory Model (WMM), correctly implementing complicated NUMA-aware locks is very difficult.We propose a Compositional Lock Framework (CLoF) for multi-level NUMA systems. CLoF composes NUMA-oblivious locks in a hierarchy matching the target platform, leading to hundreds of correct by construction NUMA-aware locks. CLoF can automatically select the best lock among them. To show the correctness of CLoF on WMMs, we provide an inductive argument with base and induction steps verified with model checkers. In our evaluation, CLoF locks outperform state-of-the-art NUMA-aware locks in most scenarios, e.g., in a highly contended LevelDB benchmark, our best CLoF locks yield twice the throughput achieved with CNA lock and ShflLock on large x86 and Armv8 servers.},
+  booktitle = {Proceedings of the ACM SIGOPS 28th Symposium on Operating Systems Principles},
+  pages     = {851–865},
+  numpages  = {15},
+  keywords  = {multicore concurrency, non-uniform access memory, weak memory models},
+  location  = {Virtual Event, Germany},
+  series    = {SOSP '21}
+}
+
+MPI locks
+
+@book{AdvancedMpi,
+  author    = {Gropp, William and Hoefler, Torsten and Thakur, Rajeev and Lusk, Ewing},
+  title     = {Using Advanced MPI: Modern Features of the Message-Passing Interface},
+  year      = {2014},
+  isbn      = {0262527634},
+  publisher = {The MIT Press},
+  abstract  = {This book offers a practical guide to the advanced features of the MPI (Message-Passing Interface) standard library for writing programs for parallel computers. It covers new features added in MPI-3, the latest version of the MPI standard, and updates from MPI-2. Like its companion volume, Using MPI, the book takes an informal, example-driven, tutorial approach. The material in each chapter is organized according to the complexity of the programs used as examples, starting with the simplest example and moving to more complex ones. Using Advanced MPI covers major changes in MPI-3, including changes to remote memory access and one-sided communication that simplify semantics and enable better performance on modern hardware; new features such as nonblocking and neighborhood collectives for greater scalability on large systems; and minor updates to parallel I/O and dynamic processes. It also covers support for hybrid shared-memory/message-passing programming; MPI_Message, which aids in certain types of multithreaded programming; features that handle very large data; an interface that allows the programmer and the developer to access performance data; and a new binding of MPI to Fortran.}
+}
+
+@inproceedings{RMA-RW,
+  author    = {Schmid, Patrick and Besta, Maciej and Hoefler, Torsten},
+  title     = {High-Performance Distributed RMA Locks},
+  year      = {2016},
+  isbn      = {9781450343145},
+  publisher = {Association for Computing Machinery},
+  address   = {New York, NY, USA},
+  url       = {https://doi.org/10.1145/2907294.2907323},
+  doi       = {10.1145/2907294.2907323},
+  abstract  = {We propose a topology-aware distributed Reader-Writer lock that accelerates irregular workloads for supercomputers and data centers. The core idea behind the lock is a modular design that is an interplay of three distributed data structures: a counter of readers/writers in the critical section, a set of queues for ordering writers waiting for the lock, and a tree that binds all the queues and synchronizes writers with readers. Each structure is associated with a parameter for favoring either readers or writers, enabling adjustable performance that can be viewed as a point in a three dimensional parameter space. We also develop a distributed topology-aware MCS lock that is a building block of the above design and improves state-of-the-art MPI implementations. Both schemes use non-blocking Remote Memory Access (RMA) techniques for highest performance and scalability. We evaluate our schemes on a Cray XC30 and illustrate that they outperform state-of-the-art MPI-3 RMA locking protocols by 81% and 73%, respectively. Finally, we use them to accelerate a distributed hashtable that represents irregular workloads such as key-value stores or graph processing.},
+  booktitle = {Proceedings of the 25th ACM International Symposium on High-Performance Parallel and Distributed Computing},
+  pages     = {19–30},
+  numpages  = {12},
+  keywords  = {topology-aware, locks, reader-writer locks, distributed locks, locking, parallel programming, hpc},
+  location  = {Kyoto, Japan},
+  series    = {HPDC '16}
+}

@@ -1,0 +1,169 @@
+\documentclass[bibliography=totoc,listof=totoc,BCOR=5mm,DIV=12]{scrbook} % Rand für Bindung: 5mm / falls Index verwendet, ergänze "index=totoc" zu den Optionen
+
+\usepackage[utf8]{inputenc}
+
+\usepackage[english,ngerman]{babel}
+\usepackage[threshold=0]{csquotes}
+\usepackage{diagbox}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{listings}
+\lstset {
+    basicstyle=\scriptsize,
+    language=C,
+    numbers=left,
+    texcl=true,
+}
+\usepackage{newfloat}
+\DeclareFloatingEnvironment[fileext=lob,listname=Benchmarkverzeichnis]{benchmark}
+\usepackage{subcaption}
+\usepackage{tikz}
+\usetikzlibrary{backgrounds,calc,positioning}
+\usepackage{url}
+
+\usepackage[ngerman]{hyperref}
+
+% Nach hyperref
+\usepackage[acronym,automake,toc]{glossaries}
+
+\graphicspath{{./Bilder/}}
+
+\input{hyphenation} % in dieses File kommen Wörter die Latex nicht richtig trennt
+
+\makeglossaries
+\newglossaryentry{Fenster}{
+    name={Fenster},
+    first={Fenster (engl. \textit{window})},
+    description={%
+        (engl. \textit{window}) ist in \gls{mpi} der Begriff für eine Sicht auf die Speicherbereiche mehrerer Prozesse,
+        die diese veröffentlicht haben,
+        um \gls{rma}-Zugriffe zu ermöglichen.
+        Mit mehreren Fenstern kann ein Prozess mehrere Speicherbereiche für unterschiedliche Zwecke veröffentlichen.
+        Die veröffentlichten Speicherbereiche mehrerer Fenster können sich auch überschneiden.
+        Um bei einem \gls{rma}-Zugriff die Ziel-Speicheradresse eindeutig anzugeben,
+        muss ein Prozess das Fenster,
+        den eindeutigen Rang des Zielprozesses,
+        und den Versatz der Ziel-Adresse innerhalb des im Fenster veröffentlichten Speichers angeben}
+}
+\newglossaryentry{hungerfrei}{
+    name={hungerfrei},
+    first={hungerfrei (engl. \textit{starvation-free})},
+    description={%
+        (engl. \textit{starvation-free}) bezeichnet Algorithmen,
+        in denen es unmöglich ist,
+        dass ein Prozess verhungert (siehe \gls{Verhungern})}
+}
+\newglossaryentry{Kohaerenz}{
+    name={Kohärenz},
+    description={%
+        ist eine Eigenschaft von \gls{Zwischenspeicher}n.
+        Die \gls{Zwischenspeicher} und der Hauptspeicher sind kohärent,
+        wenn alle Kopien einer Speicheradresse denselben Wert enthalten.
+        Damit wird verhindert,
+        dass verschiedene Prozesse
+        bei Zugriffen auf dieselbe Speicheradresse
+        verschiedene Werte lesen.
+        Eine Inkonsistenz der \gls{Zwischenspeicher} muss demnach
+        spätestens bei einem lesenden Zugriff
+        behoben werden}
+}
+\newglossaryentry{Konkurrenz}{
+    name={Konkurrenz},
+    first={Konkurrenz (engl. \textit{contention})},
+    description={%
+        (engl. \textit{contention}) bezeichnet,
+        wie viele Prozesse gleichzeitig versuchen,
+        einen Lock zu akquirieren.
+        Um sie in dieser Arbeit messen zu können,
+        wird sie in \autoref{sec:contention} als \enquote{der Anteil der Akquisitionen,
+        bei denen ein Prozess einen Lock nicht direkt akquirieren konnte,
+        sondern auf einen Vorgänger warten musste} definiert.
+        Diese empirische Konkurrenz geht demnach von 0 bis 100~\%}
+}
+\newglossaryentry{message passing}{
+    name={\textit{Message Passing}},
+    description={%
+        ist ein Konzept für die Programmierung von verteilten Systemen,
+        bei dem die beteiligten Computer Nachrichten austauschen,
+        um miteinander zu Kommunizieren}}
+\newglossaryentry{Verhungern}{
+    name={Verhungern},
+    first={Verhungern (engl. \textit{Starvation})},
+    description={%
+        (engl. \textit{starvation}) bezeichnet eine Situation,
+        in der ein Prozess für immer wartet,
+        weil er wieder und wieder von anderen Prozessen überholt wird (siehe \autoref{sec:fairness_theoretisch})}
+}
+\newglossaryentry{Zwischenspeicher}{
+    name={Zwischenspeicher},
+    first={Zwischenspeicher (engl. \textit{cache})},
+    description={%
+        (engl. \textit{cache}) bezeichnet einen schnellen Speicher,
+        der genutzt wird,
+        um wiederholte Zugriffe auf dieselbe Speicheradresse zu beschleunigen.
+        Die Daten werden beim ersten Zugriff aus dem langsamen Hauptspeicher in den schnellen Zwischenspeicher geladen
+        und liegen so bei erneutem Zugriff bereits vor.
+        Um Hauptspeicher und Zwischenspeicher \glslink{Kohaerenz}{kohärent} zu halten,
+        wird ein Zwischenspeicher-\gls{Kohaerenz}-Mechanismus benötigt \cite{cache-coherence}}
+}
+
+\newacronym{cas}{CAS}{\textit{Compare-and-Swap}}
+\newacronym{ccwb}{CCWB}{\textit{Changing Critical Work Benchmark}}
+\newacronym{cpu}{CPU}{\textit{Central Processing Unit}}
+\newacronym{cv}{CV}{\textit{Coefficient of Variation}}
+\newacronym{ecsb}{ECSB}{\textit{Empty Critical Section Benchmark}}
+\newacronym{fifo}{FIFO}{\textit{first in first out}}
+\newacronym{hpc}{HPC}{\textit{High Performance Computing}}
+\newacronym{htm}{HTM}{\textit{Hardware Transactional Memory}}
+\newacronym{lrz}{LRZ}{Leibniz-Rechenzentrum der Bayerischen Akademie der Wissenschaften}
+\newacronym{mesif}{MESIF}{\textit{modified, exclusive, shared, invalid and forward}}
+\newacronym{mpi}{MPI}{\textit{Message Passing Interface}}
+\newacronym{numa}{NUMA}{\textit{Non Uniform Memory Access}}
+\newacronym{pgas}{PGAS}{\textit{Partitioned Global Address Space}}
+\newacronym{rdma}{RDMA}{\textit{Remote Direct Memory Access}}
+\newacronym{rma}{RMA}{\textit{Remote Memory Access}}
+\newacronym{tas}{TAS}{\textit{Test-and-Set}}
+\newacronym{tts}{TTS}{\textit{Test-and-Test-and-Set}}
+\newacronym{uma}{UMA}{\textit{Uniform Memory Access}}
+\newacronym{upb}{UPB}{\textit{Uncontested Performance Benchmark}}
+\newacronym{wbab}{WBAB}{\textit{Wait Before Acquire Benchmark}}
+
+\def\upburl{\href{https://github.com/Adrodoc/distributed-locks/blob/ccea5861d0308aef0f60f7a34c745ce796d8bc6d/main/src/benchmark/mpi_lock_bench.cpp\#L289-L371}{Vollständiger Quelltext}}
+\def\ecsburl{\href{https://github.com/Adrodoc/distributed-locks/blob/ccea5861d0308aef0f60f7a34c745ce796d8bc6d/main/src/benchmark/benchmarks.cpp\#L40-L47}{Vollständiger Quelltext}}
+\def\ccwburl{\href{https://github.com/Adrodoc/distributed-locks/blob/ccea5861d0308aef0f60f7a34c745ce796d8bc6d/main/src/benchmark/benchmarks.cpp\#L204-L281}{Vollständiger Quelltext}}
+\def\wbaburl{\href{https://github.com/Adrodoc/distributed-locks/blob/ccea5861d0308aef0f60f7a34c745ce796d8bc6d/main/src/benchmark/benchmarks.cpp\#L118-L167}{Vollständiger Quelltext}}
+
+\begin{document}
+
+% ---------------------------------------------------------------
+\frontmatter % Titelblätter und Erklärung
+\include{./Titel/titel-lmu} % Titelblätter LMU
+\thispagestyle{empty}
+\cleardoublepage
+\include{./Titel/erklaerung-lmu} % Erklärung (Arbeit selbstständig verfasst)
+\thispagestyle{empty}
+\cleardoublepage
+\include{abstract} % Abstract
+\thispagestyle{empty}
+\tableofcontents % Inhaltsverzeichnis
+
+% ---------------------------------------------------------------
+\mainmatter % die eigentliche Arbeit
+
+\input{einleitung}
+\input{hinfuehrung}
+\input{locks-in-verteilten-systemen}
+\input{benchmarks}
+\input{portierung}
+\input{fazit}
+
+% ---------------------------------------------------------------
+\backmatter % ab hier keine Nummerierung mehr
+\let\cleardoublepage\clearpage
+\listoffigures
+\listofbenchmarks
+\printglossaries
+\bibliographystyle{alphadin}
+\bibliography{./Bib/uffm22}
+
+\end{document}

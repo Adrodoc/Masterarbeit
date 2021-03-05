@@ -1,0 +1,108 @@
+{
+  "context": {
+    "avg_wait_ns": "64000",
+    "benchmark": "WBAB",
+    "lock": "MpiWinLock",
+    "mpi_progress": "1",
+    "processes": "112",
+    "date": "2021-12-06T18:05:13"
+  },
+  "runs": [
+    {
+      "duration_ns": 909104666,
+      "iterations": 14119,
+      "iterations_per_process_min": 122.000000,
+      "iterations_per_process_max": 132.000000,
+      "iterations_per_process_median": 126.000000,
+      "iterations_per_process_mean": 126.062500,
+      "iterations_per_process_sd": 2.161419,
+      "iterations_per_process_cv": 0.017146,
+      "stats": {
+      }
+    },
+    {
+      "duration_ns": 909036562,
+      "iterations": 14100,
+      "iterations_per_process_min": 119.000000,
+      "iterations_per_process_max": 131.000000,
+      "iterations_per_process_median": 126.000000,
+      "iterations_per_process_mean": 125.892857,
+      "iterations_per_process_sd": 2.182474,
+      "iterations_per_process_cv": 0.017336,
+      "stats": {
+      }
+    },
+    {
+      "duration_ns": 909322011,
+      "iterations": 14102,
+      "iterations_per_process_min": 120.000000,
+      "iterations_per_process_max": 131.000000,
+      "iterations_per_process_median": 126.000000,
+      "iterations_per_process_mean": 125.910714,
+      "iterations_per_process_sd": 2.330965,
+      "iterations_per_process_cv": 0.018513,
+      "stats": {
+      }
+    },
+    {
+      "duration_ns": 908881810,
+      "iterations": 14130,
+      "iterations_per_process_min": 119.000000,
+      "iterations_per_process_max": 132.000000,
+      "iterations_per_process_median": 126.000000,
+      "iterations_per_process_mean": 126.160714,
+      "iterations_per_process_sd": 2.410763,
+      "iterations_per_process_cv": 0.019109,
+      "stats": {
+      }
+    },
+    {
+      "duration_ns": 909177552,
+      "iterations": 14085,
+      "iterations_per_process_min": 121.000000,
+      "iterations_per_process_max": 132.000000,
+      "iterations_per_process_median": 125.000000,
+      "iterations_per_process_mean": 125.758929,
+      "iterations_per_process_sd": 2.286843,
+      "iterations_per_process_cv": 0.018184,
+      "stats": {
+      }
+    },
+    {
+      "duration_ns": 909220966,
+      "iterations": 14081,
+      "iterations_per_process_min": 120.000000,
+      "iterations_per_process_max": 134.000000,
+      "iterations_per_process_median": 126.000000,
+      "iterations_per_process_mean": 125.723214,
+      "iterations_per_process_sd": 2.321889,
+      "iterations_per_process_cv": 0.018468,
+      "stats": {
+      }
+    },
+    {
+      "duration_ns": 908412634,
+      "iterations": 14111,
+      "iterations_per_process_min": 121.000000,
+      "iterations_per_process_max": 131.000000,
+      "iterations_per_process_median": 126.000000,
+      "iterations_per_process_mean": 125.991071,
+      "iterations_per_process_sd": 2.149777,
+      "iterations_per_process_cv": 0.017063,
+      "stats": {
+      }
+    },
+    {
+      "duration_ns": 908632352,
+      "iterations": 14167,
+      "iterations_per_process_min": 122.000000,
+      "iterations_per_process_max": 132.000000,
+      "iterations_per_process_median": 126.000000,
+      "iterations_per_process_mean": 126.491071,
+      "iterations_per_process_sd": 2.118114,
+      "iterations_per_process_cv": 0.016745,
+      "stats": {
+      }
+    }
+  ]
+}

@@ -1,0 +1,124 @@
+{
+  "context": {
+    "avg_wait_ns": "5000",
+    "benchmark": "WBAB",
+    "lock": "McsLockAtomic",
+    "mpi_progress": "1",
+    "processes": "28",
+    "date": "2021-11-19T20:59:24"
+  },
+  "runs": [
+    {
+      "duration_ns": 900163546,
+      "iterations": 179402,
+      "iterations_per_process_min": 6379.000000,
+      "iterations_per_process_max": 6434.000000,
+      "iterations_per_process_median": 6407.500000,
+      "iterations_per_process_mean": 6407.214286,
+      "iterations_per_process_sd": 14.158775,
+      "iterations_per_process_cv": 0.002210,
+      "stats": {
+        "acquired_delayed": 579.000000,
+        "acquired_immediately": 178823.000000
+      }
+    },
+    {
+      "duration_ns": 900143351,
+      "iterations": 179322,
+      "iterations_per_process_min": 6378.000000,
+      "iterations_per_process_max": 6421.000000,
+      "iterations_per_process_median": 6407.000000,
+      "iterations_per_process_mean": 6404.357143,
+      "iterations_per_process_sd": 13.507787,
+      "iterations_per_process_cv": 0.002109,
+      "stats": {
+        "acquired_delayed": 644.000000,
+        "acquired_immediately": 178678.000000
+      }
+    },
+    {
+      "duration_ns": 900171486,
+      "iterations": 179353,
+      "iterations_per_process_min": 6383.000000,
+      "iterations_per_process_max": 6432.000000,
+      "iterations_per_process_median": 6401.000000,
+      "iterations_per_process_mean": 6405.464286,
+      "iterations_per_process_sd": 16.153161,
+      "iterations_per_process_cv": 0.002522,
+      "stats": {
+        "acquired_delayed": 569.000000,
+        "acquired_immediately": 178784.000000
+      }
+    },
+    {
+      "duration_ns": 900160019,
+      "iterations": 179299,
+      "iterations_per_process_min": 6370.000000,
+      "iterations_per_process_max": 6432.000000,
+      "iterations_per_process_median": 6401.000000,
+      "iterations_per_process_mean": 6403.535714,
+      "iterations_per_process_sd": 15.819543,
+      "iterations_per_process_cv": 0.002470,
+      "stats": {
+        "acquired_delayed": 577.000000,
+        "acquired_immediately": 178722.000000
+      }
+    },
+    {
+      "duration_ns": 900165230,
+      "iterations": 179349,
+      "iterations_per_process_min": 6376.000000,
+      "iterations_per_process_max": 6431.000000,
+      "iterations_per_process_median": 6407.000000,
+      "iterations_per_process_mean": 6405.321429,
+      "iterations_per_process_sd": 13.891254,
+      "iterations_per_process_cv": 0.002169,
+      "stats": {
+        "acquired_delayed": 574.000000,
+        "acquired_immediately": 178775.000000
+      }
+    },
+    {
+      "duration_ns": 900156392,
+      "iterations": 179496,
+      "iterations_per_process_min": 6386.000000,
+      "iterations_per_process_max": 6434.000000,
+      "iterations_per_process_median": 6409.500000,
+      "iterations_per_process_mean": 6410.571429,
+      "iterations_per_process_sd": 12.452662,
+      "iterations_per_process_cv": 0.001943,
+      "stats": {
+        "acquired_delayed": 535.000000,
+        "acquired_immediately": 178961.000000
+      }
+    },
+    {
+      "duration_ns": 900168485,
+      "iterations": 179337,
+      "iterations_per_process_min": 6377.000000,
+      "iterations_per_process_max": 6437.000000,
+      "iterations_per_process_median": 6402.500000,
+      "iterations_per_process_mean": 6404.892857,
+      "iterations_per_process_sd": 15.471214,
+      "iterations_per_process_cv": 0.002416,
+      "stats": {
+        "acquired_delayed": 563.000000,
+        "acquired_immediately": 178774.000000
+      }
+    },
+    {
+      "duration_ns": 900154013,
+      "iterations": 179305,
+      "iterations_per_process_min": 6374.000000,
+      "iterations_per_process_max": 6437.000000,
+      "iterations_per_process_median": 6407.500000,
+      "iterations_per_process_mean": 6403.750000,
+      "iterations_per_process_sd": 16.107567,
+      "iterations_per_process_cv": 0.002515,
+      "stats": {
+        "acquired_delayed": 643.000000,
+        "acquired_immediately": 178662.000000
+      }
+    }
+  ]
+}

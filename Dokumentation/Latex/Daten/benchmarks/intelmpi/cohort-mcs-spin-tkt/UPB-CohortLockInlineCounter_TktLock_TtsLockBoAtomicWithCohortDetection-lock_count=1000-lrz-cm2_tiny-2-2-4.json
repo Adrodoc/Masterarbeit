@@ -1,0 +1,98 @@
+{
+  "context": {
+    "benchmark": "UPB",
+    "lock": "CohortLockInlineCounter_TktLock_TtsLockBoAtomicWithCohortDetection",
+    "lock_count": "1000",
+    "date": "2022-01-10T21:08:33"
+  },
+  "runs": [
+    {
+      "same_process_master_rank_ns": 639,
+      "same_node_master_rank_ns": 1165,
+      "different_node_master_rank_ns": 767,
+      "same_process_master_node_ns": 622,
+      "same_node_master_node_ns": 783,
+      "different_node_master_node_ns": 810,
+      "same_process_slave_node_ns": 8610,
+      "same_node_slave_node_ns": 9268,
+      "different_node_slave_node_ns": 8777
+    },
+    {
+      "same_process_master_rank_ns": 573,
+      "same_node_master_rank_ns": 972,
+      "different_node_master_rank_ns": 598,
+      "same_process_master_node_ns": 627,
+      "same_node_master_node_ns": 786,
+      "different_node_master_node_ns": 791,
+      "same_process_slave_node_ns": 8615,
+      "same_node_slave_node_ns": 9278,
+      "different_node_slave_node_ns": 8724
+    },
+    {
+      "same_process_master_rank_ns": 573,
+      "same_node_master_rank_ns": 973,
+      "different_node_master_rank_ns": 591,
+      "same_process_master_node_ns": 615,
+      "same_node_master_node_ns": 780,
+      "different_node_master_node_ns": 790,
+      "same_process_slave_node_ns": 8630,
+      "same_node_slave_node_ns": 9278,
+      "different_node_slave_node_ns": 8777
+    },
+    {
+      "same_process_master_rank_ns": 574,
+      "same_node_master_rank_ns": 972,
+      "different_node_master_rank_ns": 594,
+      "same_process_master_node_ns": 630,
+      "same_node_master_node_ns": 787,
+      "different_node_master_node_ns": 788,
+      "same_process_slave_node_ns": 8638,
+      "same_node_slave_node_ns": 9305,
+      "different_node_slave_node_ns": 8832
+    },
+    {
+      "same_process_master_rank_ns": 571,
+      "same_node_master_rank_ns": 974,
+      "different_node_master_rank_ns": 590,
+      "same_process_master_node_ns": 624,
+      "same_node_master_node_ns": 781,
+      "different_node_master_node_ns": 789,
+      "same_process_slave_node_ns": 8658,
+      "same_node_slave_node_ns": 9222,
+      "different_node_slave_node_ns": 8790
+    },
+    {
+      "same_process_master_rank_ns": 572,
+      "same_node_master_rank_ns": 968,
+      "different_node_master_rank_ns": 593,
+      "same_process_master_node_ns": 623,
+      "same_node_master_node_ns": 784,
+      "different_node_master_node_ns": 791,
+      "same_process_slave_node_ns": 8597,
+      "same_node_slave_node_ns": 9226,
+      "different_node_slave_node_ns": 8755
+    },
+    {
+      "same_process_master_rank_ns": 570,
+      "same_node_master_rank_ns": 911,
+      "different_node_master_rank_ns": 644,
+      "same_process_master_node_ns": 656,
+      "same_node_master_node_ns": 783,
+      "different_node_master_node_ns": 799,
+      "same_process_slave_node_ns": 8665,
+      "same_node_slave_node_ns": 9284,
+      "different_node_slave_node_ns": 8790
+    },
+    {
+      "same_process_master_rank_ns": 574,
+      "same_node_master_rank_ns": 903,
+      "different_node_master_rank_ns": 591,
+      "same_process_master_node_ns": 633,
+      "same_node_master_node_ns": 781,
+      "different_node_master_node_ns": 795,
+      "same_process_slave_node_ns": 8651,
+      "same_node_slave_node_ns": 9307,
+      "different_node_slave_node_ns": 8699
+    }
+  ]
+}

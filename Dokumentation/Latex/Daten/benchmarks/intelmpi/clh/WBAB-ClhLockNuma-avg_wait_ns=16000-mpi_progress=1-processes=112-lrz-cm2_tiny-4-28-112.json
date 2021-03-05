@@ -1,0 +1,124 @@
+{
+  "context": {
+    "avg_wait_ns": "16000",
+    "benchmark": "WBAB",
+    "lock": "ClhLockNuma",
+    "mpi_progress": "1",
+    "processes": "112",
+    "date": "2021-12-22T20:07:59"
+  },
+  "runs": [
+    {
+      "duration_ns": 902240610,
+      "iterations": 55125,
+      "iterations_per_process_min": 483.000000,
+      "iterations_per_process_max": 506.000000,
+      "iterations_per_process_median": 492.000000,
+      "iterations_per_process_mean": 492.187500,
+      "iterations_per_process_sd": 4.149311,
+      "iterations_per_process_cv": 0.008430,
+      "stats": {
+        "acquired_delayed": 29879.000000,
+        "acquired_immediately": 25246.000000
+      }
+    },
+    {
+      "duration_ns": 902421240,
+      "iterations": 55064,
+      "iterations_per_process_min": 483.000000,
+      "iterations_per_process_max": 503.000000,
+      "iterations_per_process_median": 491.500000,
+      "iterations_per_process_mean": 491.642857,
+      "iterations_per_process_sd": 4.295099,
+      "iterations_per_process_cv": 0.008736,
+      "stats": {
+        "acquired_delayed": 29550.000000,
+        "acquired_immediately": 25514.000000
+      }
+    },
+    {
+      "duration_ns": 902462498,
+      "iterations": 55190,
+      "iterations_per_process_min": 482.000000,
+      "iterations_per_process_max": 500.000000,
+      "iterations_per_process_median": 493.000000,
+      "iterations_per_process_mean": 492.767857,
+      "iterations_per_process_sd": 3.717459,
+      "iterations_per_process_cv": 0.007544,
+      "stats": {
+        "acquired_delayed": 30211.000000,
+        "acquired_immediately": 24979.000000
+      }
+    },
+    {
+      "duration_ns": 902353549,
+      "iterations": 55142,
+      "iterations_per_process_min": 484.000000,
+      "iterations_per_process_max": 503.000000,
+      "iterations_per_process_median": 492.000000,
+      "iterations_per_process_mean": 492.339286,
+      "iterations_per_process_sd": 4.160201,
+      "iterations_per_process_cv": 0.008450,
+      "stats": {
+        "acquired_delayed": 29682.000000,
+        "acquired_immediately": 25460.000000
+      }
+    },
+    {
+      "duration_ns": 902313349,
+      "iterations": 55091,
+      "iterations_per_process_min": 481.000000,
+      "iterations_per_process_max": 506.000000,
+      "iterations_per_process_median": 491.500000,
+      "iterations_per_process_mean": 491.883929,
+      "iterations_per_process_sd": 4.481686,
+      "iterations_per_process_cv": 0.009111,
+      "stats": {
+        "acquired_delayed": 29687.000000,
+        "acquired_immediately": 25404.000000
+      }
+    },
+    {
+      "duration_ns": 902184706,
+      "iterations": 55093,
+      "iterations_per_process_min": 482.000000,
+      "iterations_per_process_max": 503.000000,
+      "iterations_per_process_median": 492.000000,
+      "iterations_per_process_mean": 491.901786,
+      "iterations_per_process_sd": 4.069132,
+      "iterations_per_process_cv": 0.008272,
+      "stats": {
+        "acquired_delayed": 29829.000000,
+        "acquired_immediately": 25264.000000
+      }
+    },
+    {
+      "duration_ns": 902280457,
+      "iterations": 54947,
+      "iterations_per_process_min": 481.000000,
+      "iterations_per_process_max": 505.000000,
+      "iterations_per_process_median": 491.000000,
+      "iterations_per_process_mean": 490.598214,
+      "iterations_per_process_sd": 3.735536,
+      "iterations_per_process_cv": 0.007614,
+      "stats": {
+        "acquired_delayed": 30055.000000,
+        "acquired_immediately": 24892.000000
+      }
+    },
+    {
+      "duration_ns": 902454971,
+      "iterations": 55017,
+      "iterations_per_process_min": 480.000000,
+      "iterations_per_process_max": 502.000000,
+      "iterations_per_process_median": 491.000000,
+      "iterations_per_process_mean": 491.223214,
+      "iterations_per_process_sd": 4.123564,
+      "iterations_per_process_cv": 0.008394,
+      "stats": {
+        "acquired_delayed": 30265.000000,
+        "acquired_immediately": 24752.000000
+      }
+    }
+  ]
+}

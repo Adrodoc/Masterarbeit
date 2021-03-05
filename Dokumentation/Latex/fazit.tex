@@ -1,0 +1,146 @@
+\chapter{Fazit}
+\label{ch:fazit}
+
+Diese Arbeit hat untersucht,
+ob sich Lock-Algorithmen,
+die für Systeme mit gemeinsamem Speicher mit \glsfirst{numa} entwickelt wurden,
+auch für Systeme mit verteiltem Speicher eignen.
+Für die Implementierung der Algorithmen wurde \gls{mpi} verwendet.
+So konnten die Zugriffe auf entfernten Speicher mit \gls{rma} realisiert werden.
+
+Um einen Vergleich der Locks zu ermöglichen,
+wurde eine neue Benchmarksuite entwickelt,
+mit der die Geschwindigkeit,
+die praktische Fairness
+und andere algorithmusspezifische Kennzahlen
+von beliebigen Lock-Implementierungen auf verteiltem Speicher
+in verschiedenen Szenarien gemessen werden kann.
+Diese Suite beinhaltet vier Benchmarks,
+die einen Lock allen möglichen Konkurrenzsituationen aussetzen.
+Die ersten drei davon nutzen einen leeren kritischen Abschnitt,
+um den reinen Overhead der Locks zu messen:
+\begin{enumerate}
+    \item Der \gls{upb} misst die Geschwindigkeit von freien Locks (0~\% Konkurrenz).
+    \item Der \gls{ecsb} misst die Geschwindigkeit von vollständig ausgelasteten Locks (100~\% Konkurrenz).
+    \item Der \gls{wbab} variiert die Konkurrenz von maximal zu minimal durch eine Veränderung
+          der Arbeit außerhalb des kritischen Abschnitts.
+    \item Der \gls{ccwb} enthält Arbeit im kritischen Abschnitt,
+          um ein möglichst realistisches Szenario zu erreichen.
+          Er variiert die Konkurrenz von minimal zu maximal
+          durch eine Veränderung dieser kritischen Arbeit.
+\end{enumerate}
+Alle Benchmarks wurden so entworfen,
+dass sie mit einer beliebigen Anzahl von Prozessen funktionieren,
+sodass sie sich auch für Hochleistungsrechner mit einer großen Anzahl von Prozessoren
+und damit für den \gls{hpc}-Bereich eignen.
+
+Die Evaluation der aktuell auf verteiltem Speicher verfügbaren Lock-Implementierungen zeigte,
+dass bei der Verwendung von \gls{mpi}
+nach Möglichkeit \gls{rma}-Zugriffe auf lokalen Speicher vermieden werden sollten,
+da diese deutlich langsamer sind
+als direkte Speicherzugriffe.
+Mit diesem Wissen und einigen Optimierungen
+konnte die Geschwindigkeit von D-MCS aus \cite{RMA-RW}
+und von \texttt{dash::Mutex} aus \cite{DART-MPI} verbessert werden:
+Der optimierte \texttt{dash::Mutex} ist in den Benchmarks bis zu vier Mal so schnell
+wie die unoptimierte Variante.
+Trotz der Optimierungen schneidet der RMA-MCS-Lock aus \cite{RMA-RW} von allen verfügbaren Locks
+auf verteiltem Speicher am besten ab.
+
+Für die Portierung von \gls{numa}-Locks auf verteilten Speicher
+wurden sieben Algorithmen näher untersucht (siehe \autoref{tab:numa_locks}).
+Die Analyse ergab,
+dass sich drei der Algorithmen
+(RH-Lock, Cohort-Lock und SHFL-Lock)
+für eine Portierung auf verteilten Speicher eignen.
+Diese drei wurden mit \gls{mpi} implementiert und für verteilten Speicher optimiert.
+Die Implementierungen und die einzelnen Optimierungen
+wurden ebenfalls mit der Benchmarksuite evaluiert.
+Hierbei zeigte sich,
+dass auf verteiltem Speicher
+entfernte Zugriffe noch dringender vermieden werden müssen
+als auf gemeinsamem Speicher mit \gls{numa}.
+Auf dem kritischen Pfad und in Warteschleifen
+wirken sich entfernte Zugriffe besonders negativ auf die Geschwindigkeit aus.
+
+Der portierte SHFL-Lock hatte eine sehr schlechte Performance.
+Bei Locks tragen auf gemeinsamem Speicher im Allgemeinen zwei Faktoren dazu bei,
+dass die Bevorzugung lokaler Prozesse bei der Lockübergabe vorteilhaft ist:
+Die Übergabe eines Locks an einen lokalen Nachfolger kann ohne Zugriffe auf entfernten Speicher realisiert werden
+und lokale Nachfolger können meist davon profitieren,
+dass die Daten,
+auf die sie im kritischen Abschnitt zugreifen,
+durch ihren Vorgänger bereits in einen \gls{Zwischenspeicher} geladen wurden.
+Der SHFL-Lock benötigt allerdings auch für eine lokale Lockübergabe entfernte Zugriffe
+und in \gls{mpi} gibt es keinen \gls{Zwischenspeicher} für entfernte Zugriffe,
+der lokalen Nachfolgern einen Vorteil verschaffen würde.
+Diese veränderten Gegebenheiten wirken sich auch auf andere Algorithmen negativ aus,
+z.~B. auf den HCLH-Lock und vermutlich auch auf den CNA-Lock aus \cite{CNA-Lock}
+und Fissile-Locks aus \cite{Fissile-Locks}.
+
+Die Evaluation des RH-Locks zeigte,
+dass dieser bei geringer Konkurrenz die Geschwindigkeit von RMA-MCS übertreffen kann.
+Dafür ist dieser Lock bei hoher Konkurrenz extrem unfair,
+wodurch Prozesse \glslink{Verhungern}{verhungern} können.
+
+Am besten schneidet von den portierten Locks der Cohort-Lock ab.
+Dies ist auch der Algorithmus,
+der in RMA-MCS implementiert ist,
+wobei allerdings noch eine entscheidende Optimierung aus dem HMCS-Lock einfließt.
+Durch die zusätzliche Vermeidung von \gls{rma}-Zugriffen
+ließ sich RMA-MCS stark optimieren.
+Der daraus resultierende Cohort-Lock mit globalem und lokalem MCS-Lock
+ist bei hoher Konkurrenz etwa vier Mal so schnell
+und bei mittlerer Konkurrenz fast doppelt so schnell wie RMA-MCS.
+
+Eine Untersuchung von elf Varianten des Cohort-Locks mit drei globalen
+und fünf lokalen Locks ergab schließlich,
+dass durch die Nutzung eines lokalen Hemlocks anstelle eines MCS-Locks
+eine vergleichbare Geschwindigkeit
+bei einem deutlich geringeren Speicherverbrauch erreicht werden kann.
+
+Die Forschungsfrage kann also positiv beantwortet werden:
+Es wurde eine schnellere Implementierung mit einem geringeren Speicherverbrauch
+als der bisher beste Lock für verteilten Speicher (RMA-MCS) gefunden,
+ohne Verluste bei der Fairness in Kauf nehmen zu müssen.
+
+Dieses Ergebnis zeigt,
+dass die Portierung von \gls{numa}-Locks auf verteilten Speicher
+großes Potenzial birgt
+und es gibt noch weitere Algorithmen,
+die untersucht werden können.
+Beispiele hierfür sind der FC-MCS-Lock aus \cite{FC-MCS-Lock},
+der CNA-Lock aus \cite{CNA-Lock},
+Fissile-Locks aus \cite{Fissile-Locks}
+und das sehr aktuelle Framework CLoF aus \cite{CLoF}.
+Eine Evaluation dieser Algorithmen kann mit der neuen Benchmarksuite aus \autoref{ch:benchmarks}
+durchgeführt werden.
+
+Das Ergebnis zeigt auch,
+dass Bibliotheken,
+wie DASH \cite{DART-MPI},
+auf neuere Lock-Algorith-men umsteigen sollten.
+Dann könnten neue und bestehende Anwendungen im \gls{hpc}-Bereich leicht
+von den Erkenntnissen der Forschung profitieren.
+
+Weiterer Forschungsbedarf besteht außerdem bei Lock-Varianten,
+wie RW-Locks oder abbrechbaren Locks.
+Auch solche Locks sind kaum für verteilten Speicher verfügbar
+und hier ist ebenfalls eine Portierung von Algorithmen für gemeinsamen Speicher
+auf verteilten Speicher denkbar.
+Ein verbesserter RW-Lock könnte für die Implementierung
+von \texttt{MPI\_Win\_lock} und \texttt{MPI\_Win\_lock\_all} genutzt werden.
+Davon könnten alle Anwendungen profitieren,
+die \gls{rma} mit \textit{passive target synchronization} nutzen.
+Neue RW-Locks sollten daher mit den \gls{Fenster}-Locks mehrerer \gls{mpi}-Implementierungen,
+wie Intel-MPI und Open-MPI,
+verglichen werden.
+
+Eine Arbeit in diesem Forschungsgebiet könnte zudem untersuchen,
+% Hierfür könnte unter anderem geprüft werden,
+ob sich die Optimierungen,
+die in dieser Arbeit gefunden wurden,
+auch auf RMA-RW aus \cite{RMA-RW} anwenden lassen.
+Das sind insbesondere die nicht-atomare Lockübergabe (vgl. \autoref{sec:non_atomic_lock_passing}),
+direkte Zugriffe auf globale MCS-Warteschlangenknoten (vgl. \autoref{sec:cohort_opt_4})
+und die Verwendung eines lokalen Hemlocks (vgl. \autoref{sec:cohort_hem}).

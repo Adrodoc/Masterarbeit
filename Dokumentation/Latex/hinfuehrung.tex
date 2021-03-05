@@ -1,0 +1,690 @@
+\chapter{Hinführung zum Thema}
+\label{ch:hinfuehrung}
+
+In diesem Kapitel werden einige Grundlagen erklärt,
+die für diese Arbeit relevant sind.
+In \autoref{sec:synchronisierung_in_parallelen_programmen} wird erklärt,
+wieso es Locks gibt
+und wie sie auf Systemen mit gemeinsamem Speicher funktionieren.
+\autoref{sec:programmierung_verteilter_systeme} erläutert,
+worin sich verteilte Systeme von Systemen mit gemeinsamem Speicher unterscheiden
+und stellt die daraus resultierenden Konzepte vor,
+die für eine Programmierung verteilter Systeme notwendig sind.
+Anschließend behandelt \autoref{sec:numa} \gls{numa},
+ein Konzept für gemeinsamen Speicher,
+bei dem,
+ähnlich zu verteilten Systemen,
+nicht auf jeden Teil des Speichers
+gleich schnell zugegriffen werden kann.
+Schließlich wird in \autoref{sec:ziel} das Ziel der Arbeit definiert.
+
+\section{Synchronisierung in parallelen Programmen}
+\label{sec:synchronisierung_in_parallelen_programmen}
+
+Synchronisierung ist in parallelen Programmen von großer Bedeutung,
+denn ohne sie können sich mehrere Prozesse (oder Threads) bei Speicherzugriffen in die Quere kommen.
+Das einfachste Beispiel hierfür ist wohl das Inkrementieren eines Zählers (siehe \autoref{fig:counter}).
+
+\begin{figure}[h]
+    \centering
+    \begin{tabular}{c}\begin{lstlisting}
+int counter = 1;
+
+void increment() {
+    int c = counter;
+    c = c + 1;
+    counter = c;
+    // Equivalente Kurzschreibweise:
+    // counter += 1;
+}
+    \end{lstlisting}\end{tabular}
+    \caption{Inkrementieren eines Zählers}
+    \label{fig:counter}
+\end{figure}
+
+Wird dieser Code von zwei Prozessen gleichzeitig ausgeführt,
+kann es passieren,
+dass beide Prozesse den Anfangswert 1 lesen,
+ihn auf 2 erhöhen und dieses Ergebnis speichern.
+Das Endergebnis ist dann fälschlicherweise 2 und nicht, wie erhofft, 3.
+Es ist also eine Inkrementierung verloren gegangen.
+So einen Fall bezeichnet man als \textit{race condition},
+da die beiden Prozesse sozusagen an einem Wettrennen teilnehmen,
+bei dem das Ergebnis des Programms davon abhängt,
+wie schnell die beiden Prozesse waren.
+
+Davon abgesehen gibt es hier noch ein weiteres Problem:
+Wenn zwei Prozesse gleichzeitig normale Zugriffe auf denselben Speicherbereich ausführen,
+wobei mindestens einer der beiden Zugriffe schreibend ist,
+ist das Ergebnis in C++ und vielen anderen Sprachen undefiniert.
+Das Ergebnis kann also nicht nur die Zahl 2,
+sondern auch eine beliebige andere Zahl (z.~B. durch Durchmischung der Bits),
+oder sogar ein Programmabsturz sein.
+So einen Fall nennt man bei gemeinsamem Speicher \textit{data race} \cite{RacerX} \cite{Chord} \cite{LOCKSMITH} \cite{PACER} \cite{DejaVu} \cite{Eraser} \cite{RaceTrack}
+und bei verteiltem Speicher \textit{memory consistency error} \cite{MC-Checker} \cite{MC-CChecker}.
+
+Um \textit{data races} zu vermeiden,
+gibt es atomare Operationen.
+Anders als bei normalen Speicherzugriffen,
+ist bei atomaren Operationen der gleichzeitige Zugriff auf denselben Speicherbereich erlaubt.
+Neben atomarem Lesen und Schreiben bieten Prozessoren auch komplexere atomare Operationen an,
+wie z.~B. \gls{tas} und \gls{cas},
+die in einem unteilbaren Schritt ausgeführt werden,
+selbst wenn zwei Prozesse gleichzeitig auf denselben Speicherbereich zugreifen.
+
+Diese Vorteile haben aber auch ihren Preis.
+Atomare Operationen sind um ein Vielfaches langsamer
+als normale Speicherzugriffe,
+da der Prozessor bei jeder Operation dafür sorgen muss,
+dass die Speicheradresse \glslink{Kohaerenz}{kohärent} bleibt.
+D.~h. er muss dafür sorgen,
+dass alle Prozesse konsistente Werte beobachten.
+Außerdem verhindert die Nutzung von atomaren Operationen allein nicht unbedingt \textit{race conditions},
+da sie sich immer nur auf eine Speicheradresse beziehen,
+aber viele Programme mehrere Speicherbereiche gemeinsam bearbeiten möchten.
+
+Eine Möglichkeit,
+\textit{race conditions} (und auch \textit{data races}) zu vermeiden,
+ist wechselseitiger Ausschluss (\textit{mutual exclusion}).
+Die Idee dabei ist es,
+nur einem Prozess gleichzeitig zu erlauben,
+einen bestimmten Abschnitt im Code auszuführen.
+Denn wenn nur ein Prozess den Code ausführt,
+der den gemeinsamen Speicherbereich modifiziert,
+können in diesem sogenannten kritischen Abschnitt weder \textit{race conditions},
+noch \textit{data races} auftreten.
+Wechselseitiger Ausschluss wird von verschiedenen Synchronisierungskonzepten,
+wie z.~B. Monitoren,
+gewährleistet.
+Das zugrunde liegende Konzept ist aber meist das eines Locks und stammt bereits aus dem Jahr 1962 \cite{Locks}.
+
+Bei einem Lock beginnt der kritische Abschnitt,
+indem ein Prozess den Lock akquiriert
+und endet, indem der Prozess den Lock wieder frei gibt.
+Da der Lock nur von einem Prozess gleichzeitig akquiriert werden kann,
+warten weitere Prozesse beim Akquirieren so lange,
+bis der Lock wieder freigegeben wurde.
+Eine korrekte Implementierung der Inkrementierung eines Zählers mit einem Lock ist in \autoref{fig:lockedcounter} zu sehen.
+
+\begin{figure}[h]
+    \centering
+    \begin{tabular}{c}\begin{lstlisting}
+int counter = 1;
+Lock lock;
+
+void increment() {
+    lock.acquire(); // Warte auf Lock
+    int c = counter;
+    c = c + 1;
+    counter = c;
+    lock.release(); // Gebe Lock frei
+}
+    \end{lstlisting}\end{tabular}
+    \caption{Inkrementieren eines Zählers mit einem Lock}
+    \label{fig:lockedcounter}
+\end{figure}
+
+Neben diesen exklusiven Locks gibt es auch andere Varianten:
+die am weitesten Verbreitete ist wohl der \textit{Reader-Writer}-Lock (kurz RW-Lock, wird auch geteilter Lock genannt).
+Die Idee hierbei ist,
+zwischen lesenden und schreibenden Zugriffen zu unterscheiden.
+Während schreibende Zugriffe,
+wie oben gezeigt,
+exklusiven Zugriff benötigen,
+können mehrere Prozesse problemlos gleichzeitig lesend auf dieselbe Speicheradresse zugreifen.
+Wechselseitiger Ausschluss für lesende Zugriffe würde daher das Programm unnötig verlangsamen.
+Ein RW-Lock bietet dementsprechend zwei verschiedene Möglichkeiten der Akquisition:
+eine Exklusive und eine Geteilte.
+Ein RW-Lock kann nur von einem Prozess gleichzeitig exklusiv akquiriert sein,
+hierdurch wird wechselseitiger Ausschluss für schreibende Zugriffe ermöglicht.
+Wenn ein RW-Lock hingegen nicht exklusiv akquiriert ist,
+können beliebig viele Prozesse ihn geteilt akquirieren,
+um lesende Zugriffe auszuführen.
+So können lesende Zugriffe parallel zu anderen lesenden Zugriffen sein,
+aber nicht parallel zu schreibenden Zugriffen.
+Diese Arbeit beschäftigt sich hauptsächlich mit normalen Locks,
+RW-Locks spielen bei der Programmierung verteilter Systeme aber eine wichtige Rolle
+(siehe \autoref{sec:mpi_locks}).
+
+\subsection{Spin-Locks}
+\label{sec:spin_locks}
+
+Ein einfacher Algorithmus für die Implementierung eines Locks ist der \gls{tas}-Lock.
+Dieser Lock nutzt nur eine zentrale Speicheradresse an der steht,
+ob der Lock verfügbar ist.
+Da diese Speicheradresse nur die Werte 0 und 1 annehmen kann,
+wird sie häufig als \textit{Flag} bezeichnet.
+
+Um den Lock zu akquirieren,
+muss ein Prozess das \textit{Flag} atomar von 0 auf 1 ändern.
+Dies wird mit einer \gls{tas}-Operation gemacht.
+Diese Operation setzt den Wert einer Speicheradresse atomar auf 1 und gibt den vorher enthaltenen Wert zurück.
+% Es ist also eine spezielle Variante einer \textit{swap}-Operation (auch \textit{exchange} genannt),
+% welche den Wert einer Speicheradresse atomar auf einen beliebigen Wert setzt und den vorher enthaltenen Wert zurückgibt.
+Mit dem Rückgabewert der \gls{tas}-Operation kann der Prozess prüfen,
+ob der Lock bereits akquiriert ist.
+Das ist der Fall,
+wenn das \textit{Flag} bereits den Wert 1 hatte.
+Dann hat die \gls{tas}-Operation den Wert von 1 auf 1 gesetzt (also nichts geändert)
+und der Prozess muss es in einer Schleife erneut versuchen.
+Nur wenn der Lock frei war,
+ist der Rückgabewert eine 0,
+die atomar auf eine 1 geändert wurde.
+Dann kann der Prozess sicher den kritischen Abschnitt betreten,
+während alle anderen Prozesse durch den Wert 1 sehen,
+dass der Lock akquiriert ist.
+
+Um den Lock wieder freizugeben setzt der Prozess das \textit{Flag} atomar auf den Wert 0
+(in \autoref{fig:spin_locks_code} mit der Funktion \texttt{clear}).
+Da Prozesse beim Akquirieren in einer Schleife immer wieder das \textit{Flag} prüfen müssen,
+bezeichnet man den \gls{tas}-Lock und dessen Varianten als \textit{Spin}-Locks.
+\autoref{fig:tas_code} zeigt eine C++-Implementierung eines \gls{tas}-Locks,
+wobei \texttt{test\_and\_set} mit \texttt{tas} abgekürzt wurde.
+
+\begin{figure}[h]
+    \begin{subfigure}[b]{.32\textwidth}
+        \centering
+        \begin{tabular}{c}\begin{lstlisting}
+std::atomic_flag flag;
+
+void acquire() {
+  while(flag.tas());
+}
+
+void release() {
+  flag.clear();
+}
+        \end{lstlisting}\end{tabular}
+        \caption{\glstext{tas}-Lock}
+        \label{fig:tas_code}
+    \end{subfigure}
+    \begin{subfigure}[b]{.32\textwidth}
+        \centering
+        \begin{tabular}{c}\begin{lstlisting}
+std::atomic_flag flag;
+
+void acquire() {
+  while(flag.tas()) {
+    while(flag.test());
+  }
+}
+
+void release() {
+  flag.clear();
+}
+        \end{lstlisting}\end{tabular}
+        \caption{\glstext{tts}-Lock}
+        \label{fig:tts_code}
+    \end{subfigure}
+    \begin{subfigure}[b]{.32\textwidth}
+        \centering
+        \begin{tabular}{c}\begin{lstlisting}
+std::atomic_flag flag;
+
+void acquire() {
+  int b = B_MIN;
+  while(flag.tas()) {
+    do {
+      wait(b);
+      b = min(b * 2, B_MAX);
+    } while(flag.test());
+  }
+}
+
+void release() {
+  flag.clear();
+}
+        \end{lstlisting}\end{tabular}
+        \caption{\glstext{tts}-Lock mit exp. Backoff}
+        \label{fig:tts_bo_code}
+    \end{subfigure}
+    \caption{Einige Spin-Lock-Algorithmen}
+    \label{fig:spin_locks_code}
+\end{figure}
+
+Ein großes Problem des \gls{tas}-Locks ist,
+dass wartende Prozesse durchgehend immer wieder die atomare \gls{tas}-Operation ausführen.
+Wie zuvor erwähnt,
+sind atomare Operationen deutlich langsamer
+als normale Speicherzugriffe.
+Das ist besonders ausgeprägt,
+wenn es sich,
+wie bei \gls{tas},
+um schreibende Zugriffe handelt
+und es betrifft nicht nur den Prozess,
+der die Operation ausführt.
+
+Um Speicherzugriffe schneller zu machen,
+verwenden Prozessoren einen schnellen \gls{Zwischenspeicher}
+(meist sogar mehrere).
+Die Werte von Speicheradressen werden beim ersten Zugriff in den \gls{Zwischenspeicher} geladen,
+wodurch erneute Zugriffe nicht mehr auf den langsamen Hauptspeicher zugreifen müssen.
+Um den Hauptspeicher und die Zwischenspeicher aller Prozessoren
+bei Änderungen \glslink{Kohaerenz}{kohärent} zu halten,
+wird ein sogenannter \gls{Zwischenspeicher}-\gls{Kohaerenz}-Mechanismus eingesetzt \cite{cache-coherence}.
+Bei einer schreibenden atomaren Operation,
+wie \gls{tas},
+muss dieser alle Kopien der Speicheradresse in den \gls{Zwischenspeicher}n der anderen Prozessoren invalidieren.
+Wenn mehrere Prozesse auf verschiedenen Prozessoren laufen
+und dabei atomar auf dieselbe Speicheradresse zugreifen,
+führt das dazu,
+dass die Prozesse ständig gegenseitig ihre \gls{Zwischenspeicher} invalidieren,
+was bei allen beteiligten Prozessen erheblichen Overhead verursacht.
+
+Um dieses Problem zu vermeiden,
+gibt es eine Variante des \gls{tas}-Locks:
+den \gls{tts}-Lock \cite{TTS-Lock} (siehe \autoref{fig:tts_code}).
+Wenn ein Prozess daran scheitert,
+mit der \gls{tas}-Operation den Lock zu akquirieren,
+versucht er es beim \gls{tts}-Lock nicht direkt erneut,
+sondern wartet zuvor in einer Schleife mit einer atomaren Lese-Operation
+(hier als \textit{test} bezeichnet),
+bis der Lock frei ist.
+Dadurch wird die Anzahl von langsamen schreibenden atomaren Operationen stark reduziert,
+wodurch dieser Lock deutlich schneller ist.
+
+Auch beim \gls{tas}-Lock kann es kurzzeitig zu erheblichem Overhead
+durch den \gls{Zwischenspeicher}-\gls{Kohaerenz}-Mechanismus kommen,
+wenn der Lock freigegeben wird und daraufhin mehrere Prozesse versuchen,
+ihn mit einer \gls{tas}-Operation zu akquirieren.
+Um die Wahrscheinlichkeit für diesen Fall zu senken,
+wird in \cite{TTS-backoff} vorgeschlagen,
+im Falle eines solchen Konflikts eine kurze Zeit zu warten
+und diese Wartezeit mit jedem weiteren Konflikt,
+bis zu einer Obergrenze,
+zu verdoppeln.
+Diese Wartezeit steigt damit exponentiell.
+Um auch die Anzahl der Lese-Operationen zu senken,
+wird typischerweise auch nach Lese-Operationen
+gewartet und die Wartezeit erhöht,
+wenn der Lock nicht verfügbar ist.
+Diese Strategie wird exponentieller Backoff genannt und stammt ursprünglich aus \cite{backoff},
+wo sie auf andere Synchronisierungskonzepte angewandt wurde.
+Ein \gls{tts}-Lock mit exponentiellem Backoff ist in \autoref{fig:tts_bo_code} zu sehen.
+Die Implementierung basiert auf \cite{TTS-backoff-code}.
+
+Auch wenn der Einsatz von exponentiellem Backoff die Performance verbessert,
+bringt er einen neuen Nachteil mit sich.
+Die optimalen Werte für die initiale und maximale Wartezeit hängen
+von vielen Faktoren ab.
+Unter anderem von der Anzahl der beteiligten Prozesse,
+der Länge des kritischen Abschnitts
+und der Dauer einer einzelnen Operation.
+Daher muss der Lock für eine optimale Performance auf das spezifische System und Programm angepasst werden.
+Das bedeutet zusätzlichen Aufwand bei der Entwicklung.
+
+\subsection{Fairness}
+\label{sec:fairness_theoretisch}
+
+Neben den bereits genannten Problemen
+haben einfache \textit{Spin}-Locks,
+wie die aus \autoref{sec:spin_locks},
+noch einen weiteren Nachteil:
+Sie sind unfair.
+Fairness bezeichnet bei Locks,
+wie viele andere Prozesse einen Prozess maximal überholen dürfen,
+der als Erstes versucht,
+den kritischen Abschnitt zu betreten \cite{fairness}.
+
+Wenn ein \textit{Spin}-Lock freigegeben wird,
+haben alle wartenden Prozesse die Möglichkeit,
+den Lock zu akquirieren.
+Es ist also Zufall,
+welcher Prozess als Nächstes den kritischen Abschnitt betreten darf.
+Ein \textit{Spin}-Lock ist somit maximal unfair,
+da beliebig viele Prozesse einen wartenden Prozess überholen können.
+
+Bei einem Lock der so unfair ist,
+kann es sogar passieren,
+dass ein Prozess für immer auf den Lock wartet,
+weil er immer wieder von einem anderen Prozess überholt wird.
+In so einem Fall spricht man von \glslink{Verhungern}{verhungern}.
+Ein Lock,
+der im Gegensatz dazu zumindest eine minimale Fairnessgarantie bietet,
+also nur eine begrenzte Anzahl von Prozessen überholen lässt,
+wird entsprechend als \gls{hungerfrei} bezeichnet.
+Ein maximal fairer Lock lässt gar keinen anderen Prozess überholen,
+wenn ein Prozess begonnen hat,
+auf den Lock zu warten.
+So ein Lock garantiert demnach eine \gls{fifo} Reihenfolge der wartenden Prozesse.
+
+\clearpage
+
+\subsection{MCS-Lock}
+\label{sec:mcs_lock}
+
+Der MCS-Lock ist ein sehr verbreiteter Lock von Mellor-Crummey und Scott aus \cite{MCS-Lock},
+auf dem viele andere Lock-Algorithmen aufbauen.
+Dieser Lock verwaltet eine Warteschlange der akquirierenden Prozesse,
+um \gls{fifo},
+also maximale Fairness zu garantieren.
+Darüber hinaus bietet er noch einen weiteren Vorteil
+gegenüber den einfachen \textit{Spin}-Locks aus \autoref{sec:spin_locks}:
+Beim MCS-Lock greift jeder Prozess in der Warteschleife nur auf einen eigenen Speicherbereich zu.
+Dadurch wird vollständig vermieden,
+dass wartende Prozesse die \gls{Zwischenspeicher} anderer Prozesse invalidieren.
+Umso mehr Prozesse beteiligt sind,
+umso größer ist der Gewinn hierdurch.
+
+\begin{figure}[h]
+    \begin{subfigure}[b]{\textwidth}
+        \centering
+        \begin{tabular}{c}\begin{lstlisting}
+struct node {
+  atomic<bool> locked;
+  atomic<node*> next;
+};
+node mynode; // Pro Prozess
+atomic<node*> tail = NULL; // Pro Lock
+        \end{lstlisting}\end{tabular}
+        \caption{Felder}
+        \label{fig:mcs_fields}
+        \vspace{1em}
+    \end{subfigure}
+    \begin{subfigure}[b]{.5\textwidth}
+        \centering
+        \begin{tabular}{c}\begin{lstlisting}
+mynode.next.store(NULL);
+node* pred = tail.exchange(&mynode);
+if (pred != NULL) {
+  mynode.locked.store(true);
+  pred->next.store(&mynode);
+  while (mynode.locked.load());
+}
+        \end{lstlisting}\end{tabular}
+        \caption{Akquirieren des Locks (\texttt{acquire})}
+        \label{fig:mcs_acquire}
+    \end{subfigure}
+    \begin{subfigure}[b]{.5\textwidth}
+        \centering
+        \begin{tabular}{c}\begin{lstlisting}
+if (mynode.next.load() == NULL) {
+  node* expected = &mynode;
+  if (tail.cas(expected, NULL))
+    return;
+  while (mynode.next.load() == NULL);
+}
+mynode.next.load()->locked.store(false);
+        \end{lstlisting}\end{tabular}
+        \caption{Freigeben des Locks (\texttt{release})}
+        \label{fig:mcs_release}
+    \end{subfigure}
+    \caption{MCS-Lock}
+    \label{fig:mcs_code}
+\end{figure}
+
+\autoref{fig:mcs_code} zeigt eine C++-Implementierung des MCS-Locks.
+Die Funktion\\\texttt{compare\_exchange\_strong} wurde in \autoref{fig:mcs_release} mit \texttt{cas} abgekürzt,
+da es sich hierbei um eine \glsfirst{cas}-Operation handelt.
+Wie bereit erwähnt,
+verwaltet der MCS-Lock eine Warteschlange der akquirierenden Prozesse.
+Jeder Prozess hat einen Warteschlangenknoten (engl. \textit{node}) in seinem Feld \texttt{mynode}.
+Dieser Knoten besteht aus zwei Feldern,
+auf die atomar von mehreren Prozessen zugegriffen werden kann: \texttt{locked} und \texttt{next}
+(vgl. \autoref{fig:mcs_fields}).
+%
+Das Feld \texttt{locked} ist ein \textit{Flag},
+welches dem Prozess signalisiert,
+ob er auf einen Vorgänger warten muss.
+Dies ist sehr ähnlich zu dem \textit{Flag} eines \textit{Spin}-Locks (vgl. \autoref{sec:spin_locks}),
+allerdings hat beim MCS-Lock jeder Prozess ein eigenes \texttt{locked}-\textit{Flag}.
+%
+Das Feld \texttt{next} ist ein Zeiger auf den Knoten des nächsten Prozesses in der Warteschlange.
+Über dieses Feld weiß ein Prozess,
+an wen er den Lock übergeben muss,
+wenn er fertig ist.
+Die Warteschlange ist demnach eine einfach verlinkte Liste.
+%
+Zusätzlich gibt es einmal pro Lock einen Zeiger namens \texttt{tail} (deutsch Ende),
+der auf den letzten Knoten der Warteschlange zeigt.
+Dieser Zeiger wird von Prozessen genutzt,
+um sich am Ende der Warteschlange einzureihen.
+Initial ist dieser Zeiger \texttt{NULL},
+er zeigt also ins Leere,
+da noch kein Prozess wartet.
+
+Will ein Prozess den MCS-Lock akquirieren,
+setzt er zunächst den \texttt{next}-Zeiger seines Knotens auf \texttt{NULL},
+falls er zuvor schon einmal einen Nachfolger hatte.
+Dann reiht er sich in die Warteschlange ein,
+indem er mit einer atomaren \texttt{exchange}-Operation (Synonym für \textit{swap})
+den \texttt{tail}-Zeiger durch einen Zeiger auf seinen eigenen Knoten ersetzt (\autoref{fig:mcs_acquire}, Zeile 2).
+Diese Operation liefert als Rückgabewert den alten Wert von \texttt{tail}.
+Diesen alten Zeiger speichert er in der lokalen Variable \texttt{pred}
+(kurz für engl. \textit{Predecessor}, deutsch Vorgänger).
+
+Die Variable \texttt{pred} enthält nun also entweder den Zeiger \texttt{NULL}
+oder einen Zeiger auf den Knoten des letzten Prozesses,
+der sich in die Warteschlange eingereiht hat.
+Im ersten Fall gibt es keinen Vorgänger,
+d.~h. der Prozess kann den kritischen Abschnitt direkt betreten.
+Im zweiten Fall muss er darauf warten,
+dass sein Vorgänger ihm Bescheid gibt.
+Hierfür setzt der Prozess das \texttt{locked}-\textit{Flag} seines Knotens auf \texttt{true}
+und lässt den \texttt{next}-Zeiger des Vorgängerknotens auf seinen eigenen Knoten zeigen (\autoref{fig:mcs_acquire}, Zeile 4 und 5).
+Dann wartet er in Zeile 6 in einer Schleife so lange,
+bis sein Vorgänger das \texttt{locked}-\textit{Flag} wieder auf \texttt{false} setzt.
+
+Um den Lock wieder freizugeben,
+prüft ein Prozess zunächst anhand des \texttt{next}-Feldes seines Knotens,
+ob er einen Nachfolger hat (\autoref{fig:mcs_release}, Zeile 1).
+Wenn das der Fall ist,
+setzt er in Zeile 7 das \texttt{locked}-\textit{Flag} seines Nachfolgers auf \texttt{false}
+und ist fertig.
+Gibt es hingegen keinen Nachfolger,
+muss der \texttt{tail}-Zeiger zurück auf \texttt{NULL} gesetzt werden,
+damit der nächste Prozess nicht fälschlicherweise denkt,
+er hätte einen Vorgänger.
+Beim Zurücksetzen muss aber berücksichtigt werden,
+dass sich jederzeit parallel ein neuer Nachfolger einreihen könnte.
+Im MCS-Lock wird dafür eine \gls{cas}-Operation verwendet.
+
+Die \gls{cas}-Operation ist sehr mächtig,
+da sie in einem atomaren Schritt eine Prüfung
+und einen schreibenden Zugriff ausführt.
+Zunächst prüft sie,
+ob die Speicheradresse einen erwarteten Wert enthält.
+Wenn das der Fall ist,
+schreibt sie einen neuen Wert an die Adresse,
+ansonsten ändert sie nichts.
+Damit ein Prozess weiß,
+ob die \gls{cas}-Operation den Wert geändert hat,
+liefert sie \texttt{true} zurück,
+wenn sie erfolgreich war
+und sonst \texttt{false}.
+
+Der Prozess versucht also den \texttt{tail}-Zeiger mit einer \gls{cas}-Operation zurückzusetzen (\autoref{fig:mcs_release}, Zeile 3).
+Der zu schreibende Wert ist \texttt{NULL}
+und der erwartete Wert ist die Speicheradresse seines eigenen Knotens,
+denn wenn sich noch kein Nachfolger in die Warteschlange eingereiht hat,
+war der Prozess selbst der Letzte,
+sodass \texttt{tail} immer noch auf diesen Knoten zeigen sollte.
+Wenn die \gls{cas}-Operation erfolgreich ist,
+ist der Lock wieder in seinem Ausgangszustand.
+Der Prozess ist damit fertig und beendet mit \texttt{return} vorzeitig die \texttt{release}-Funktion.
+
+Ansonsten hat sich bereits ein Nachfolger in die Warteschlange eingereiht.
+Dieser hat sich aber evtl. noch nicht bei seinem Vorgänger,
+also dem Prozess der gerade den Lock freigeben möchte registriert.
+Zur Erinnerung,
+ein akquirierender Prozess tauscht zuerst den \texttt{tail}-Zeiger (\autoref{fig:mcs_acquire}, Zeile 2)
+und registriert sich erst später bei seinem Vorgänger (\autoref{fig:mcs_acquire}, Zeile 5).
+Daher muss der Prozess nun warten,
+bis sein Nachfolger den \texttt{next}-Zeiger ändert.
+Genau wie beim Warten auf den Vorgänger (\autoref{fig:mcs_acquire}, Zeile 6),
+wird beim Warten auf den Nachfolger (\autoref{fig:mcs_release}, Zeile 5)
+in der Warteschleife nur auf den lokalen Speicher des eigenen Warteschlangenknotens zugegriffen.
+Sobald der Nachfolger sich registriert hat,
+kann der Vorgängerprozess wieder in Zeile 7 dessen \texttt{locked}-\textit{Flag} auf \texttt{false} setzen
+und ist fertig.
+
+\section{Programmierung verteilter Systeme}
+\label{sec:programmierung_verteilter_systeme}
+
+Systeme mit gemeinsamem Speicher und verteilte Systeme unterscheiden sich stark bei der Entwicklung von parallelen Programmen.
+Bei Ersteren handelt es sich um einzelne Computer,
+bei denen Prozessoren und Speicher in derselben Maschine verbaut sind.
+Durch diese Nähe können alle Prozessoren relativ schnell auf alle Speicherbereiche zugreifen.
+Im Gegensatz dazu sind bei verteilten Systemen mehrere Computer (auch als Knoten, engl. \textit{node}, bezeichnet) über Netzwerkkabel miteinander verbunden.
+Ein Zugriff auf den Speicher eines anderen Computers im Netzwerk ist deutlich langsamer.
+
+Der größte Vorteil von verteilten Systemen ist eine höhere Leistungsfähigkeit.
+Während es bei gemeinsamem Speicher ab einer gewissen Anzahl an Prozessoren nicht mehr möglich ist,
+weitere hinzuzufügen und einzelne Prozessoren auch nicht beliebig schnell sind,
+lassen sich verteilte Systeme erweitern,
+indem mehr Computer angeschlossen werden.
+Aus diesem Grund handelt es sich bei allen Supercomputern um verteilte Systeme.
+
+Ein Nachteil ist dafür eine erhöhte Komplexität bei der Programmierung.
+Zusätzlich zu allen Herausforderungen,
+die die Entwicklung von parallelen Programmen in Systemen mit gemeinsamem Speicher mitbringt,
+muss bei verteilten Systemen die Datenlokalität berücksichtigt werden.
+Bevor mit Daten gerechnet werden kann,
+muss sichergestellt werden,
+dass diese Daten auf dem richtigen Knoten zur Verfügung stehen,
+um langsame Zugriffe auf entfernten Speicher zu vermeiden.
+% 
+Für die Kommunikation zwischen den Knoten eines verteilten Systems gibt es verschiedene Konzepte.
+Zwei der verbreitetsten Konzepte sind \gls{pgas} \cite{PGAS} und \gls{message passing} \cite{MPI-3.1}.
+
+Bei \gls{pgas} macht jeder Prozess einen Teil seines Speichers für alle Prozesse zugänglich.
+Diese öffentlichen Speicherbereiche aller Computer werden zu einem großen Speicherbereich zusammengefasst.
+Dabei bleibt aber weiterhin klar,
+welche Speicheradressen lokalen und welche entfernten Speicher repräsentieren.
+So kann programmiert werden,
+wie in einem System mit gemeinsamem Speicher,
+aber langsame Zugriffe auf entfernten Speicher können bewusst vermieden werden.
+Es gibt zahlreiche Sprachen und Bibliotheken,
+die \gls{pgas} implementieren,
+z.~B. Co-Array-Fortran (CAF) \cite{Co-Array-Fortran}, DASH \cite{DASH} und UPC \cite{UPC}.
+
+Bei \gls{message passing} werden direkt die Nachrichten,
+die zwischen den Computern ausgetauscht werden,
+modelliert.
+Dieses Konzept ist als \gls{mpi} \cite{MPI-3.1} standardisiert.
+\Gls{mpi} ist sehr weit verbreitet und es gibt zahlreiche Implementierungen des Standards,
+die zum Teil für spezifische Hardware entwickelt und optimiert wurden \cite{foMPI}.
+Einige \gls{pgas}-Bibliotheken nutzen daher intern \gls{mpi}.
+
+Bei \gls{mpi} gibt es drei Ausprägungen der Kommunikation zwischen Prozessen:
+kollektive, Punkt-zu-Punkt- und einseitige Kommunikation.
+Bei kollektiver Kommunikation sind viele Prozesse an einer Operation beteiligt,
+ein einfaches Beispiel ist ein Broadcast,
+bei dem ein Prozess einen Wert an alle anderen Prozesse verteilt.
+Bei Punkt-zu-Punkt-Kommunikation tauschen zwei Prozesse einzelne Nachrichten aus.
+Einseitige Kommunikation erlaubt es einem Prozess auf einen zuvor veröffentlichten Speicherbereich eines anderen Prozesses zuzugreifen,
+ähnlich wie bei \gls{pgas}.
+
+Um einen Speicherbereich für einseitige Kommunikation zu veröffentlichen und so anderen Prozessen zur Verfügung zu stellen,
+wird ein gemeinsames sogenanntes \gls{Fenster} von allen an der Kommunikation beteiligten Prozessen erzeugt.
+Jeder Prozess kann dabei einen beliebigen Speicherbereich freigeben.
+Möchte ein Prozess über dieses \gls{Fenster} nur auf den Speicher der anderen Prozesse zugreifen,
+aber selbst keinen Speicher freigeben,
+kann er auch einen Speicherbereich der Länge 0 freigeben.
+Über dieses \gls{Fenster} kann dann durch Angabe des Zielprozesses der freigegebene Speicher referenziert werden,
+außerdem werden alle Speicherzugriffe über dieses \gls{Fenster} synchronisiert.
+
+Bei einseitiger Kommunikation mit \gls{mpi} spricht man auch von \gls{rma},
+da über das \gls{Fenster} auf einen Teil des Speichers des anderen Prozesses zugegriffen werden kann.
+Manche Hardware erlaubt solche Speicherzugriffe über das Netzwerk sogar ohne Beteiligung des Betriebssystems auf dem Zielrechner,
+typischerweise indem die Netzwerkkarte selbst Zugriff auf den Hauptspeicher bekommt \cite{Gemini} \cite{InfiniBand} \cite{PERCS} \cite{RoCE}.
+In so einem Fall spricht man von \gls{rdma}.
+
+\section{NUMA}
+\label{sec:numa}
+
+Auch wenn bei Systemen mit gemeinsamem Speicher die Prozessoren und der Hauptspeicher im selben Computer sind,
+was Speicherzugriffe deutlich schneller macht
+als bei verteilten Systemen,
+gibt es Architekturen,
+bei denen jeder Prozessor auf einen bestimmten Speicherbereich schneller zugreifen kann
+als auf alle anderen.
+Bei solchen Architekturen spricht man von \glsfirst{numa} \cite{NUMA}.
+Während bei \gls{uma}-Systemen
+der Hauptspeicher über einen Bus angebunden ist,
+der allen Prozessoren direkten Zugriff auf alle Speicherbereiche gewährt
+(vgl. \autoref{fig:UMA}),
+hat bei \gls{numa}-Systemen jeder einzelne Prozessor einen lokalen Speicherbereich,
+auf den er besonders schnell zugreifen kann
+(vgl. \autoref{fig:NUMA}).
+Ein Prozessor bildet mit seinem lokalen Speicherbereich einen so genannten \gls{numa}-Knoten (engl. \textit{\gls{numa} node}).
+Zugriffe auf die Speicherbereiche der anderen Prozessoren sind weiterhin möglich,
+aber dazu ist Kommunikation mit dem zuständigen Prozessor notwendig,
+was diese deutlich langsamer macht.
+Wenn Prozessoren vor allem ihren eigenen Speicherbereich nutzen,
+kann \gls{numa} die Performance verbessern,
+da Prozessoren sich nicht wie bei \gls{uma} auf dem einzigen Bus gegenseitig blockieren.
+
+\tikzstyle{mem} = [rectangle, draw, color=blue, fill=blue!20, text centered, rounded corners]
+\tikzstyle{cpu} = [rectangle, draw, color=red, fill=red!20, text centered]
+\tikzstyle{mem-access} = [draw, color=black, -latex]
+\tikzstyle{cpu-connect} = [draw, color=black]
+\tikzstyle{numa-node} = [draw, color=gray, fill=gray!20]
+
+\begin{figure}[h]
+    \begin{minipage}[b]{.5\textwidth}
+        \centering
+        \begin{tikzpicture}[node distance = 4.5em]
+            \node [cpu] (uma-cpu-1) {CPU};
+            \node [cpu, right of=uma-cpu-1] (uma-cpu-2) {CPU};
+            \node [cpu, right of=uma-cpu-2] (uma-cpu-3) {CPU};
+            \node [cpu, right of=uma-cpu-3] (uma-cpu-4) {CPU};
+            \node [mem, below = of $(uma-cpu-2)!0.5!(uma-cpu-3)$] (uma-mem) {Mem};
+
+            \path [mem-access] (uma-cpu-1) |- ++(0, -2.5em) -| (uma-mem);
+            \path [mem-access] (uma-cpu-2) |- ++(0, -2.5em) -| (uma-mem);
+            \path [mem-access] (uma-cpu-3) |- ++(0, -2.5em) -| (uma-mem);
+            \path [mem-access] (uma-cpu-4) |- ++(0, -2.5em) -| (uma-mem);
+        \end{tikzpicture}
+        \caption{Uniform Memory Access}
+        \label{fig:UMA}
+    \end{minipage}
+    \begin{minipage}[b]{.5\textwidth}
+        \centering
+        \begin{tikzpicture}[node distance = 4.5em]
+            \node [mem] (numa-mem-1) {Mem};
+            \node [cpu, right of=numa-mem-1] (numa-cpu-1) {CPU};
+            \node [cpu, right of=numa-cpu-1] (numa-cpu-2) {CPU};
+            \node [mem, right of=numa-cpu-2] (numa-mem-2) {Mem};
+            \node [mem, below of=numa-mem-1] (numa-mem-4) {Mem};
+            \node [cpu, below of=numa-cpu-1] (numa-cpu-4) {CPU};
+            \node [cpu, below of=numa-cpu-2] (numa-cpu-3) {CPU};
+            \node [mem, below of=numa-mem-2] (numa-mem-3) {Mem};
+
+            \scoped[on background layer]{\filldraw [numa-node] ($(numa-mem-1)+(-0.75,0.75)$) rectangle ($(numa-cpu-1)+(0.75,-0.75)$);}
+            \scoped[on background layer]{\filldraw [numa-node] ($(numa-cpu-2)+(-0.75,0.75)$) rectangle ($(numa-mem-2)+(0.75,-0.75)$);}
+            \scoped[on background layer]{\filldraw [numa-node] ($(numa-cpu-3)+(-0.75,0.75)$) rectangle ($(numa-mem-3)+(0.75,-0.75)$);}
+            \scoped[on background layer]{\filldraw [numa-node] ($(numa-mem-4)+(-0.75,0.75)$) rectangle ($(numa-cpu-4)+(0.75,-0.75)$);}
+
+            \path [mem-access] (numa-cpu-1) -- (numa-mem-1);
+            \path [mem-access] (numa-cpu-2) -- (numa-mem-2);
+            \path [mem-access] (numa-cpu-3) -- (numa-mem-3);
+            \path [mem-access] (numa-cpu-4) -- (numa-mem-4);
+            \path [cpu-connect] (numa-cpu-1) -- (numa-cpu-2);
+            \path [cpu-connect] (numa-cpu-2) -- (numa-cpu-3);
+            \path [cpu-connect] (numa-cpu-3) -- (numa-cpu-4);
+            \path [cpu-connect] (numa-cpu-4) -- (numa-cpu-1);
+        \end{tikzpicture}
+        \caption{Non-Uniform Memory Access}
+        \label{fig:NUMA}
+    \end{minipage}
+\end{figure}
+
+\section{Ziel der Arbeit}
+\label{sec:ziel}
+
+Obwohl Locks einer der Grundbausteine der Programmierung paralleler Programme sind
+und die Leistungsfähigkeit von Supercomputern nur mit parallelen Programmen voll ausgenutzt werden kann,
+gibt es kaum Forschung zu Lock-Algorithmen für verteilten Speicher.
+Dafür gibt es aber eine Vielzahl an Lock-Algorithmen für Systeme mit gemeinsamem Speicher,
+die auch \gls{numa} berücksichtigen.
+Die Programmierung auf gemeinsamem Speicher ist sehr ähnlich
+zu der Programmierung von verteilten Systemen mit \gls{rma}.
+Zudem sind bei \gls{numa},
+genau wie bei verteiltem Speicher,
+Zugriffe auf lokalen Speicher schneller
+als Zugriffe auf entfernten Speicher.
+
+In dieser Arbeit soll daher die folgende Forschungsfrage beantwortet werden:
+Können Lock-Algorithmen für \gls{numa}-Systeme auf verteilten Speicher portiert werden,
+um eine bessere Performance als bestehende Implementierungen verteilter Locks zu erreichen?

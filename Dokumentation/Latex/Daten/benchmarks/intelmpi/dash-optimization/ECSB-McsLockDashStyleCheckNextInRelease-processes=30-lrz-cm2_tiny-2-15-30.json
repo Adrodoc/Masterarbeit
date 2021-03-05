@@ -1,0 +1,122 @@
+{
+  "context": {
+    "benchmark": "ECSB",
+    "lock": "McsLockDashStyleCheckNextInRelease",
+    "processes": "30",
+    "date": "2021-11-20T13:19:06"
+  },
+  "runs": [
+    {
+      "duration_ns": 900095405,
+      "iterations": 402242,
+      "iterations_per_process_min": 13250.000000,
+      "iterations_per_process_max": 13561.000000,
+      "iterations_per_process_median": 13408.000000,
+      "iterations_per_process_mean": 13408.066667,
+      "iterations_per_process_sd": 152.102491,
+      "iterations_per_process_cv": 0.011344,
+      "stats": {
+        "acquired_delayed": 402241.000000,
+        "acquired_immediately": 1.000000
+      }
+    },
+    {
+      "duration_ns": 900085059,
+      "iterations": 401433,
+      "iterations_per_process_min": 13226.000000,
+      "iterations_per_process_max": 13532.000000,
+      "iterations_per_process_median": 13381.000000,
+      "iterations_per_process_mean": 13381.100000,
+      "iterations_per_process_sd": 151.386318,
+      "iterations_per_process_cv": 0.011313,
+      "stats": {
+        "acquired_delayed": 401432.000000,
+        "acquired_immediately": 1.000000
+      }
+    },
+    {
+      "duration_ns": 900103779,
+      "iterations": 406655,
+      "iterations_per_process_min": 13395.000000,
+      "iterations_per_process_max": 13708.000000,
+      "iterations_per_process_median": 13555.500000,
+      "iterations_per_process_mean": 13555.166667,
+      "iterations_per_process_sd": 154.371268,
+      "iterations_per_process_cv": 0.011388,
+      "stats": {
+        "acquired_delayed": 406654.000000,
+        "acquired_immediately": 1.000000
+      }
+    },
+    {
+      "duration_ns": 900080818,
+      "iterations": 407419,
+      "iterations_per_process_min": 13420.000000,
+      "iterations_per_process_max": 13734.000000,
+      "iterations_per_process_median": 13581.500000,
+      "iterations_per_process_mean": 13580.633333,
+      "iterations_per_process_sd": 153.290682,
+      "iterations_per_process_cv": 0.011287,
+      "stats": {
+        "acquired_delayed": 407415.000000,
+        "acquired_immediately": 4.000000
+      }
+    },
+    {
+      "duration_ns": 900082608,
+      "iterations": 403675,
+      "iterations_per_process_min": 13297.000000,
+      "iterations_per_process_max": 13607.000000,
+      "iterations_per_process_median": 13456.000000,
+      "iterations_per_process_mean": 13455.833333,
+      "iterations_per_process_sd": 151.190696,
+      "iterations_per_process_cv": 0.011236,
+      "stats": {
+        "acquired_delayed": 403671.000000,
+        "acquired_immediately": 4.000000
+      }
+    },
+    {
+      "duration_ns": 900107439,
+      "iterations": 406776,
+      "iterations_per_process_min": 13398.000000,
+      "iterations_per_process_max": 13713.000000,
+      "iterations_per_process_median": 13559.500000,
+      "iterations_per_process_mean": 13559.200000,
+      "iterations_per_process_sd": 155.287142,
+      "iterations_per_process_cv": 0.011453,
+      "stats": {
+        "acquired_delayed": 406775.000000,
+        "acquired_immediately": 1.000000
+      }
+    },
+    {
+      "duration_ns": 900103747,
+      "iterations": 403048,
+      "iterations_per_process_min": 13278.000000,
+      "iterations_per_process_max": 13585.000000,
+      "iterations_per_process_median": 13435.500000,
+      "iterations_per_process_mean": 13434.933333,
+      "iterations_per_process_sd": 151.354103,
+      "iterations_per_process_cv": 0.011266,
+      "stats": {
+        "acquired_delayed": 403047.000000,
+        "acquired_immediately": 1.000000
+      }
+    },
+    {
+      "duration_ns": 900094788,
+      "iterations": 400008,
+      "iterations_per_process_min": 13184.000000,
+      "iterations_per_process_max": 13477.000000,
+      "iterations_per_process_median": 13334.000000,
+      "iterations_per_process_mean": 13333.600000,
+      "iterations_per_process_sd": 143.761680,
+      "iterations_per_process_cv": 0.010782,
+      "stats": {
+        "acquired_delayed": 400007.000000,
+        "acquired_immediately": 1.000000
+      }
+    }
+  ]
+}

@@ -1,0 +1,124 @@
+{
+  "context": {
+    "avg_wait_ns": "1000",
+    "benchmark": "WBAB",
+    "lock": "McsLock",
+    "mpi_progress": "1",
+    "processes": "28",
+    "date": "2021-11-19T20:53:47"
+  },
+  "runs": [
+    {
+      "duration_ns": 900037442,
+      "iterations": 784050,
+      "iterations_per_process_min": 27863.000000,
+      "iterations_per_process_max": 28093.000000,
+      "iterations_per_process_median": 28002.000000,
+      "iterations_per_process_mean": 28001.785714,
+      "iterations_per_process_sd": 57.033036,
+      "iterations_per_process_cv": 0.002037,
+      "stats": {
+        "acquired_delayed": 519331.000000,
+        "acquired_immediately": 264719.000000
+      }
+    },
+    {
+      "duration_ns": 900038932,
+      "iterations": 783031,
+      "iterations_per_process_min": 27782.000000,
+      "iterations_per_process_max": 28076.000000,
+      "iterations_per_process_median": 27976.000000,
+      "iterations_per_process_mean": 27965.392857,
+      "iterations_per_process_sd": 58.393518,
+      "iterations_per_process_cv": 0.002088,
+      "stats": {
+        "acquired_delayed": 516160.000000,
+        "acquired_immediately": 266871.000000
+      }
+    },
+    {
+      "duration_ns": 900043412,
+      "iterations": 783127,
+      "iterations_per_process_min": 27763.000000,
+      "iterations_per_process_max": 28070.000000,
+      "iterations_per_process_median": 27983.000000,
+      "iterations_per_process_mean": 27968.821429,
+      "iterations_per_process_sd": 67.245847,
+      "iterations_per_process_cv": 0.002404,
+      "stats": {
+        "acquired_delayed": 514901.000000,
+        "acquired_immediately": 268226.000000
+      }
+    },
+    {
+      "duration_ns": 900036992,
+      "iterations": 776432,
+      "iterations_per_process_min": 27594.000000,
+      "iterations_per_process_max": 27880.000000,
+      "iterations_per_process_median": 27737.000000,
+      "iterations_per_process_mean": 27729.714286,
+      "iterations_per_process_sd": 54.569600,
+      "iterations_per_process_cv": 0.001968,
+      "stats": {
+        "acquired_delayed": 527739.000000,
+        "acquired_immediately": 248693.000000
+      }
+    },
+    {
+      "duration_ns": 900038395,
+      "iterations": 782913,
+      "iterations_per_process_min": 27795.000000,
+      "iterations_per_process_max": 28048.000000,
+      "iterations_per_process_median": 27969.500000,
+      "iterations_per_process_mean": 27961.178571,
+      "iterations_per_process_sd": 58.499796,
+      "iterations_per_process_cv": 0.002092,
+      "stats": {
+        "acquired_delayed": 517338.000000,
+        "acquired_immediately": 265575.000000
+      }
+    },
+    {
+      "duration_ns": 900036850,
+      "iterations": 785143,
+      "iterations_per_process_min": 27849.000000,
+      "iterations_per_process_max": 28108.000000,
+      "iterations_per_process_median": 28046.000000,
+      "iterations_per_process_mean": 28040.821429,
+      "iterations_per_process_sd": 51.332650,
+      "iterations_per_process_cv": 0.001831,
+      "stats": {
+        "acquired_delayed": 517247.000000,
+        "acquired_immediately": 267896.000000
+      }
+    },
+    {
+      "duration_ns": 900037756,
+      "iterations": 789630,
+      "iterations_per_process_min": 27987.000000,
+      "iterations_per_process_max": 28288.000000,
+      "iterations_per_process_median": 28201.000000,
+      "iterations_per_process_mean": 28201.071429,
+      "iterations_per_process_sd": 61.318796,
+      "iterations_per_process_cv": 0.002174,
+      "stats": {
+        "acquired_delayed": 512765.000000,
+        "acquired_immediately": 276865.000000
+      }
+    },
+    {
+      "duration_ns": 900029175,
+      "iterations": 777972,
+      "iterations_per_process_min": 27604.000000,
+      "iterations_per_process_max": 27934.000000,
+      "iterations_per_process_median": 27787.500000,
+      "iterations_per_process_mean": 27784.714286,
+      "iterations_per_process_sd": 72.107357,
+      "iterations_per_process_cv": 0.002595,
+      "stats": {
+        "acquired_delayed": 524284.000000,
+        "acquired_immediately": 253688.000000
+      }
+    }
+  ]
+}

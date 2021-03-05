@@ -1,0 +1,124 @@
+{
+  "context": {
+    "benchmark": "CCWB",
+    "critical_work": "5",
+    "lock": "McsLockWithTtsStealing",
+    "processes": "28",
+    "work": "56",
+    "date": "2022-01-14T17:54:26"
+  },
+  "runs": [
+    {
+      "duration_ns": 900134117,
+      "iterations": 170101,
+      "iterations_per_process_min": 5962.000000,
+      "iterations_per_process_max": 6097.000000,
+      "iterations_per_process_median": 6082.000000,
+      "iterations_per_process_mean": 6075.035714,
+      "iterations_per_process_sd": 26.500150,
+      "iterations_per_process_cv": 0.004362,
+      "stats": {
+        "acquired_delayed": 170100.000000,
+        "acquired_immediately": 1.000000
+      }
+    },
+    {
+      "duration_ns": 900139715,
+      "iterations": 170282,
+      "iterations_per_process_min": 5970.000000,
+      "iterations_per_process_max": 6102.000000,
+      "iterations_per_process_median": 6086.500000,
+      "iterations_per_process_mean": 6081.500000,
+      "iterations_per_process_sd": 26.385321,
+      "iterations_per_process_cv": 0.004339,
+      "stats": {
+        "acquired_delayed": 170281.000000,
+        "acquired_immediately": 1.000000
+      }
+    },
+    {
+      "duration_ns": 900152127,
+      "iterations": 170501,
+      "iterations_per_process_min": 5981.000000,
+      "iterations_per_process_max": 6111.000000,
+      "iterations_per_process_median": 6095.500000,
+      "iterations_per_process_mean": 6089.321429,
+      "iterations_per_process_sd": 25.666022,
+      "iterations_per_process_cv": 0.004215,
+      "stats": {
+        "acquired_delayed": 170500.000000,
+        "acquired_immediately": 1.000000
+      }
+    },
+    {
+      "duration_ns": 900138086,
+      "iterations": 169805,
+      "iterations_per_process_min": 5951.000000,
+      "iterations_per_process_max": 6090.000000,
+      "iterations_per_process_median": 6070.000000,
+      "iterations_per_process_mean": 6064.464286,
+      "iterations_per_process_sd": 26.720061,
+      "iterations_per_process_cv": 0.004406,
+      "stats": {
+        "acquired_delayed": 169804.000000,
+        "acquired_immediately": 1.000000
+      }
+    },
+    {
+      "duration_ns": 900127221,
+      "iterations": 170116,
+      "iterations_per_process_min": 5960.000000,
+      "iterations_per_process_max": 6097.000000,
+      "iterations_per_process_median": 6081.500000,
+      "iterations_per_process_mean": 6075.571429,
+      "iterations_per_process_sd": 26.326200,
+      "iterations_per_process_cv": 0.004333,
+      "stats": {
+        "acquired_delayed": 170115.000000,
+        "acquired_immediately": 1.000000
+      }
+    },
+    {
+      "duration_ns": 900138595,
+      "iterations": 170703,
+      "iterations_per_process_min": 5986.000000,
+      "iterations_per_process_max": 6118.000000,
+      "iterations_per_process_median": 6101.500000,
+      "iterations_per_process_mean": 6096.535714,
+      "iterations_per_process_sd": 25.659425,
+      "iterations_per_process_cv": 0.004209,
+      "stats": {
+        "acquired_delayed": 170702.000000,
+        "acquired_immediately": 1.000000
+      }
+    },
+    {
+      "duration_ns": 900134639,
+      "iterations": 169399,
+      "iterations_per_process_min": 5942.000000,
+      "iterations_per_process_max": 6073.000000,
+      "iterations_per_process_median": 6056.000000,
+      "iterations_per_process_mean": 6049.964286,
+      "iterations_per_process_sd": 25.130006,
+      "iterations_per_process_cv": 0.004154,
+      "stats": {
+        "acquired_delayed": 169396.000000,
+        "acquired_immediately": 3.000000
+      }
+    },
+    {
+      "duration_ns": 900144608,
+      "iterations": 168320,
+      "iterations_per_process_min": 5904.000000,
+      "iterations_per_process_max": 6036.000000,
+      "iterations_per_process_median": 6016.000000,
+      "iterations_per_process_mean": 6011.428571,
+      "iterations_per_process_sd": 25.016185,
+      "iterations_per_process_cv": 0.004161,
+      "stats": {
+        "acquired_delayed": 168319.000000,
+        "acquired_immediately": 1.000000
+      }
+    }
+  ]
+}

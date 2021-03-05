@@ -1,0 +1,821 @@
+\chapter{Locks in verteilten Systemen}
+\label{ch:dist_locks}
+
+Genau wie in Systemen mit gemeinsamem Speicher
+ist auch in verteilten Systemen die Synchronisierung von Speicherzugriffen wichtig.
+Es gibt dort zwar nicht einen großen gemeinsamen Speicherbereich,
+aber mit Hilfe von \gls{rma} kann auf den Speicher anderer Knoten zugegriffen werden.
+Solche Zugriffe müssen geschützt werden,
+um \textit{race conditions} und \textit{memory consistency errors} zu vermeiden.
+Auch in verteilten Systemen eignen sich dafür Locks.
+
+\section{MPI Locks}
+\label{sec:mpi_locks}
+
+Bei \gls{mpi} ist es sogar zwingend erforderlich,
+\gls{rma}-Zugriffe zu synchronisieren.
+Es muss entweder \textit{active target synchronization} oder \textit{passive target synchronization} genutzt werden \cite[Kapitel 11.5, S. 436]{MPI-3.1}.
+Bei \textit{active target synchronization} sind beide Prozesse an der Synchronisierung beteiligt,
+was eine enorme Einschränkung bei der Programmierung sein kann,
+weil Prozesse nicht unabhängig voneinander agieren können.
+\textit{passive target synchronization} hingegen erlaubt es,
+ähnlich wie bei gemeinsamem Speicher,
+ohne Beteiligung eines anderen Prozesses
+auf dessen freigegebenen Speicherbereich zuzugreifen.
+Zur Synchronisierung dienen hierbei RW-Locks
+(vgl. \autoref{sec:synchronisierung_in_parallelen_programmen}):
+Mit \texttt{MPI\_Win\_lock} wird zunächst ein exklusiver oder geteilter Lock
+für den freigegebenen Speicher eines Zielprozesses akquiriert
+(mit \texttt{MPI\_LOCK\_EXCLUSIVE} oder \texttt{MPI\_LOCK\_SHARED}).
+Damit beginnt eine sogenannte Zugriffsepoche (engl. \textit{access epoch}),
+in der per \gls{rma} auf diesen Speicher zugegriffen werden kann.
+Schließlich muss die Epoche mit \texttt{MPI\_Win\_unlock} wieder beendet werden.
+Mehrere Prozesse können gleichzeitig geteilte Locks auf denselben Speicher haben,
+aber ein exklusiver Lock garantiert,
+dass kein anderer Prozess gleichzeitig einen Lock auf den Speicher hält.
+Er bietet also wechselseitigen Ausschluss,
+aber nicht ohne Einschränkung:
+\foreignblockcquote{english}[Kapitel 11.5.3, S. 448]{MPI-3.1}{%
+    The call to
+    MPI\_WIN\_LOCK may block until an exclusive lock on the window is acquired; or, the first
+    \textelp{} calls may not block, while MPI\_WIN\_UNLOCK blocks until a lock is acquired}
+Da nicht garantiert ist,
+dass \texttt{MPI\_Win\_lock} direkt einen Lock akquiriert,
+muss eine Operation,
+z.~B. ein lesender Zugriff,
+initiiert und mit \texttt{MPI\_Win\_flush} vollständig ausgeführt werden,
+um wechselseitigen Ausschluss zu gewährleisten.
+
+Alternativ zu \texttt{MPI\_Win\_lock} kann mit \texttt{MPI\_Win\_lock\_all} ein Lock für alle Prozesse,
+die ein \gls{Fenster} nutzen,
+akquiriert werden.
+Dieser Lock ist allerdings immer geteilt.
+Auf diese Weise kann kein exklusiver Lock akquiriert werden.
+Ein geteilter Lock für alle Prozesse eignet sich gut,
+um auf verteiltem Speicher zu programmieren,
+als würde es sich um gemeinsamen Speicher handeln,
+da ungehindert auf alle Speicherbereiche des \gls{Fenster}s zugegriffen werden kann.
+So können Algorithmen,
+die für gemeinsamen Speicher entwickelt wurden
+auch auf verteiltem Speicher implementiert werden.
+Manche Bibliotheken wie BCL \cite{BCL} nutzen \texttt{MPI\_Win\_lock\_all} sogar nur einmalig beim Programmstart
+und haben so über die gesamte Laufzeit eine einzige große Zugriffsepoche.
+
+Es ist nicht möglich,
+über dasselbe \gls{Fenster} gleichzeitig mehrere Locks für denselben Zielprozess zu halten:
+\foreignblockcquote{english}[Kapitel 11.5.3, S. 446]{MPI-3.1}{%
+    Multiple RMA access epochs (with calls
+    to MPI\_WIN\_LOCK) can occur simultaneously; however, each access epoch must target a
+    different process.}
+Daher kann in einer Zugriffsepoche,
+die mit \texttt{MPI\_Win\_lock\_all} gestartet wurde,
+nicht auf demselben \gls{Fenster} mit \texttt{MPI\_Win\_lock} ein exklusiver Lock akquiriert werden.
+Um trotzdem Locks mit dieser Methode nutzen zu können,
+muss in diesem Fall ein eigenes \gls{Fenster} pro Lock erzeugt werden.
+Bei vielen Locks kann das je nach \gls{mpi}-Implementierung ein ziemlicher Overhead sein,
+da ein \gls{Fenster} im schlimmsten Fall $\Omega(p)$ Speicher auf jedem der $p$ Prozesse benötigt \cite{foMPI}.
+Mit einem einzigen \gls{Fenster} können zwar theoretisch so viele unabhängige Locks implementiert werden,
+wie es beteiligte Prozesse gibt,
+aber die Handhabung wird dann schwierig,
+da die Anzahl der Prozesse meist erst zur Laufzeit bekannt ist.
+
+\section{RMA-MCS}
+\label{sec:rma-mcs}
+
+Um von der oben genannten Limitierung der Locks des \gls{mpi}-Standards unabhängig zu sein,
+bietet es sich an,
+eigene Locks auf Basis anderer Operationen von MPI zu implementieren.
+Dies ermöglicht auch die Nutzung von Lock-Algorithmen,
+die besser für die eigenen Anforderungen geeignet sind,
+z.~B. weil sie eine bessere Performance bei besonders hoher oder geringer Anzahl an konkurrierenden Lock-Akquisitionen (engl. \textit{contention}) haben
+oder sie Vorrang für exklusive oder Vorrang für geteilte Lock-Akquisitionen bieten.
+
+Es gibt zwar einige Lock-Algorithmen für verteilte Systeme,
+diese unterscheiden jedoch in der Regel nicht zwischen Prozessen,
+die auf demselben Knoten laufen und Prozessen auf anderen Knoten.
+D.~h. sie berücksichtigen keine Geschwindigkeitsunterschiede zwischen Zugriffen auf lokalen und entfernten Speicher,
+wodurch keine optimale Performance erreicht werden kann.
+Bei Locks für \gls{numa}-Systeme
+kann man höhere Geschwindigkeiten erreichen,
+wenn man die Fairness einschränkt,
+indem Prozesse,
+die auf demselben Knoten laufen,
+Vorrang bei der Lock-Akquisition erhalten.
+Denn wenn der Lock seltener an Prozesse in anderen Knoten übergeben wird,
+sind weniger langsame Zugriffe auf entfernten Speicher notwendig.
+
+Die einzige bekannte Arbeit,
+die diese Technik für verteilte Systeme anwendet,
+ist \cite{RMA-RW}.
+In ihr stellen Schmid et.~al. ihren Lock RMA-RW vor,
+welcher ein verteilter RW-Lock auf Basis eines hierarchischen MCS-Locks
+(HMCS-Lock, siehe \autoref{sec:cohort-lock})
+ist,
+den sie RMA-MCS nennen.
+Für ihren Performancevergleich nutzen sie einen MCS-Lock,
+den sie als D-MCS-Lock (D für engl. \textit{distributed}) bezeichnen,
+der auf einer Implementierung aus \cite{AdvancedMpi}[Kapitel 4.7, S. 130] beruht,
+sowie die Locks,
+der von ihnen genutzten \gls{mpi}-Implementierung \textit{fast one-sided MPI} (foMPI).
+
+foMPI implementiert nur den Teil der \gls{mpi}-Spezifikation für einseitige Kommunikation
+und nutzt dafür \textit{Distributed Memory Application} (DMAPP) \cite{dmapp},
+eine \gls{rdma}-Bibliothek für \gls{hpc}-Systeme der Firma Cray \cite{foMPI}.
+Da im Rahmen dieser Masterarbeit kein Cray-System zur Verfügung steht
+und die Performance von zwei Algorithmen nur schwer verglichen werden kann,
+wenn nicht beide auf derselben Hardware laufen,
+muss für einen Performancevergleich die \gls{mpi}-Implementierung in RMA-MCS ausgetauscht werden.
+
+Normalerweise muss bei einem Wechsel der \gls{mpi}-Implementierung der Anwendungscode nicht angepasst werden,
+da eine einheitliche Schnittstelle verwendet wird.
+Da foMPI allerdings nicht die ganze \gls{mpi}-Spezifikation implementiert,
+haben die Autoren sich dazu entschieden,
+bei allen Funktionen und Konstanten den Präfix \enquote{MPI} durch \enquote{foMPI} zu ersetzen.
+Diese Ersetzung muss rückgängig gemacht werden,
+damit RMA-MCS die standardisierte \gls{mpi}-Schnittstelle nutzt.
+
+\section{Fortschrittsgarantien von MPI}
+\label{sec:mpi_fortschritt}
+
+Leider ist es mit dieser einfachen Ersetzung nicht getan.
+Die so modifizierte Version von RMA-MCS läuft bei der Verwendung von Intel-MPI%
+\footnote{Intel(R) MPI Library for Linux* OS, Version 2019 Update 10 Build 20210120 (id: d7908565b)}
+mit mindestens zwei Rechenknoten in einen Deadlock.
+Der Grund dafür liegt in der Übergabe des Locks von einem Prozess an seinen Nachfolger.
+
+Bei einem MCS-Lock reihen sich Prozesse in eine Warteschlange ein
+und warten in einer Schleife darauf,
+dass ein lokaler Speicherbereich von ihrem Vorgänger geändert wird (vgl. \autoref{sec:mcs_lock}).
+Dies hat den großen Vorteil,
+dass die vielen Speicherzugriffe beim Warten nicht über das Netzwerk gehen müssen.
+Der D-MCS-Lock aus \cite{AdvancedMpi} und auch RMA-MCS und RMA-RW aus \cite{RMA-RW}
+nutzen dafür eine Implementierung
+ähnlich zu der in \autoref{fig:deadlock_intel_mpi} gezeigten.
+
+\begin{figure}[h]
+    \begin{subfigure}[b]{.5\textwidth}
+        \centering
+        \begin{tabular}{c}\begin{lstlisting}
+do {
+    MPI_Win_sync(window);
+} while (window_mem[blocked] == 1);
+        \end{lstlisting}\end{tabular}
+        \caption{Auf Vorgänger warten}
+        \label{fig:wait_win_sync}
+    \end{subfigure}
+    \begin{subfigure}[b]{.5\textwidth}
+        \centering
+        \begin{tabular}{c}\begin{lstlisting}
+constexpr int ZERO = 0;
+MPI_Accumulate(
+    &ZERO, 1, MPI_INT,
+    successor, blocked, 1, MPI_INT,
+    MPI_REPLACE, window);
+MPI_Win_flush(successor, window);
+        \end{lstlisting}\end{tabular}
+        \caption{Lock an Nachfolger übergeben}
+        \label{fig:notify_accumulate}
+    \end{subfigure}
+    \caption{Lockübergabe, die in Intel-MPI zu einem Deadlock führt}
+    \label{fig:deadlock_intel_mpi}
+\end{figure}
+
+Ein direkter Zugriff auf den lokalen Speicher des \gls{Fenster}s ist deutlich schneller
+als ein Zugriff über \texttt{MPI\_Get} oder \texttt{MPI\_Get\_accumulate}.
+Durch \texttt{MPI\_Win\_sync} wird sichergestellt,
+dass auch bei dem Speichermodell \texttt{MPI\_WIN\_SEPARATE}%
+\footnote{
+    MPI definiert zwei Speichermodelle: \texttt{MPI\_WIN\_SEPARATE} und \texttt{MPI\_WIN\_UNIFIED}.
+    Bei dem ersten gibt es eine öffentliche und eine private Kopie des Fensterspeichers,
+    die manuell synchron gehalten werden müssen.
+    Dies repräsentiert Systeme mit nicht-\glslink{Kohaerenz}{kohärentem} Speicher.
+    Bei dem zweiten gibt es nur eine Version des Fensterspeichers,
+    da der unterliegende Speicher selbst \glslink{Kohaerenz}{kohärent} ist.
+    Siehe \cite[Kapitel 11.4, S. 435]{MPI-3.1}}
+die Änderungen in der öffentlichen Kopie des \gls{Fenster}s für die private Kopie (also den lokalen Speicher) sichtbar werden.
+Bei Intel-MPI kann allerdings das \texttt{MPI\_Win\_flush} in \autoref{fig:notify_accumulate} nicht ausgeführt werden,
+während der Zielprozess mit der Schleife in \autoref{fig:wait_win_sync} wartet.
+Das liegt vermutlich an der folgenden Einschränkung der \gls{mpi}-Spezifikation:
+\foreignblockcquote{english}[Kapitel 11.7, S. 456]{MPI-3.1}{%
+    MPI implementations must guarantee that a process makes progress on all
+    enabled communications it participates in, while blocked on an MPI call \textelp{}.
+    A similar issue is whether such progress must occur while a process is busy computing,
+    or blocked in a non-MPI call \textelp{}. Then MPI does not specify
+    whether deadlock is avoided.}
+Anscheinend zählt der Aufruf von \texttt{MPI\_Win\_sync} in der Schleife für Intel-MPI nicht als blockierender \gls{mpi}-Aufruf,
+sodass \texttt{MPI\_Win\_flush} hängen bleibt.
+
+Eine mögliche Erklärung dafür,
+dass \gls{mpi} keine Garantien in so einem Fall gibt,
+ist,
+dass bei Systemen,
+die kein \gls{rdma} unterstützen,
+das Betriebssystem des Zielprozesses an dem Datentransfer beteiligt sein muss.
+Wenn der Zielprozess selbst aber beschäftigt ist,
+müsste in so einem Fall ein anderer Prozess oder Thread diese Aufgabe übernehmen.
+Zu erkennen,
+dass der Zielprozess längerfristig beschäftigt sein wird,
+ist nicht wirklich möglich und alle \gls{rma}-Kommunikation durch einen nur dafür zuständigen Hintergrundprozess oder -thread zu leiten,
+könnte erheblichen Overhead mit sich bringen.
+Damit bleibt ohne \gls{rdma} nur die Option zu warten,
+bis der Zielprozess wieder eine \gls{mpi}-Funktion aufruft.
+Wenn das aber nie passiert,
+gibt es einen Deadlock.
+
+Bei Open-MPI%
+\footnote{Open MPI 4.0.4; kompiliert mit: icc (ICC) 19.0.5.281 20190815}
+ist dieses Problem noch ausgeprägter.
+Hier kann selbst bei ausschließlicher Nutzung von atomaren \gls{rma}-Funktionen
+(ohne manuelle Zugriffe auf den Speicher des \gls{Fenster}s)
+kein Lock übergeben werden,
+wenn der Zielprozess mit einer Schleife wie in \autoref{fig:wait_fao} wartet
+(die Lockfreigabe in \autoref{fig:release_open_mpi} ist unverändert).
+Dies ist mit Intel-MPI hingegen möglich,
+da dort \texttt{MPI\_Win\_flush} als blockierender Aufruf gilt.
+
+\begin{figure}[h]
+    \begin{subfigure}[b]{.5\textwidth}
+        \centering
+        \begin{tabular}{c}\begin{lstlisting}
+int flag;
+do {
+    int dummy;
+    MPI_Fetch_and_op(
+        &dummy, &flag, MPI_INT,
+        my_rank, blocked,
+        MPI_NO_OP, window);
+    MPI_Win_flush(my_rank, window);
+} while (flag == 1);
+        \end{lstlisting}\end{tabular}
+        \caption{Auf Vorgänger warten}
+        \label{fig:wait_fao}
+    \end{subfigure}
+    \begin{subfigure}[b]{.5\textwidth}
+        \centering
+        \begin{tabular}{c}\begin{lstlisting}
+constexpr int ZERO = 0;
+MPI_Accumulate(
+    &ZERO, 1, MPI_INT,
+    successor, blocked, 1, MPI_INT,
+    MPI_REPLACE, window);
+MPI_Win_flush(successor, window);
+        \end{lstlisting}\end{tabular}
+        \caption{Lock an Nachfolger übergeben}
+        \label{fig:release_open_mpi}
+    \end{subfigure}
+    \caption{Lockübergabe, die in Open-MPI zu einem Deadlock führt}
+    \label{fig:deadlock_open_mpi}
+\end{figure}
+
+Die Entwickler der \gls{pgas}-Bibliothek DASH haben eine Lösung für dieses Problem gefunden%
+\footnote{\url{https://github.com/dash-project/dash/issues/372}}.
+Sie verwenden die Funktion \texttt{MPI\_Iprobe} um den Deadlock zu vermeiden.
+MPI\_Iprobe dient eigentlich dazu,
+bei Punkt-zu-Punkt-Kommunikation herauszufinden,
+ob ein anderer Prozess versucht,
+eine Nachricht zu senden,
+die der eigene Prozess empfangen könnte,
+ohne auf die Nachricht zu warten.
+Die \gls{mpi}-Spezifikation garantiert darüber hinaus aber auch Programmfortschritt:
+\foreignblockcquote{english}[Kapitel 3.8.1, S. 66]{MPI-3.1}{%
+    The MPI implementation of \textelp{} MPI\_IPROBE needs to guarantee progress:
+    \textelp{} if a process busy waits with MPI\_IPROBE and a
+    matching message has been issued, then the call to MPI\_IPROBE will eventually return flag
+    = true unless the message is received by another concurrent receive operation or matched
+    by a concurrent matched probe.}
+Damit eignet sich \texttt{MPI\_Iprobe} perfekt,
+um den Deadlock in Open-MPI und Intel-MPI zu beheben
+(siehe \autoref{fig:wait_iprobe}, die Lockfreigabe in \autoref{fig:release_iprobe} ist weiterhin unverändert).
+
+\clearpage
+
+\begin{figure}[h]
+    \begin{subfigure}[b]{.5\textwidth}
+        \centering
+        \begin{tabular}{c}\begin{lstlisting}
+do {
+    int flag;
+    MPI_Iprobe(
+        MPI_ANY_SOURCE, MPI_ANY_TAG,
+        communicator,
+        &flag, MPI_STATUS_IGNORE);
+    MPI_Win_sync(window);
+} while (window_mem[blocked] == 1);
+        \end{lstlisting}\end{tabular}
+        \caption{Auf Vorgänger warten}
+        \label{fig:wait_iprobe}
+    \end{subfigure}
+    \begin{subfigure}[b]{.5\textwidth}
+        \centering
+        \begin{tabular}{c}\begin{lstlisting}
+constexpr int ZERO = 0;
+MPI_Accumulate(
+    &ZERO, 1, MPI_INT,
+    successor, blocked, 1, MPI_INT,
+    MPI_REPLACE, window);
+MPI_Win_flush(successor, window);
+        \end{lstlisting}\end{tabular}
+        \caption{Lock an Nachfolger übergeben}
+        \label{fig:release_iprobe}
+    \end{subfigure}
+    \caption{Lockübergabe mit \texttt{MPI\_Iprobe}}
+    \label{fig:iprobe_lock_passing}
+\end{figure}
+
+\section{Nicht-atomare Übergabe von Locks}
+\label{sec:non_atomic_lock_passing}
+
+Für die Übergabe eines MCS-Locks an den Nachfolger wird in der Literatur
+(wie in \autoref{sec:mpi_fortschritt} gezeigt)
+die atomare \gls{rma}-Operation \texttt{MPI\_Accumulate} genutzt
+und auf Seite des Nachfolgers mit direkten nicht-atomaren Zugriffen auf den lokalen Speicher des \gls{Fenster}s gewartet.
+Dies ist in \gls{mpi}-2.2 nicht erlaubt:
+\foreignblockcquote{english}[Kapitel 11.7, S. 365]{MPI-2.2}{%
+    A correct program must obey the following rules.
+    \begin{enumerate}
+        \item A location in a window must not be accessed locally once an update to that location
+              has started, until the update becomes visible in the private window copy in process
+              memory. \textelp{}
+    \end{enumerate}
+    A program is erroneous if it violates these rules.}
+In \gls{mpi}-3.1 wurde diese Regel aufgeweicht:
+\foreignblockcquote{english}[Kapitel 11.7, S. 455]{MPI-3.1}{%
+    Accessing a location in the window that is also the target of a remote update is valid
+    (not erroneous) but the precise result will depend on the behavior of the implementation.
+    Updates from a remote process will appear in the memory of the target, but
+    there are no atomicity or ordering guarantees if more than one byte is updated.
+    Updates are stable in the sense that once data appears in memory of the target, the data
+    remains until replaced by another update. This permits polling on a location for a
+    change from zero to non-zero or for a particular value, but not polling and comparing
+    the relative magnitude of values.}
+Dies gilt allerdings nur,
+wenn das Speichermodell des \gls{Fenster}s \texttt{MPI\_WIN\_UNIFIED} ist.
+Beim Speichermodell \texttt{MPI\_WIN\_SEPARATE} ist dies weiterhin nicht erlaubt,
+führt aber nun zu undefiniertem Verhalten
+statt zu einem Fehler,
+was es Implementierungen ermöglicht,
+diesen Fall zu unterstützen.
+Alle für diese Arbeit verwendeten Systeme verwenden das Speichermodell \texttt{MPI\_WIN\_UNIFIED},
+daher ist es schwer zu sagen,
+ob die hier gezeigten Algorithmen auf \texttt{MPI\_WIN\_SEPARATE}-Systemen korrekt funktionieren.
+
+Beide Versionen der \gls{mpi}-Spezifikation unterscheiden an dieser Stelle nicht zwischen atomaren Operationen wie \texttt{MPI\_Accumulate}
+und normalen Operationen wie \texttt{MPI\_Put}.
+Und da der wartende Prozess sowieso nicht-atomare Operationen nutzt,
+erhält man durch die Nutzung einer atomaren \gls{rma}-Operation keine zusätzlichen Garantien.
+Aus diesem Grund wird im weiteren Verlauf dieser Arbeit für solche Fälle die nicht-atomare Operation \texttt{MPI\_Put} verwendet.
+Diese ist etwas schneller (siehe \autoref{sec:optimierung_dmcs})
+und hat auf den zur Verfügung stehenden Systemen denselben Effekt wie \texttt{MPI\_Accumulate}.
+Sollte einer der hier gezeigten Locks auf einem System zum Einsatz kommen,
+bei dem in solchen Fällen eine atomare Operation erforderlich ist,
+kann dies leicht geändert werden.
+
+Der Ausschnitt aus der \gls{mpi}-3.1-Spezifikation legt außerdem nahe,
+nach Möglichkeit nur ein Byte mit einem \gls{rma}-Zugriff zu ändern,
+wenn gleichzeitig direkt auf die Speicheradresse zugegriffen wird.
+In der Literatur werden aber meist mehrere Bytes verwendet,
+beispielsweise vier Byte in \cite{AdvancedMpi} durch Nutzung des Datentyps \texttt{MPI\_INT}
+und sogar acht Byte in \cite{RMA-RW} durch Nutzung von \texttt{MPI\_INT64\_T},
+obwohl für so eine Änderung von 1 zu 0 nur ein Byte nötig wäre (z.~B. mit \texttt{MPI\_CXX\_BOOL}).
+
+Der Grund hierfür ist vermutlich,
+dass der Speicher des \gls{Fenster}s meist als Array betrachtet wird,
+wodurch es für den Programmierer leichter ist,
+wenn alle Elemente denselben Datentyp haben.
+Dabei ist es problemlos möglich,
+auf den Speicher des \gls{Fenster}s über ein Struct zuzugreifen,
+wenn bei dem Erzeugen des \gls{Fenster}s eine \textit{displacement unit} von einem Byte angegeben wurde.
+Um auf ein bestimmtes Feld des Structs zuzugreifen,
+kann dann bei einem \gls{rma}-Zugriff als \textit{displacement} statt der Position im Array,
+der Byteoffset des Felds angegeben werden.
+Dieser wird mit dem Makro \texttt{offsetof}\footnote{\url{https://en.cppreference.com/w/cpp/types/offsetof}} ermittelt.
+
+Auf diese Weise ist es leicht,
+innerhalb eines \gls{Fenster}s verschiedene Datentypen zu verwenden und es wird möglich,
+mit dem Makro \texttt{alignas}\footnote{\url{https://en.cppreference.com/w/cpp/language/alignas}}
+die Felder auf verschiedenen Zeilen des \gls{Zwischenspeicher}s zu legen (siehe \autoref{fig:mcs_mpi_struct}).
+
+\begin{figure}[h]
+    \centering
+    \begin{tabular}{c}\begin{lstlisting}
+struct memory_layout {
+  alignas(64) bool locked;
+  alignas(64) int next;
+  alignas(64) int tail;
+};
+static constexpr MPI_Aint locked_disp = offsetof(memory_layout, locked);
+static constexpr MPI_Aint next_disp = offsetof(memory_layout, next);
+static constexpr MPI_Aint tail_disp = offsetof(memory_layout, tail);
+    \end{lstlisting}\end{tabular}
+    \caption{Nutzung eines Structs für MPI-Fenster}
+    \label{fig:mcs_mpi_struct}
+\end{figure}
+% memory_layout *win_mem;
+% MPI_Win win;
+% MPI_Win_allocate(sizeof(memory_layout), 1, MPI_INFO_NULL, MPI_COMM_WORLD,
+%                  &win_mem, &win);
+
+\begin{figure}[h]
+    \begin{subfigure}[b]{.5\textwidth}
+        \centering
+        \begin{tabular}{c}\begin{lstlisting}
+win_mem->locked = true;
+win_mem->next = -1;
+MPI_Win_sync(win);
+
+// Finde Vorgänger
+int pred;
+MPI_Fetch_and_op(
+  &my_rank, &pred, MPI_INT,
+  main_rank, tail_disp,
+  MPI_REPLACE, win);
+MPI_Win_flush(main_rank, win);
+
+if (pred != -1) {
+  // Reihe nach Vorgänger ein
+  MPI_Put(&my_rank, 1, MPI_INT,
+          pred, next_disp, 1, MPI_INT,
+          win);
+  MPI_Win_flush(pred, win);
+
+  // Warte auf Vorgänger
+  while (win_mem->locked) {
+    int flag; // Garantiere Fortschritt
+    MPI_Iprobe(
+      MPI_ANY_SOURCE, MPI_ANY_TAG,
+      comm, &flag, MPI_STATUS_IGNORE);
+    MPI_Win_sync(win);
+  }
+}
+        \end{lstlisting}\end{tabular}
+        \caption{Akquirieren des Locks (\texttt{acquire})}
+        \label{fig:mcs_mpi_acquire}
+    \end{subfigure}
+    \begin{subfigure}[b]{.5\textwidth}
+        \centering
+        \begin{tabular}{c}\begin{lstlisting}
+int succ = win_mem->next;
+if (succ == -1) {
+  constexpr int NULL_RANK = -1;
+  int old_value;
+  MPI_Compare_and_swap(
+    &NULL_RANK, &my_rank, &old_value,
+    MPI_INT, main_rank, tail_disp, win);
+  MPI_Win_flush(main_rank, win);
+
+  // Die Warteschlange ist leer
+  if (old_value == my_rank) return;
+
+  // Warte auf Nachfolger
+  while ((succ = win_mem->next) == -1) {
+    int flag; // Garantiere Fortschritt
+    MPI_Iprobe(
+      MPI_ANY_SOURCE, MPI_ANY_TAG,
+      comm, &flag, MPI_STATUS_IGNORE);
+    MPI_Win_sync(win);
+  }
+}
+// Benachrichtige Nachfolger
+constexpr bool FALSE = false;
+MPI_Put(
+  &FALSE, 1, MPI_CXX_BOOL,
+  succ, locked_disp, 1, MPI_CXX_BOOL,
+  win);
+MPI_Win_flush(succ, win);
+        \end{lstlisting}\end{tabular}
+        \caption{Freigeben des Locks (\texttt{release})}
+        \label{fig:mcs_mpi_release}
+    \end{subfigure}
+    \caption{MCS-Lock in MPI (optimierter D-MCS)}
+    \label{fig:mcs_mpi_code}
+\end{figure}
+
+Insgesamt ergibt sich damit die optimierte Implementierung des D-MCS-Locks
+in \autoref{fig:mcs_mpi_code}.
+Diese ähnelt sehr der C++-Implementierung in \autoref{fig:mcs_code},
+es gibt aber ein paar kleine Unterschiede:
+\begin{enumerate}
+    \item Das \texttt{locked}-\textit{Flag} wird zusammen mit dem \texttt{next}-Feld direkt am Anfang von \texttt{acquire} zurückgesetzt.
+          Diese nicht-atomare lokale Schreib-Operation ist sehr schnell,
+          es ist daher kein großes Problem,
+          wenn sie auch ausgeführt wird,
+          wenn es keinen Nachfolger gibt.
+          Durch das Vorziehen dieser Operation ist kein zweites \texttt{MPI\_Win\_sync} notwendig,
+          da beide Operationen gemeinsam synchronisiert werden können
+          (\autoref{fig:mcs_mpi_acquire}, Zeile 1-3).
+    \item Da der Warteschlangenknoten eines Prozesses nicht in einem Feld gespeichert ist,
+          sondern im Speicher des \gls{mpi}-\gls{Fenster}s,
+          handelt es sich bei \texttt{next} und \texttt{tail} nicht um Zeiger,
+          sondern um \texttt{int}s.
+          Diese enthalten die ID eines Prozesses
+          (in \gls{mpi} als Rang, engl. \textit{rank}, bezeichnet).
+\end{enumerate}
+
+\section{Punkt-zu-Punkt Übergabe von Locks}
+\label{sec:p2p_lock_passing}
+
+Es gibt noch eine weitere Möglichkeit,
+die in \autoref{sec:mpi_fortschritt} beschriebenen Probleme zu vermeiden:
+Statt für die Übergabe des Locks mit einer Schleife auf eine \gls{rma}-Operation zu warten,
+können der Vorgänger- und Nachfolgerprozess auch mit Punkt-zu-Punkt-Kommunikation mit \texttt{MPI\_Send} und \texttt{MPI\_Recv} eine Nachricht austauschen.
+Diese Technik kommt auch in der \gls{pgas}-Bibliothek DASH zum Einsatz \cite{DART-MPI}.
+Da dieser Nachrichtenaustausch nur der Synchronisierung dient,
+kann die eigentliche Nachricht leer sein
+(vgl. \autoref{fig:p2p_lock_passing}).
+
+\begin{figure}[h]
+    \begin{subfigure}[b]{.5\textwidth}
+        \centering
+        \begin{tabular}{c}\begin{lstlisting}
+MPI_Recv(NULL, 0, MPI_UINT8_T,
+         predecessor, 0,
+         communicator, MPI_STATUS_IGNORE);
+        \end{lstlisting}\end{tabular}
+        \caption{Auf Vorgänger warten}
+        \label{fig:wait_recv}
+    \end{subfigure}
+    \begin{subfigure}[b]{.5\textwidth}
+        \centering
+        \begin{tabular}{c}\begin{lstlisting}
+MPI_Send(NULL, 0, MPI_UINT8_T,
+         successor, 0,
+         communicator);
+        \end{lstlisting}\end{tabular}
+        \caption{Lock an Nachfolger übergeben}
+        \label{fig:notify_send}
+    \end{subfigure}
+    \caption{Lockübergabe mit Punkt-zu-Punkt-Kommunikation}
+    \label{fig:p2p_lock_passing}
+\end{figure}
+
+Die in \autoref{sec:mpi_fortschritt} gezeigte Technik unter Verwendung von \texttt{MPI\_Iprobe}
+ist auch bei Nutzung von Punkt-zu-Punkt-Kommunikation wichtig,
+da der MCS-Lock noch eine zweite Schleife hat,
+in der auf eine Änderung des lokalen Speichers durch einen anderen Prozess gewartet wird.
+Bei der Freigabe des Locks (\autoref{fig:mcs_mpi_release}, ab Zeile 13) muss ein Prozess unter Umständen auf seinen Nachfolger warten.
+Dieser Fall kommt nur selten vor
+(wenn ein Prozess kurz davor ist,
+auf seinen Vorgänger zu warten,
+während sein Vorgänger dabei ist,
+den Lock freizugeben),
+aber auch hier kann es ohne \texttt{MPI\_Iprobe} zu einem Deadlock kommen.
+
+\section{Nutzung von gemeinsamem Speicher innerhalb eines Rechenknotens}
+\label{sec:mpi_shared_mem}
+
+Direkte Zugriffe auf Speicher sind deutlich schneller
+als Zugriffe auf denselben Speicher mittels \gls{rma} über \gls{mpi}.
+Das ist auch der Grund,
+weshalb D-MCS und RMA-MCS \cite{RMA-RW} direkte Speicherzugriffe benutzen,
+wenn sie in einer Schleife auf ihren Vorgänger bzw. Nachfolger warten (siehe \autoref{sec:mpi_fortschritt}).
+Bei diesen beiden Lock-Implementierungen werden direkte Speicherzugriffe nur für den Speicher des eigenen Prozesses genutzt,
+da der Speicher der anderen Prozesse potenziell auf anderen Rechenknoten liegt.
+
+\Gls{numa}-Locks hingegen unterscheiden Prozesse danach,
+ob sie auf demselben \gls{numa}-Knoten laufen.
+Somit ist auch bekannt,
+ob die Prozesse über gemeinsamen Speicher verfügen.
+Das erlaubt es in vielen Fällen,
+auch bei der Kommunikation mit anderen Prozessen,
+direkte Speicherzugriffe zu verwenden.
+\Gls{mpi} ermöglicht es mit der Funktion \texttt{MPI\_Win\_allocate\_shared} ein \gls{Fenster} auf gemeinsamen Speicher zu erstellen.
+Dafür müssen zunächst die Prozesse in Gruppen aufgeteilt werden,
+sodass alle Prozesse in einer Gruppe einen gemeinsamen Speicher besitzen (typischerweise weil sie auf demselben Rechenknoten laufen).
+Das geht mit der Funktion \texttt{MPI\_Comm\_split\_type} und dem Typ \texttt{MPI\_COMM\_TYPE\_SHARED}.
+Ist so ein \gls{Fenster} auf gemeinsamen Speicher erstellt,
+kann die Speicheradresse für jeden Prozess per Zeigerarithmetik ausgerechnet
+oder mit \texttt{MPI\_Win\_shared\_query} abgefragt werden.
+So kann z.~B. der lokale Lock eines Cohort-Locks (siehe \autoref{sec:cohort-lock}) komplett ohne \gls{rma} auskommen
+und stattdessen mit C++ \texttt{std::atomic}\footnote{\url{https://en.cppreference.com/w/cpp/atomic/atomic}} implementiert werden.
+
+\endinput
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Mit C++ \texttt{std::atomic\_ref}\footnote{\label{note:atomic_ref}\url{https://en.cppreference.com/w/cpp/atomic/atomic_ref}} ist es sogar möglich,
+auf dieselbe Speicheradresse sowohl direkt
+als auch mit \gls{rma} atomar zuzugreifen.
+Das erlaubt z.~B. eine deutlich performantere Implementierung eines RH-Lock (siehe \autoref{sec:rh-lock}).
+Diese Technik ist allerdings nicht standardkonform und hängt damit vom verwendeten Compiler und der \gls{mpi}-Implementierung ab.
+Denn die C++-Spezifikation besagt:
+\foreignblockquote{english}[\footref{note:atomic_ref}]{%
+    While any atomic\_ref instances referencing an object exists,
+    the object must be exclusively accessed through these atomic\_ref instances.}
+und die \gls{mpi}-Spezifikation besagt:
+\foreignblockcquote{english}[Kapitel 11.7, S. 455]{MPI-3.1}{%
+    Accessing a location in the window that is also the target of a remote update is valid
+    (not erroneous) but the precise result will depend on the behavior of the implementation.
+    \textelp{}
+    there are no atomicity or ordering guarantees if more than one byte is updated.}
+Es muss also auf jedem System genau getestet werden,
+ob sich \texttt{std::atomic\_ref} mit \gls{mpi} kombinieren lässt
+und im Zweifel sollte darauf lieber verzichtet werden.
+Die meisten \gls{numa}-Locks profitieren aber auch kaum von \texttt{std::atomic\_ref},
+da Speicheradressen meist entweder nur durch lokale
+oder fast ausschließlich durch entfernte Prozesse verwendet werden.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\begin{figure}
+    \begin{lstlisting}
+void acquire() {
+  win_mem[blocked_disp] = 1;
+  win_mem[next_disp] = -1;
+
+  int predecessor;
+  MPI_Fetch_and_op(&my_rank, &predecessor, MPI_INT
+                   main_rank, tail_disp, MPI_REPLACE, win);
+  MPI_Win_flush(main_rank, win);
+  if (predecessor != -1) {
+    // We didn't get the lock. Add us to the tail of the list.
+    MPI_Accumulate(&my_rank, 1, MPI_INT,
+                   predecessor, next_disp, 1, MPI_INT,
+                   MPI_REPLACE, win);
+    MPI_Win_flush(predecessor, win);
+
+    // Now spin on "blocked" until we are given the lock.
+    do {
+      MPI_Win_sync(win); // Ensure memory updated
+    } while (win_mem[blocked_disp] == 1);
+  }
+}
+\end{lstlisting}
+    \caption{D-MCS-Lock acquire}
+    \label{fig:dmcs_acquire}
+\end{figure}
+
+\begin{figure}
+    \begin{lstlisting}
+void release() {
+  int successor = win_mem[next_disp];
+
+  if (successor == -1) {
+    // See if we're waiting for the next to notify us
+    int null_rank = -1;
+    int cur_tail;
+    MPI_Compare_and_swap(&null_rank, &my_rank, &cur_tail, MPI_INT,
+                         main_rank, tail_disp, win);
+    MPI_Win_flush(main_rank, win);
+
+    if (cur_tail == my_rank) {
+      return; // We are the only process in the list.
+    }
+    // Otherwise, someone else has added themselves to the list.
+    do {
+      MPI_Win_sync(win);
+    } while ((successor = win_mem[next_disp]) == -1);
+  }
+
+  // Now we can notify them.
+  int zero = 0;
+  MPI_Accumulate(&zero, 1, MPI_INT,
+                 successor, blocked_disp, 1, MPI_INT,
+                 MPI_REPLACE, win);
+  MPI_Win_flush(successor, win);
+}
+    \end{lstlisting}
+    \caption{D-MCS-Lock release}
+    \label{fig:dmcs_release}
+\end{figure}
+
+\foreignblockcquote{english}[Kapitel 11.7.3, S. 462]{MPI-3.1}{%
+    \textins*{O}nce a communication is enabled it is guaranteed to complete \textelp{}.
+    There is some fuzziness in the definition of the time when a RMA communication
+    becomes enabled. This fuzziness provides to the implementor more flexibility \textelp{}.
+    Access to a target window becomes enabled once the corresponding
+    synchronization (such as MPI\_WIN\_FENCE or MPI\_WIN\_POST) has executed. On
+    the origin process, an RMA communication may become enabled as soon as the corresponding
+    put, get or accumulate call has executed, or as late as when the ensuing synchronization
+    call is issued. Once the communication is enabled both at the origin and at the target, the
+    communication must complete.}
+
+\foreignblockcquote{english}[Kapitel 11.7, S. 453]{MPI-3.1}{%
+    If an RMA operation is completed at the origin by a call to MPI\_WIN\_UNLOCK,
+    MPI\_WIN\_UNLOCK\_ALL, MPI\_WIN\_FLUSH(rank=target), or
+    MPI\_WIN\_FLUSH\_ALL, then the operation is completed at the target by that same
+    call.}
+
+\foreignblockcquote{english}[Kapitel 11.7, S. 453]{MPI-3.1}{%
+    the update performed
+    by a put or accumulate call in the public copy of the target window is visible when the put
+    or accumulate has completed at the target (or earlier).}
+
+\foreignblockcquote{english}[Kapitel 11.7, S. 453]{MPI-3.1}{%
+    If an RMA operation is completed at the origin by a call to MPI\_WIN\_UNLOCK,
+    MPI\_WIN\_UNLOCK\_ALL, MPI\_WIN\_FLUSH(rank=target), or
+    MPI\_WIN\_FLUSH\_ALL, then the operation is completed at the target by that same
+    call.}
+
+\foreignblockcquote{english}[Kapitel 11.7, S. 453]{MPI-3.1}{%
+    An update of a location in a private window copy in process memory becomes visible
+    in the public window copy at latest when an ensuing call to MPI\_WIN\_POST,
+    MPI\_WIN\_FENCE, MPI\_WIN\_UNLOCK, MPI\_WIN\_UNLOCK\_ALL, or
+    MPI\_WIN\_SYNC is executed on that window by the window owner. In the RMA
+    unified memory model, an update of a location in a private window in process memory
+    becomes visible without additional RMA calls.}
+
+\foreignblockcquote{english}[Kapitel 11.7, S. 453]{MPI-3.1}{%
+    An update by a put or accumulate call to a public window copy becomes visible in the
+    private copy in process memory at latest when an ensuing call to MPI\_WIN\_WAIT,
+    MPI\_WIN\_FENCE, MPI\_WIN\_LOCK, MPI\_WIN\_LOCK\_ALL, or MPI\_WIN\_SYNC is
+    executed on that window by the window owner. In the RMA unified memory model,
+    an update by a put or accumulate call to a public window copy eventually becomes
+    visible in the private copy in process memory without additional RMA calls.}
+
+\texttt{MPI\_WIN\_SEPARATE} memory model:
+
+\foreignblockcquote{english}[Kapitel 11.7, S. 454]{MPI-3.1}{%
+    A location in a window must not be accessed with load/store operations once an
+    update to that location has started, until the update becomes visible in the private
+    window copy in process memory.}
+
+\texttt{MPI\_WIN\_UNIFIED} memory model:
+
+\foreignblockcquote{english}[Kapitel 11.7, S. 455]{MPI-3.1}{%
+    A location in a window must not be accessed with load/store operations once an
+    update to that location has started, until the update is complete, subject to the
+    following special case.}
+
+\foreignblockcquote{english}[Kapitel 11.7, S. 455]{MPI-3.1}{%
+    Accessing a location in the window that is also the target of a remote update is valid
+    (not erroneous) but the precise result will depend on the behavior of the implementation.
+    Updates from a remote process will appear in the memory of the target, but
+    there are no atomicity or ordering guarantees if more than one byte is updated.
+    Updates are stable in the sense that once data appears in memory of the target, the data
+    remains until replaced by another update. This permits polling on a location for a
+    change from zero to non-zero or for a particular value, but not polling and comparing
+    the relative magnitude of values.}
+
+\foreignblockcquote{english}[Kapitel 11.7, S. 456]{MPI-3.1}{%
+    A program that violates these rules has undefined behavior.}
+
+
+\foreignblockcquote{english}[Kapitel 11.7, S. 456]{MPI-3.1}{%
+    In the unified memory model, in the case where the window is
+    in shared memory, MPI\_WIN\_SYNC can be used to order store operations and make
+    store updates to the window visible to other processes and threads. Use of this
+    routine is necessary to ensure portable behavior when point-to-point, collective, or
+    shared memory synchronization is used in place of an RMA synchronization routine.
+    MPI\_WIN\_SYNC should be called by the writer before the non-RMA synchronization
+    operation and by the reader after the non-RMA synchronization}
+
+\foreignblockcquote{english}[Kapitel 11.7, S. 469]{MPI-3.1}{%
+    MPI\_WIN\_SYNC \textelp{} act locally as a processor-memory barrier}

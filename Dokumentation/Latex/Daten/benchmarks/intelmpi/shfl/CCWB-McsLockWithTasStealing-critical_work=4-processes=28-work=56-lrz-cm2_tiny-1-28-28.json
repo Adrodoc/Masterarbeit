@@ -1,0 +1,124 @@
+{
+  "context": {
+    "benchmark": "CCWB",
+    "critical_work": "4",
+    "lock": "McsLockWithTasStealing",
+    "processes": "28",
+    "work": "56",
+    "date": "2022-01-14T17:52:10"
+  },
+  "runs": [
+    {
+      "duration_ns": 900128999,
+      "iterations": 189504,
+      "iterations_per_process_min": 6619.000000,
+      "iterations_per_process_max": 6800.000000,
+      "iterations_per_process_median": 6775.000000,
+      "iterations_per_process_mean": 6768.000000,
+      "iterations_per_process_sd": 34.649568,
+      "iterations_per_process_cv": 0.005120,
+      "stats": {
+        "acquired_delayed": 189502.000000,
+        "acquired_immediately": 2.000000
+      }
+    },
+    {
+      "duration_ns": 900115881,
+      "iterations": 189598,
+      "iterations_per_process_min": 6621.000000,
+      "iterations_per_process_max": 6799.000000,
+      "iterations_per_process_median": 6779.500000,
+      "iterations_per_process_mean": 6771.357143,
+      "iterations_per_process_sd": 33.891127,
+      "iterations_per_process_cv": 0.005005,
+      "stats": {
+        "acquired_delayed": 189597.000000,
+        "acquired_immediately": 1.000000
+      }
+    },
+    {
+      "duration_ns": 900133874,
+      "iterations": 191599,
+      "iterations_per_process_min": 6692.000000,
+      "iterations_per_process_max": 6872.000000,
+      "iterations_per_process_median": 6852.000000,
+      "iterations_per_process_mean": 6842.821429,
+      "iterations_per_process_sd": 35.007992,
+      "iterations_per_process_cv": 0.005116,
+      "stats": {
+        "acquired_delayed": 191598.000000,
+        "acquired_immediately": 1.000000
+      }
+    },
+    {
+      "duration_ns": 900134381,
+      "iterations": 215634,
+      "iterations_per_process_min": 7488.000000,
+      "iterations_per_process_max": 7784.000000,
+      "iterations_per_process_median": 7708.000000,
+      "iterations_per_process_mean": 7701.214286,
+      "iterations_per_process_sd": 60.572184,
+      "iterations_per_process_cv": 0.007865,
+      "stats": {
+        "acquired_delayed": 165881.000000,
+        "acquired_immediately": 49753.000000
+      }
+    },
+    {
+      "duration_ns": 900126443,
+      "iterations": 191407,
+      "iterations_per_process_min": 6693.000000,
+      "iterations_per_process_max": 6863.000000,
+      "iterations_per_process_median": 6847.000000,
+      "iterations_per_process_mean": 6835.964286,
+      "iterations_per_process_sd": 33.600576,
+      "iterations_per_process_cv": 0.004915,
+      "stats": {
+        "acquired_delayed": 191406.000000,
+        "acquired_immediately": 1.000000
+      }
+    },
+    {
+      "duration_ns": 900131998,
+      "iterations": 192646,
+      "iterations_per_process_min": 6724.000000,
+      "iterations_per_process_max": 6911.000000,
+      "iterations_per_process_median": 6888.000000,
+      "iterations_per_process_mean": 6880.214286,
+      "iterations_per_process_sd": 36.030190,
+      "iterations_per_process_cv": 0.005237,
+      "stats": {
+        "acquired_delayed": 192645.000000,
+        "acquired_immediately": 1.000000
+      }
+    },
+    {
+      "duration_ns": 900123964,
+      "iterations": 218155,
+      "iterations_per_process_min": 7552.000000,
+      "iterations_per_process_max": 7873.000000,
+      "iterations_per_process_median": 7796.500000,
+      "iterations_per_process_mean": 7791.250000,
+      "iterations_per_process_sd": 59.706458,
+      "iterations_per_process_cv": 0.007663,
+      "stats": {
+        "acquired_delayed": 168918.000000,
+        "acquired_immediately": 49237.000000
+      }
+    },
+    {
+      "duration_ns": 900124443,
+      "iterations": 188955,
+      "iterations_per_process_min": 6609.000000,
+      "iterations_per_process_max": 6786.000000,
+      "iterations_per_process_median": 6754.500000,
+      "iterations_per_process_mean": 6748.392857,
+      "iterations_per_process_sd": 33.246932,
+      "iterations_per_process_cv": 0.004927,
+      "stats": {
+        "acquired_delayed": 188954.000000,
+        "acquired_immediately": 1.000000
+      }
+    }
+  ]
+}
